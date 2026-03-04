@@ -56,7 +56,7 @@ export const mapsUrl = (venue, city) =>
   `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${venue} ${city}`)}`;
 
 // localStorage key for travel overrides: "venue_city" → minutes
-export const OVERRIDES_KEY = "cancha_travel_overrides";
+export const OVERRIDES_KEY = "pivot_travel_overrides";
 
 export const loadOverrides = () => {
   try { return JSON.parse(localStorage.getItem(OVERRIDES_KEY) || "{}"); }

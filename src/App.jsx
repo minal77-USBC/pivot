@@ -32,8 +32,8 @@ export default function App() {
       {/* Header */}
       <div style={S.header}>
         <div>
-          <div style={S.logo}>CANCHA</div>
-          <div style={S.subtitle}>Basketball Command Center · BCN</div>
+          <div style={S.logo}>PIVOT</div>
+          <div style={S.subtitle}>Basketball · BCN</div>
         </div>
         <div style={{ textAlign: "right" }}>
           <div style={{ fontSize: 11, color: "#475569", letterSpacing: "0.08em" }}>2025–26</div>

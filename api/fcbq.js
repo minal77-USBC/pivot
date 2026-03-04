@@ -18,7 +18,7 @@ export default async function handler(req, res) {
 
   try {
     const upstream = await fetch(decoded, {
-      headers: { "User-Agent": "Cancha/1.0" },
+      headers: { "User-Agent": "Pivot/1.0" },
     });
     const contentType = upstream.headers.get("content-type") || "";
 
