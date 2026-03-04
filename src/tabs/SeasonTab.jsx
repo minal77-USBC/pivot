@@ -136,44 +136,86 @@ function RohanSeason() {
 
 function SaraSeason() {
   const played = K2_MATCHES.filter(m => m.played);
-  const upcoming = K2_MATCHES.filter(m => !m.played);
+  const wins = played.filter(m => m.win).length;
+  const losses = played.length - wins;
+  const homeGames = played.filter(m => m.ha === "home");
+  const awayGames = played.filter(m => m.ha === "away");
+  const homeWins = homeGames.filter(m => m.win).length;
+  const awayWins = awayGames.filter(m => m.win).length;
+  const winPct = played.length ? Math.round((wins / played.length) * 100) : 0;
+
+  const streak = (() => {
+    const recent = [...played].reverse();
+    if (!recent.length) return { count: 0, win: true };
+    let count = 0;
+    const type = recent[0].win;
+    for (const m of recent) { if (m.win === type) count++; else break; }
+    return { count, win: type };
+  })();
 
   return (
     <>
       <div style={S.sectionTitle}>Sara — Infantil Femení Season</div>
-      <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
+
+      <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
+        <div style={S.statBox}><div style={{ ...S.statNum, color: "#22d3a0" }}>{wins}</div><div style={S.statLbl}>Wins</div></div>
+        <div style={S.statBox}><div style={{ ...S.statNum, color: "#ff4757" }}>{losses}</div><div style={S.statLbl}>Losses</div></div>
+        <div style={S.statBox}><div style={{ ...S.statNum, color: "#a855f7" }}>{winPct}%</div><div style={S.statLbl}>Win Rate</div></div>
+      </div>
+
+      <div style={{ ...S.card(), display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <div>
+          <div style={S.label}>Current Streak</div>
+          <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 22, fontWeight: 700, color: streak.win ? "#22d3a0" : "#ff4757" }}>
+            {streak.count} {streak.win ? "wins" : "losses"} in a row
+          </div>
+        </div>
+        <div style={{ fontSize: 28 }}>{streak.win ? "🔥" : "❄️"}</div>
+      </div>
+
+      <div style={S.sectionTitle}>Home / Away Split</div>
+      <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
         <div style={S.statBox}>
-          <div style={{ ...S.statNum, color: "#a855f7" }}>{played.length}</div>
-          <div style={S.statLbl}>Played</div>
+          <div style={{ fontSize: 11, color: "#22d3a0", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 6 }}>🏠 Home</div>
+          <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 24, fontWeight: 700 }}>{homeWins}W / {homeGames.length - homeWins}L</div>
+          <div style={{ fontSize: 11, color: "#475569", marginTop: 2 }}>{homeGames.length ? Math.round(homeWins / homeGames.length * 100) : 0}% win rate</div>
         </div>
         <div style={S.statBox}>
-          <div style={{ ...S.statNum, color: "#64748b" }}>{upcoming.length}</div>
-          <div style={S.statLbl}>Remaining</div>
-        </div>
-        <div style={S.statBox}>
-          <div style={{ ...S.statNum, color: "#64748b" }}>{K2_MATCHES.length}</div>
-          <div style={S.statLbl}>Total</div>
+          <div style={{ fontSize: 11, color: "#ff4757", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 6 }}>✈ Away</div>
+          <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 24, fontWeight: 700 }}>{awayWins}W / {awayGames.length - awayWins}L</div>
+          <div style={{ fontSize: 11, color: "#475569", marginTop: 2 }}>{awayGames.length ? Math.round(awayWins / awayGames.length * 100) : 0}% win rate</div>
         </div>
       </div>
 
-      <div style={{ ...S.card({ borderColor: "rgba(168,85,247,0.2)", background: "rgba(168,85,247,0.04)" }), marginBottom: 16 }}>
-        <div style={{ fontSize: 12, color: "#a855f7", fontWeight: 500, marginBottom: 4 }}>ℹ Scores not available</div>
-        <div style={{ fontSize: 12, color: "#64748b" }}>
-          FCBQ does not publish results for Infantil Femení Promoció. Match scores not tracked.
-        </div>
+      <div style={S.sectionTitle}>Recent Form</div>
+      <div style={{ ...S.card(), display: "flex", gap: 6, flexWrap: "wrap" }}>
+        {played.slice(-10).map((m, i) => (
+          <div key={i} style={{
+            width: 36, height: 36, borderRadius: 8,
+            background: m.win ? "rgba(34,211,160,0.15)" : "rgba(255,71,87,0.15)",
+            border: `1px solid ${m.win ? "rgba(34,211,160,0.3)" : "rgba(255,71,87,0.3)"}`,
+            display: "flex", alignItems: "center", justifyContent: "center",
+            fontSize: 13, fontWeight: 700, color: m.win ? "#22d3a0" : "#ff4757",
+          }}>
+            {m.win ? "W" : "L"}
+          </div>
+        ))}
+        <div style={{ fontSize: 11, color: "#475569", alignSelf: "center", marginLeft: 4 }}>Last 10</div>
       </div>
 
-      <div style={S.sectionTitle}>All Matches</div>
+      <div style={S.sectionTitle}>All Results</div>
       <div style={S.card()}>
         {K2_MATCHES.slice().reverse().map((m, i) => (
           <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "7px 0", borderBottom: i < K2_MATCHES.length - 1 ? "1px solid rgba(255,255,255,0.05)" : "none" }}>
             <div>
               <div style={{ fontSize: 12, color: "#64748b" }}>{fmtDate(m.date)}</div>
-              <div style={{ fontSize: 13, color: m.played ? "#475569" : "#94a3b8" }}>{m.ha === "home" ? "vs" : "@"} {m.opp}</div>
+              <div style={{ fontSize: 13, color: m.played ? "#94a3b8" : "#475569" }}>{m.ha === "home" ? "vs" : "@"} {m.opp}</div>
             </div>
-            <span style={S.badge(m.played ? (m.ha === "home" ? "home" : "away") : "canvis")}>
-              {m.played ? (m.ha === "home" ? "Home" : "Away") : "Upcoming"}
-            </span>
+            {m.played
+              ? <span style={{ fontSize: 14, fontWeight: 700, color: m.win ? "#22d3a0" : "#ff4757" }}>
+                  {m.win ? "W" : "L"} {m.score}
+                </span>
+              : <span style={S.badge("canvis")}>Upcoming</span>}
           </div>
         ))}
       </div>
