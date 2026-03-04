@@ -4,10 +4,10 @@ import { S } from "../styles";
 import { KIDS, K1_MATCHES, K2_MATCHES } from "../data";
 import { upcoming, daysOut, fmtDate, leaveByFromMins, travelMins, getOverrideMins } from "../utils";
 
-function getLeave(m) {
+function getLeave(m, arrivalBuffer = 20) {
   if (m.km === 0) return null;
   const override = getOverrideMins(m.venue, m.city);
-  return leaveByFromMins(m.time, override ?? travelMins(m.km));
+  return leaveByFromMins(m.time, override ?? travelMins(m.km), arrivalBuffer);
 }
 
 export default function DashboardTab() {
@@ -35,7 +35,7 @@ export default function DashboardTab() {
 
     const matchLines = [];
     if (nextK1 && daysOut(nextK1.date) <= 4) {
-      const leave = getLeave(nextK1);
+      const leave = getLeave(nextK1, KIDS[0].arrivalBuffer);
       matchLines.push(
         `Rohan (Cadet Masculí, 15y): ${fmtDate(nextK1.date)}, ${nextK1.time}, ${nextK1.ha === "home" ? "HOME" : "AWAY"} vs ${nextK1.opp}, ${nextK1.venue}, ${nextK1.city}, ${nextK1.km}km away${leave ? `, leave by ${leave}` : ""}, kit: ${nextK1.ha === "home" ? "NEGRE/VERMELL" : "BLANCA/VERMELL"}`
       );
@@ -43,7 +43,7 @@ export default function DashboardTab() {
       matchLines.push("Rohan: No match this weekend.");
     }
     if (nextK2 && daysOut(nextK2.date) <= 4) {
-      const leave = getLeave(nextK2);
+      const leave = getLeave(nextK2, KIDS[1].arrivalBuffer);
       matchLines.push(
         `Sara (Infantil Femení, 12y): ${fmtDate(nextK2.date)}, ${nextK2.time}, ${nextK2.ha === "home" ? "HOME" : "AWAY"} vs ${nextK2.opp}, ${nextK2.venue}, ${nextK2.city}, ${nextK2.km}km away${leave ? `, leave by ${leave}` : ""}, kit: ${nextK2.ha === "home" ? "NEGRE/VERMELL" : "BLANCA/VERMELL"}`
       );
@@ -116,13 +116,13 @@ export default function DashboardTab() {
       {nextK1 && (
         <>
           <div style={S.sectionTitle}>Rohan — Next Match</div>
-          <MatchCard m={nextK1} kidColor={KIDS[0].color} />
+          <MatchCard m={nextK1} kidColor={KIDS[0].color} arrivalBuffer={KIDS[0].arrivalBuffer} />
         </>
       )}
       {nextK2 && (
         <>
           <div style={S.sectionTitle}>Sara — Next Match</div>
-          <MatchCard m={nextK2} kidColor={KIDS[1].color} />
+          <MatchCard m={nextK2} kidColor={KIDS[1].color} arrivalBuffer={KIDS[1].arrivalBuffer} />
         </>
       )}
 
@@ -131,7 +131,7 @@ export default function DashboardTab() {
         <>
           <div style={S.sectionTitle}>Upcoming Road Trips</div>
           {upK1.filter(m => m.km > 60).slice(0, 3).map((m, i) => {
-            const leave = getLeave(m);
+            const leave = getLeave(m, KIDS[0].arrivalBuffer);
             return (
               <div key={i} style={{ ...S.roadCard, padding: "12px 14px" }}>
                 <div style={S.spaceBetween}>

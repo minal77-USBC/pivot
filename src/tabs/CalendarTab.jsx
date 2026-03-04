@@ -37,7 +37,7 @@ export default function CalendarTab() {
         </div>
       )}
       {matches.map((m, i) => (
-        <MatchCard key={i} m={m} kidColor={kid.color} compact={false} />
+        <MatchCard key={i} m={m} kidColor={kid.color} compact={false} arrivalBuffer={kid.arrivalBuffer} />
       ))}
     </div>
   );

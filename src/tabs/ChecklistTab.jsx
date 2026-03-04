@@ -31,7 +31,7 @@ export default function ChecklistTab() {
   const done = items.filter(i => checked[`${ck}-${i.id}`]).length;
 
   const overrideMins = match.km > 0 ? getOverrideMins(match.venue, match.city) : null;
-  const leave = match.km > 0 ? leaveByFromMins(match.time, overrideMins ?? travelMins(match.km)) : null;
+  const leave = match.km > 0 ? leaveByFromMins(match.time, overrideMins ?? travelMins(match.km), kid.arrivalBuffer) : null;
 
   const toggle = (id) => setChecked(c => ({ ...c, [`${ck}-${id}`]: !c[`${ck}-${id}`] }));
   const reset = () => {

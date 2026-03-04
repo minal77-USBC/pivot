@@ -21,10 +21,10 @@ export const leaveBy = (time, km, overrides = {}) => {
   return `${String(lh).padStart(2, "0")}:${String(lm).padStart(2, "0")}`;
 };
 
-export const leaveByFromMins = (time, mins) => {
+export const leaveByFromMins = (time, mins, arrivalBuffer = 20) => {
   if (!mins) return null;
   const [h, m] = time.split(":").map(Number);
-  const leave = h * 60 + m - mins - 20;
+  const leave = h * 60 + m - mins - arrivalBuffer;
   const lh = Math.floor(leave / 60);
   const lm = Math.floor((leave % 60) / 5) * 5;
   return `${String(lh).padStart(2, "0")}:${String(lm).padStart(2, "0")}`;

@@ -2,13 +2,13 @@ import { useState } from "react";
 import { S } from "../styles";
 import { tier, travelMins, leaveByFromMins, fmtDate, daysLabel, mapsUrl, getOverrideMins, saveOverride } from "../utils";
 
-export default function MatchCard({ m, kidColor = "#FF6B2B", compact = false }) {
+export default function MatchCard({ m, kidColor = "#FF6B2B", compact = false, arrivalBuffer = 20 }) {
   const t = tier(m.km);
   const isRoad = t === "road";
   const days = daysLabel(m.date);
   const overrideMins = m.km > 0 ? getOverrideMins(m.venue, m.city) : null;
   const effectiveMins = overrideMins ?? travelMins(m.km);
-  const leave = m.km > 0 ? leaveByFromMins(m.time, effectiveMins) : null;
+  const leave = m.km > 0 ? leaveByFromMins(m.time, effectiveMins, arrivalBuffer) : null;
 
   const [editing, setEditing] = useState(false);
   const [draftMins, setDraftMins] = useState("");
