@@ -1,11 +1,10 @@
 import { useState } from "react";
 import { S } from "../styles";
-import { KIDS, K1_MATCHES, K2_MATCHES } from "../data";
+import { KIDS } from "../data";
 import { tier, fmtDate, leaveByFromMins, travelMins, getOverrideMins } from "../utils";
 
-export default function SeasonTab() {
+export default function SeasonTab({ k1Matches, k2Matches }) {
   const [kidId, setKidId] = useState("k1");
-  const kid = KIDS.find(k => k.id === kidId);
 
   return (
     <div>
@@ -18,20 +17,22 @@ export default function SeasonTab() {
         ))}
       </div>
 
-      {kidId === "k1" ? <RohanSeason /> : <SaraSeason />}
+      {kidId === "k1"
+        ? <RohanSeason matches={k1Matches} />
+        : <SaraSeason matches={k2Matches} />}
     </div>
   );
 }
 
-function RohanSeason() {
-  const played = K1_MATCHES.filter(m => m.played);
+function RohanSeason({ matches }) {
+  const played = matches.filter(m => m.played);
   const wins = played.filter(m => m.win).length;
   const losses = played.length - wins;
   const homeGames = played.filter(m => m.ha === "home");
   const awayGames = played.filter(m => m.ha === "away");
   const homeWins = homeGames.filter(m => m.win).length;
   const awayWins = awayGames.filter(m => m.win).length;
-  const roadTrips = K1_MATCHES.filter(m => tier(m.km) === "road");
+  const roadTrips = matches.filter(m => tier(m.km) === "road");
   const roadDone = roadTrips.filter(m => m.played).length;
   const winPct = played.length ? Math.round((wins / played.length) * 100) : 0;
 
@@ -119,6 +120,7 @@ function RohanSeason() {
       <div style={S.sectionTitle}>All Results</div>
       <div style={S.card()}>
         {played.slice().reverse().map((m, i) => (
+
           <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "7px 0", borderBottom: i < played.length - 1 ? "1px solid rgba(255,255,255,0.05)" : "none" }}>
             <div>
               <div style={{ fontSize: 12, color: "#64748b" }}>{fmtDate(m.date)}</div>
@@ -134,8 +136,8 @@ function RohanSeason() {
   );
 }
 
-function SaraSeason() {
-  const played = K2_MATCHES.filter(m => m.played);
+function SaraSeason({ matches }) {
+  const played = matches.filter(m => m.played);
   const wins = played.filter(m => m.win).length;
   const losses = played.length - wins;
   const homeGames = played.filter(m => m.ha === "home");
@@ -205,8 +207,8 @@ function SaraSeason() {
 
       <div style={S.sectionTitle}>All Results</div>
       <div style={S.card()}>
-        {K2_MATCHES.slice().reverse().map((m, i) => (
-          <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "7px 0", borderBottom: i < K2_MATCHES.length - 1 ? "1px solid rgba(255,255,255,0.05)" : "none" }}>
+        {matches.slice().reverse().map((m, i) => (
+          <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "7px 0", borderBottom: i < matches.length - 1 ? "1px solid rgba(255,255,255,0.05)" : "none" }}>
             <div>
               <div style={{ fontSize: 12, color: "#64748b" }}>{fmtDate(m.date)}</div>
               <div style={{ fontSize: 13, color: m.played ? "#94a3b8" : "#475569" }}>{m.ha === "home" ? "vs" : "@"} {m.opp}</div>

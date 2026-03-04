@@ -30,67 +30,6 @@ export const KIDS = [
   },
 ];
 
-export const K1_MATCHES = [
-  // Phase 1 — Primera Fase (grup 19848) — 1W 13L
-  { date:"2025-09-07",  time:"17:45", ha:"away", opp:"CB Granollers 4",              venue:"Pavello C.B. Granollers",           city:"Granollers",            km:30,  played:true,  win:false, score:"75–53",  statsUuid:"68bdc1bdf4f69200014108cd" },
-  { date:"2025-09-14",  time:"16:00", ha:"home", opp:"Bàsquet Girona U15",           venue:"Nau Parc Clot",                     city:"Barcelona",             km:0,   played:true,  win:false, score:"40–92",  statsUuid:"68c6e062424ec900016d0e44" },
-  { date:"2025-09-20",  time:"15:30", ha:"away", opp:"JAC Sants Barcelona U15 1",    venue:"CE La Bordeta",                     city:"Barcelona",             km:8,   played:true,  win:false, score:"97–57",  statsUuid:"68cec504fc3a920001f162e6" },
-  { date:"2025-09-27",  time:"16:00", ha:"home", opp:"Basket Almeda Negre",          venue:"Nau Parc Clot",                     city:"Barcelona",             km:0,   played:true,  win:false, score:"62–85",  statsUuid:"68d8077c8c9c3a0001342470" },
-  { date:"2025-10-05",  time:"12:15", ha:"away", opp:"Motorola CB Sant Josep Badalona","venue":"Pavello La Colina",              city:"Badalona",              km:12,  played:true,  win:false, score:"80–51",  statsUuid:"68e263641c33a20001314e25" },
-  { date:"2025-10-12",  time:"16:00", ha:"away", opp:"Nayox Força Lleida B",         venue:"Pavello Barris Nord",               city:"Lleida",                km:162, played:true,  win:false, score:"117–38", statsUuid:"68ebcb472ea75e0001d07597" },
-  { date:"2025-10-18",  time:"16:00", ha:"home", opp:"UE Montgat Vermell",           venue:"Nau Parc Clot",                     city:"Barcelona",             km:0,   played:true,  win:true,  score:"71–67" },
-  { date:"2025-10-25",  time:"16:00", ha:"home", opp:"CB Granollers 4",              venue:"Nau Parc Clot",                     city:"Barcelona",             km:0,   played:true,  win:false, score:"58–88",  statsUuid:"68fceffb1497f200013e470c" },
-  { date:"2025-11-01",  time:"16:00", ha:"away", opp:"Bàsquet Girona U15",           venue:"Pavelló St Eugènia",                city:"Girona",                km:103, played:true,  win:false, score:"90–56",  statsUuid:"69063ca18e3db80001d5a1b4" },
-  { date:"2025-11-09",  time:"17:45", ha:"home", opp:"JAC Sants Barcelona U15 1",   venue:"Nau Parc Clot",                     city:"Barcelona",             km:0,   played:true,  win:false, score:"64–84",  statsUuid:"6910dcb5530d2e0001540f43" },
-  { date:"2025-11-16",  time:"16:30", ha:"away", opp:"Basket Almeda Negre",         venue:"Pavello Almeda",                    city:"Cornellà de Llobregat", km:14,  played:true,  win:false, score:"62–57",  statsUuid:"691a070c5ac4ad000177772c" },
-  { date:"2025-11-22",  time:"16:00", ha:"home", opp:"Motorola CB Sant Josep Badalona","venue":"Nau Parc Clot",                 city:"Barcelona",             km:0,   played:true,  win:false, score:"55–77",  statsUuid:"6921e72071982d0001d9a763" },
-  { date:"2025-11-30",  time:"17:45", ha:"home", opp:"Nayox Força Lleida B",        venue:"Nau Parc Clot",                     city:"Barcelona",             km:0,   played:true,  win:false, score:"50–71",  statsUuid:"692c8e117c9e680001d5a45b" },
-  { date:"2025-12-13",  time:"12:15", ha:"away", opp:"UE Montgat Vermell",           venue:"Poliesp. Silvia Domínguez",         city:"Montgat",               km:18,  played:true,  win:false, score:"112–51", statsUuid:"693d660f9e24f90001bbc1f2" },
-  // Phase 2 — Segona Fase (grup 21202) — 5W 1L so far
-  { date:"2026-01-10",  time:"16:00", ha:"home", opp:"CB Viladecans Blanc",          venue:"Nau Parc Clot",                     city:"Barcelona",             km:0,   played:true,  win:true,  score:"85–53",  statsUuid:"696280a4226468000191f4d1" },
-  { date:"2026-01-17",  time:"12:30", ha:"away", opp:"CB Calella 1r Any",            venue:"Pavello Municipal Calella",         city:"Calella",               km:63,  played:true,  win:true,  score:"58–67",  statsUuid:"696b8c5a252d140001bcb54d" },
-  { date:"2026-01-25",  time:"17:45", ha:"home", opp:"UE Sant Cugat – Occident 2011",venue:"Nau Parc Clot",                    city:"Barcelona",             km:0,   played:true,  win:true,  score:"64–58",  statsUuid:"697663cd2baa68000161e018" },
-  { date:"2026-01-31",  time:"12:45", ha:"away", opp:"TGN Bàsquet 11A",              venue:"Col. Sagrat Cor",                   city:"Tarragona",             km:99,  played:true,  win:false, score:"78–72",  statsUuid:"697e096616fb1a000108225b" },
-  { date:"2026-02-07",  time:"16:00", ha:"home", opp:"La Salle Manresa 1",           venue:"Nau Parc Clot",                     city:"Barcelona",             km:0,   played:true,  win:true,  score:"67–45",  statsUuid:"69876b78f9430b000196301d" },
-  { date:"2026-03-01",  time:"12:30", ha:"away", opp:"Carnisseries Soler BBA Castelldefels","venue":"Complex Can Vinader",      city:"Castelldefels",         km:24,  played:true,  win:true,  score:"55–63",  statsUuid:"69a43aa05213ba0001ee166d" },
-  { date:"2026-03-07",  time:"19:30", ha:"away", opp:"CB Viladecans Blanc",          venue:"Col·legi Sant Gabriel",             city:"Viladecans",            km:22,  played:false },
-  { date:"2026-03-14",  time:"16:00", ha:"home", opp:"CB Calella 1r Any",            venue:"Nau Parc Clot",                     city:"Barcelona",             km:0,   played:false },
-  { date:"2026-03-21",  time:"10:30", ha:"away", opp:"UE Sant Cugat – Occident 2011",venue:"Institut Leonardo Da Vinci",        city:"Sant Cugat del Vallès", km:25,  played:false, canvis:true },
-  { date:"2026-03-28",  time:"10:45", ha:"home", opp:"CB Guíxols U15",               venue:"Nau Parc Clot",                     city:"Barcelona",             km:0,   played:false, canvis:true },
-  { date:"2026-04-11",  time:"16:00", ha:"home", opp:"TGN Bàsquet 11A",              venue:"Nau Parc Clot",                     city:"Barcelona",             km:0,   played:false },
-  { date:"2026-04-19",  time:"16:00", ha:"away", opp:"La Salle Manresa 1",           venue:"Col·legi La Salle Manresa",         city:"Manresa",               km:75,  played:false, canvis:true },
-  { date:"2026-04-26",  time:"10:45", ha:"away", opp:"CB Guíxols U15",               venue:"Pavello La Corchera",               city:"Sant Feliu de Guíxols", km:105, played:false },
-  { date:"2026-05-09",  time:"16:00", ha:"home", opp:"Carnisseries Soler BBA Castelldefels","venue":"Nau Parc Clot",            city:"Barcelona",             km:0,   played:false },
-];
-
-export const K2_MATCHES = [
-  // Phase 1 — Primera Fase (grup 20111) — 4W 6L
-  { date:"2025-10-04",  time:"12:15", ha:"home", opp:"Lluïsos de Gràcia",             venue:"Nau Parc Clot",                     city:"Barcelona",             km:0,   played:true,  win:false, score:"52–61",  statsUuid:"68e1156a1c33a2000130f892" },
-  { date:"2025-10-12",  time:"09:00", ha:"away", opp:"C.B. Prat-Montibello B",        venue:"Cem Estruch",                       city:"El Prat de Llobregat",  km:14,  played:true,  win:true,  score:"45–59",  statsUuid:"68eb67dc2ea75e0001d04dd6" },
-  { date:"2025-10-19",  time:"10:45", ha:"home", opp:"UE Sant Cugat-Occident 2013",   venue:"Nau Parc Clot",                     city:"Barcelona",             km:0,   played:true,  win:false, score:"38–55",  statsUuid:"68f4b9e6104e420001aec311" },
-  { date:"2025-10-25",  time:"10:00", ha:"away", opp:"CB Sant Just U13 Blau",         venue:"Pavelló La Bonaigua",               city:"Sant Just Desvern",     km:9,   played:true,  win:false, score:"73–63",  statsUuid:"68fca2881497f200013e0c85" },
-  { date:"2025-11-08",  time:"12:15", ha:"home", opp:"U.E. Claret B",                 venue:"Nau Parc Clot",                     city:"Barcelona",             km:0,   played:true,  win:false, score:"42–54",  statsUuid:"690f39dc530d2e0001537490" },
-  { date:"2025-11-16",  time:"10:45", ha:"away", opp:"Lluïsos de Gràcia",             venue:"Plaça del Nord",                    city:"Barcelona",             km:5,   played:true,  win:false, score:"45–38",  statsUuid:"6919b50fedca8300012ee941" },
-  { date:"2025-11-22",  time:"12:15", ha:"home", opp:"C.B. Prat-Montibello B",        venue:"Nau Parc Clot",                     city:"Barcelona",             km:0,   played:true,  win:true,  score:"56–27",  statsUuid:"6921b10d71982d0001d98984" },
-  { date:"2025-11-29",  time:"12:00", ha:"away", opp:"UE Sant Cugat-Occident 2013",   venue:"Institut Leonardo da Vinci",        city:"Sant Cugat del Vallès", km:25,  played:true,  win:true,  score:"53–62",  statsUuid:"692aec4025810800013ba183" },
-  { date:"2025-12-13",  time:"12:15", ha:"home", opp:"CB Sant Just U13 Blau",         venue:"Nau Parc Clot",                     city:"Barcelona",             km:0,   played:true,  win:false, score:"43–63",  statsUuid:"693d673a161a7100013835ee" },
-  { date:"2025-12-23",  time:"18:00", ha:"away", opp:"U.E. Claret B",                 venue:"Col·legi Claret",                   city:"Barcelona",             km:4,   played:true,  win:true,  score:"W/O" },
-  // Phase 2 — Segona Fase (grup 21491) — 4W 2L so far
-  { date:"2026-01-17",  time:"12:15", ha:"away", opp:"Talenom Boet Mataró Taronja",   venue:"Poliesportiu Eusebio Millan",       city:"Mataró",                km:30,  played:true,  win:true,  score:"43–55",  statsUuid:"696b90fd252d140001bcb889" },
-  { date:"2026-01-24",  time:"12:15", ha:"home", opp:"Basket Almeda Groc",            venue:"Nau Parc Clot",                     city:"Barcelona",             km:0,   played:true,  win:true,  score:"52–34",  statsUuid:"6974c8687d35150001e036b9" },
-  { date:"2026-01-31",  time:"12:00", ha:"away", opp:"UE Sant Cugat-Occident 2013",   venue:"Institut Leonardo da Vinci",        city:"Sant Cugat del Vallès", km:25,  played:true,  win:false, score:"51–34",  statsUuid:"697dffd616fb1a0001081a92" },
-  { date:"2026-02-07",  time:"12:15", ha:"home", opp:"C.B. Prat-Montibello B",        venue:"Nau Parc Clot",                     city:"Barcelona",             km:0,   played:true,  win:true,  score:"52–27",  statsUuid:"698737c5f9430b0001961549" },
-  { date:"2026-02-21",  time:"12:15", ha:"home", opp:"CB Artés",                      venue:"Nau Parc Clot",                     city:"Barcelona",             km:0,   played:true,  win:true,  score:"74–38",  statsUuid:"6999abbca918de00018f7b94" },
-  { date:"2026-03-01",  time:"09:00", ha:"away", opp:"C.B. Vilassar de Mar 1984 Verd",venue:"Pavelló La Bobila",                 city:"Vilassar de Mar",       km:27,  played:true,  win:false, score:"58–38",  statsUuid:"69a40ab75213ba0001edf1f9" },
-  { date:"2026-03-07",  time:"12:15", ha:"home", opp:"CB Parets Vermell 1",           venue:"Nau Parc Clot",                     city:"Barcelona",             km:0,   played:false },
-  { date:"2026-03-14",  time:"12:15", ha:"home", opp:"Talenom Boet Mataró Taronja",   venue:"Nau Parc Clot",                     city:"Barcelona",             km:0,   played:false },
-  { date:"2026-03-21",  time:"13:30", ha:"away", opp:"Basket Almeda Groc",            venue:"Pavelló Almeda",                    city:"Cornellà de Llobregat", km:14,  played:false },
-  { date:"2026-04-11",  time:"12:15", ha:"home", opp:"UE Sant Cugat-Occident 2013",   venue:"Nau Parc Clot",                     city:"Barcelona",             km:0,   played:false },
-  { date:"2026-04-18",  time:"10:45", ha:"away", opp:"C.B. Prat-Montibello B",        venue:"Cem Estruch",                       city:"El Prat de Llobregat",  km:14,  played:false },
-  { date:"2026-04-25",  time:"12:30", ha:"away", opp:"CB Artés",                      venue:"Pavelló Esportiu d'Artés",          city:"Artés",                 km:68,  played:false },
-  { date:"2026-05-09",  time:"12:15", ha:"home", opp:"C.B. Vilassar de Mar 1984 Verd",venue:"Nau Parc Clot",                     city:"Barcelona",             km:0,   played:false },
-  { date:"2026-05-16",  time:"10:45", ha:"away", opp:"CB Parets Vermell 1",           venue:"Pavelló Municipal Parets",          city:"Parets del Vallès",     km:23,  played:false },
-];
 
 export const CHECKLIST_STD = [
   { id:"jersey",  emoji:"👕", label:"Match Jersey" },

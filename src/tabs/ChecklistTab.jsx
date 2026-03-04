@@ -1,17 +1,15 @@
 import { useState } from "react";
 import { S } from "../styles";
-import { KIDS, K1_MATCHES, K2_MATCHES, CHECKLIST_STD, CHECKLIST_ROAD } from "../data";
+import { KIDS, CHECKLIST_STD, CHECKLIST_ROAD } from "../data";
 import { upcoming, tier, fmtDate, leaveByFromMins, travelMins, getOverrideMins, mapsUrl } from "../utils";
 
-const MATCHES_BY_KID = { k1: K1_MATCHES, k2: K2_MATCHES };
-
-export default function ChecklistTab() {
+export default function ChecklistTab({ k1Matches, k2Matches }) {
   const [kidId, setKidId] = useState("k1");
   const [selIdx, setSelIdx] = useState(0);
   const [checked, setChecked] = useState({});
 
   const kid = KIDS.find(k => k.id === kidId);
-  const upMatches = upcoming(MATCHES_BY_KID[kidId]);
+  const upMatches = upcoming(kidId === "k1" ? k1Matches : k2Matches);
   const match = upMatches[selIdx] || upMatches[0];
 
   // Reset match index when kid changes

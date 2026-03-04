@@ -1,7 +1,7 @@
 import { useState } from "react";
 import MatchCard from "../components/MatchCard";
 import { S } from "../styles";
-import { KIDS, K1_MATCHES, K2_MATCHES } from "../data";
+import { KIDS } from "../data";
 import { upcoming, daysOut, fmtDate, leaveByFromMins, travelMins, getOverrideMins } from "../utils";
 
 function getLeave(m, arrivalBuffer = 20) {
@@ -10,18 +10,18 @@ function getLeave(m, arrivalBuffer = 20) {
   return leaveByFromMins(m.time, override ?? travelMins(m.km), arrivalBuffer);
 }
 
-export default function DashboardTab() {
+export default function DashboardTab({ k1Matches, k2Matches }) {
   const [briefing, setBriefing] = useState(null);
   const [briefLoading, setBriefLoading] = useState(false);
   const [briefError, setBriefError] = useState(null);
   const [copied, setCopied] = useState(false);
 
-  const upK1 = upcoming(K1_MATCHES);
-  const upK2 = upcoming(K2_MATCHES);
+  const upK1 = upcoming(k1Matches);
+  const upK2 = upcoming(k2Matches);
   const nextK1 = upK1[0];
   const nextK2 = upK2[0];
 
-  const played = K1_MATCHES.filter(m => m.played);
+  const played = k1Matches.filter(m => m.played);
   const wins = played.filter(m => m.win).length;
 
   const doubles = upK1.filter(m1 => upK2.some(m2 => m2.date === m1.date));
@@ -107,7 +107,7 @@ export default function DashboardTab() {
           <div style={S.statLbl}>{played.length} played</div>
         </div>
         <div style={S.statBox}>
-          <div style={{ ...S.statNum, color: "#64748b", fontSize: 28 }}>{K1_MATCHES.filter(m => !m.played).length}</div>
+          <div style={{ ...S.statNum, color: "#64748b", fontSize: 28 }}>{k1Matches.filter(m => !m.played).length}</div>
           <div style={S.statLbl}>Remaining</div>
         </div>
       </div>

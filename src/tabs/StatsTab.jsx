@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { S } from "../styles";
-import { KIDS, K1_MATCHES } from "../data";
+import { KIDS } from "../data";
 import { fmtDate } from "../utils";
 
 const MSSTATS_BASE = "https://msstats.optimalwayconsulting.com/v1/fcbq";
@@ -142,13 +142,13 @@ function SeasonStats() {
   );
 }
 
-function MatchBoxScores() {
+function MatchBoxScores({ k1Matches }) {
   const [selectedMatch, setSelectedMatch] = useState(null);
   const [boxScore, setBoxScore] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const playedMatches = K1_MATCHES.filter(m => m.played).slice().reverse();
+  const playedMatches = k1Matches.filter(m => m.played).slice().reverse();
 
   const loadBoxScore = async (match) => {
     if (!match.statsUuid) {
@@ -249,7 +249,7 @@ function MatchBoxScores() {
   );
 }
 
-export default function StatsTab() {
+export default function StatsTab({ k1Matches }) {
   const [kidId, setKidId] = useState("k1");
   const [view, setView] = useState("season");
 
@@ -291,7 +291,7 @@ export default function StatsTab() {
             ))}
           </div>
 
-          {view === "season" ? <SeasonStats /> : <MatchBoxScores />}
+          {view === "season" ? <SeasonStats /> : <MatchBoxScores k1Matches={k1Matches} />}
         </>
       )}
     </div>
