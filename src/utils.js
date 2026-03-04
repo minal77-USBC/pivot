@@ -21,6 +21,15 @@ export const leaveBy = (time, km, overrides = {}) => {
   return `${String(lh).padStart(2, "0")}:${String(lm).padStart(2, "0")}`;
 };
 
+export const latestMeal = (time, arrivalBuffer) => {
+  // Must eat at least 1 hour before arriving at the venue
+  const [h, m] = time.split(":").map(Number);
+  const total = h * 60 + m - arrivalBuffer - 60;
+  const lh = Math.floor(total / 60);
+  const lm = Math.floor((total % 60) / 5) * 5;
+  return `${String(lh).padStart(2, "0")}:${String(lm).padStart(2, "0")}`;
+};
+
 export const leaveByFromMins = (time, mins, arrivalBuffer = 20) => {
   if (!mins) return null;
   const [h, m] = time.split(":").map(Number);

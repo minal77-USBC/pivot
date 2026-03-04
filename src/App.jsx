@@ -9,7 +9,7 @@ import StatsTab from "./tabs/StatsTab";
 
 const TABS = [
   { id: "dash",     label: "Dashboard", icon: "⚡" },
-  { id: "calendar", label: "Calendari", icon: "📅" },
+  { id: "calendar", label: "Calendar", icon: "📅" },
   { id: "matchday", label: "Match Day",  icon: "🎒" },
   { id: "season",   label: "Season",    icon: "📊" },
   { id: "stats",    label: "Stats",     icon: "🏀" },

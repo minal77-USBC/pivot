@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { S } from "../styles";
-import { KIDS, CHECKLIST_STD, CHECKLIST_ROAD } from "../data";
-import { upcoming, tier, fmtDate, leaveByFromMins, travelMins, getOverrideMins, mapsUrl } from "../utils";
+import { KIDS, CHECKLIST_STD, CHECKLIST_ROAD, CHECKLIST_NIGHT_BEFORE } from "../data";
+import { upcoming, tier, fmtDate, leaveByFromMins, travelMins, getOverrideMins, mapsUrl, latestMeal, daysOut } from "../utils";
 
 export default function ChecklistTab({ k1Matches, k2Matches }) {
   const [kidId, setKidId] = useState("k1");
@@ -12,7 +12,6 @@ export default function ChecklistTab({ k1Matches, k2Matches }) {
   const upMatches = upcoming(kidId === "k1" ? k1Matches : k2Matches);
   const match = upMatches[selIdx] || upMatches[0];
 
-  // Reset match index when kid changes
   const switchKid = (id) => { setKidId(id); setSelIdx(0); };
 
   if (!match) return (
@@ -23,15 +22,26 @@ export default function ChecklistTab({ k1Matches, k2Matches }) {
   );
 
   const isRoad = tier(match.km) === "road";
-  const items = isRoad ? CHECKLIST_ROAD : CHECKLIST_STD;
+  const matchDayItems = isRoad ? CHECKLIST_ROAD : CHECKLIST_STD;
   const kit = match.ha === "home" ? kid.kit.home : kid.kit.away;
   const ck = `${kidId}-${selIdx}`;
-  const done = items.filter(i => checked[`${ck}-${i.id}`]).length;
+
+  // Count checked items across both sections
+  const nightDone = CHECKLIST_NIGHT_BEFORE.filter(i => checked[`${ck}-night-${i.id}`]).length;
+  const dayDone = matchDayItems.filter(i => checked[`${ck}-day-${i.id}`]).length;
 
   const overrideMins = match.km > 0 ? getOverrideMins(match.venue, match.city) : null;
-  const leave = match.km > 0 ? leaveByFromMins(match.time, overrideMins ?? travelMins(match.km), kid.arrivalBuffer) : null;
+  const leave = match.km > 0
+    ? leaveByFromMins(match.time, overrideMins ?? travelMins(match.km), kid.arrivalBuffer)
+    : null;
+  const meal = latestMeal(match.time, kid.arrivalBuffer);
 
-  const toggle = (id) => setChecked(c => ({ ...c, [`${ck}-${id}`]: !c[`${ck}-${id}`] }));
+  const daysAway = daysOut(match.date);
+  const showNightBefore = daysAway >= 1; // only show if match is tomorrow or later
+
+  const toggle = (section, id) =>
+    setChecked(c => ({ ...c, [`${ck}-${section}-${id}`]: !c[`${ck}-${section}-${id}`] }));
+
   const reset = () => {
     const next = {};
     Object.keys(checked).forEach(k => { if (!k.startsWith(`${ck}-`)) next[k] = checked[k]; });
@@ -93,6 +103,10 @@ export default function ChecklistTab({ k1Matches, k2Matches }) {
             </div>
           )}
           <div>
+            <div style={S.label}>Latest meal</div>
+            <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 28, fontWeight: 700, color: "#22d3a0" }}>{meal}</div>
+          </div>
+          <div>
             <div style={S.label}>Kit</div>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#f1f5f9" }}>{kit.jersey}</div>
             <div style={{ fontSize: 11, color: "#64748b" }}>+ {kit.shorts} shorts</div>
@@ -100,26 +114,57 @@ export default function ChecklistTab({ k1Matches, k2Matches }) {
         </div>
       </div>
 
-      {/* Checklist */}
+      {/* Night Before checklist */}
+      {showNightBefore && (
+        <>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10, marginTop: 6 }}>
+            <div style={{ ...S.sectionTitle, marginBottom: 0 }}>
+              🌙 Night Before
+            </div>
+            <span style={{ fontSize: 12, color: nightDone === CHECKLIST_NIGHT_BEFORE.length ? "#22d3a0" : "#64748b" }}>
+              {nightDone}/{CHECKLIST_NIGHT_BEFORE.length}
+            </span>
+          </div>
+          <div style={{ background: "rgba(34,211,160,0.04)", border: "1px solid rgba(34,211,160,0.12)", borderRadius: 12, overflow: "hidden", marginBottom: 16 }}>
+            {CHECKLIST_NIGHT_BEFORE.map((item, i) => {
+              const isChecked = !!checked[`${ck}-night-${item.id}`];
+              return (
+                <div key={item.id}>
+                  {i > 0 && <div style={{ height: 1, background: "rgba(255,255,255,0.04)", margin: "0 12px" }} />}
+                  <div style={S.checkItem(isChecked)} onClick={() => toggle("night", item.id)}>
+                    <div style={S.checkBox(isChecked)}>{isChecked && "✓"}</div>
+                    <span style={{ fontSize: 16 }}>{item.emoji}</span>
+                    <span style={{ fontSize: 14, color: isChecked ? "#64748b" : "#e2e8f0", textDecoration: isChecked ? "line-through" : "none" }}>
+                      {item.label}
+                    </span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </>
+      )}
+
+      {/* Match Day checklist */}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
         <div style={{ ...S.sectionTitle, marginBottom: 0 }}>
-          Kit Checklist {isRoad && <span style={{ color: "#ffb347", fontSize: 13 }}>🚗 Road</span>}
+          {daysAway === 0 ? "⚡ Match Day" : "🎒 Match Day Kit"} {isRoad && <span style={{ color: "#ffb347", fontSize: 13 }}>🚗 Road</span>}
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <span style={{ fontSize: 12, color: done === items.length ? "#22d3a0" : "#64748b" }}>
-            {done}/{items.length}
+          <span style={{ fontSize: 12, color: dayDone === matchDayItems.length ? "#22d3a0" : "#64748b" }}>
+            {dayDone}/{matchDayItems.length}
           </span>
-          <button onClick={reset} style={{ background: "none", border: "none", color: "#475569", cursor: "pointer", fontSize: 12 }}>Reset</button>
+          <button onClick={reset} style={{ background: "none", border: "none", color: "#475569", cursor: "pointer", fontSize: 12 }}>Reset all</button>
         </div>
       </div>
 
       <div style={{ background: "#111827", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 12, overflow: "hidden" }}>
-        {items.map((item, i) => {
-          const isChecked = !!checked[`${ck}-${item.id}`];
+        {matchDayItems.map((item, i) => {
+          const isChecked = !!checked[`${ck}-day-${item.id}`];
           return (
             <div key={item.id}>
               {i > 0 && <div style={{ height: 1, background: "rgba(255,255,255,0.04)", margin: "0 12px" }} />}
-              <div style={S.checkItem(isChecked)} onClick={() => toggle(item.id)}>
+              <div style={S.checkItem(isChecked)} onClick={() => toggle("day", item.id)}>
                 <div style={S.checkBox(isChecked)}>{isChecked && "✓"}</div>
                 <span style={{ fontSize: 16 }}>{item.emoji}</span>
                 <span style={{ fontSize: 14, color: isChecked ? "#64748b" : "#e2e8f0", textDecoration: isChecked ? "line-through" : "none" }}>
@@ -131,10 +176,10 @@ export default function ChecklistTab({ k1Matches, k2Matches }) {
         })}
       </div>
 
-      {done === items.length && (
+      {dayDone === matchDayItems.length && nightDone === (showNightBefore ? CHECKLIST_NIGHT_BEFORE.length : nightDone) && (
         <div style={{ background: "rgba(34,211,160,0.1)", border: "1px solid rgba(34,211,160,0.25)", borderRadius: 10, padding: 14, marginTop: 12, textAlign: "center" }}>
           <span style={{ fontSize: 16 }}>✅</span>
-          <span style={{ color: "#22d3a0", fontWeight: 600, marginLeft: 8 }}>Kit ready. Let's go.</span>
+          <span style={{ color: "#22d3a0", fontWeight: 600, marginLeft: 8 }}>All set. Let's go.</span>
         </div>
       )}
 

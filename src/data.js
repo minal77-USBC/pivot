@@ -31,13 +31,19 @@ export const KIDS = [
 ];
 
 
+export const CHECKLIST_NIGHT_BEFORE = [
+  { id:"wash",  emoji:"🧺", label:"Wash & dry match kit" },
+  { id:"pack",  emoji:"🎒", label:"Pack kit bag tonight" },
+  { id:"shoes", emoji:"👟", label:"Check & clean shoes" },
+  { id:"water", emoji:"💧", label:"Fill & chill water bottle" },
+];
+
 export const CHECKLIST_STD = [
   { id:"jersey",  emoji:"👕", label:"Match Jersey" },
   { id:"shorts",  emoji:"🩳", label:"Match Shorts" },
   { id:"shoes",   emoji:"👟", label:"Basketball Shoes" },
   { id:"water",   emoji:"💧", label:"Water Bottle (full)" },
   { id:"snack",   emoji:"🍌", label:"Pre-match Snack" },
-  { id:"fedcard", emoji:"🪪", label:"Federació ID Card ⚠️" },
   { id:"towel",   emoji:"🧺", label:"Towel" },
   { id:"bag",     emoji:"🎒", label:"Kit Bag" },
 ];
@@ -48,7 +54,6 @@ export const CHECKLIST_ROAD = [
   { id:"shoes",   emoji:"👟", label:"Basketball Shoes" },
   { id:"water",   emoji:"💧", label:"Large Water Bottle" },
   { id:"snack",   emoji:"🍱", label:"Road Snacks (2h trip)" },
-  { id:"fedcard", emoji:"🪪", label:"Federació ID Card ⚠️" },
   { id:"towel",   emoji:"🧺", label:"Towel" },
   { id:"layer",   emoji:"🧥", label:"Extra Layer / Hoodie" },
   { id:"cash",    emoji:"💶", label:"Cash — Food Stop" },
