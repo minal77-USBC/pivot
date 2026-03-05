@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { S } from "../styles";
-import { tier, fmtDate } from "../utils";
+import { fmtDate } from "../utils";
 
 export default function SeasonTab({ kids = [], k1Matches, k2Matches }) {
   const [kidId, setKidId] = useState("k1");
@@ -34,8 +34,10 @@ function KidSeason({ matches, kid }) {
   const awayGames = played.filter(m => m.ha === "away");
   const homeWins = homeGames.filter(m => m.win).length;
   const awayWins = awayGames.filter(m => m.win).length;
-  const roadTrips = matches.filter(m => tier(m.km) === "road");
+  const roadTrips = matches.filter(m => m.ha === "away");
   const roadDone = roadTrips.filter(m => m.played).length;
+  const roadUpcoming = roadTrips.filter(m => !m.played).sort((a, b) => a.date.localeCompare(b.date));
+  const roadPlayed = roadTrips.filter(m => m.played).sort((a, b) => b.date.localeCompare(a.date));
   const winPct = played.length ? Math.round((wins / played.length) * 100) : 0;
 
   const streak = (() => {
@@ -82,26 +84,47 @@ function KidSeason({ matches, kid }) {
       </div>
 
       <div style={S.sectionTitle}>Road Trips</div>
-      <div style={S.card()}>
-        <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 12 }}>
-          <span style={{ fontSize: 14, color: "#94a3b8" }}>{roadDone} completed · {roadTrips.length - roadDone} remaining</span>
-        </div>
-        {roadTrips.map((m, i) => (
-          <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "8px 0", borderBottom: i < roadTrips.length - 1 ? "1px solid rgba(255,255,255,0.05)" : "none" }}>
-            <div>
-              <div style={{ fontSize: 13, fontWeight: 500, color: m.played ? "#475569" : "#f1f5f9", textDecoration: m.played ? "line-through" : "none" }}>
-                {m.city}
-              </div>
-              <div style={{ fontSize: 11, color: "#475569" }}>{fmtDate(m.date)} · {m.km}km</div>
-            </div>
-            <div style={{ textAlign: "right" }}>
-              {m.played
-                ? <span style={{ fontSize: 13, color: m.win ? "#22d3a0" : "#ff4757", fontWeight: 600 }}>{m.win ? "W" : "L"} {m.score}</span>
-                : <span style={S.badge("road")}>Upcoming</span>}
-            </div>
-          </div>
-        ))}
+      <div style={{ fontSize: 12, color: "#475569", marginBottom: 10 }}>
+        {roadDone} completed · {roadTrips.length - roadDone} remaining
       </div>
+
+      {roadUpcoming.length > 0 && (
+        <>
+          <div style={{ fontSize: 11, fontWeight: 600, color: "#ffb347", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 8 }}>
+            Upcoming · {roadUpcoming.length}
+          </div>
+          <div style={{ ...S.card(), marginBottom: 12 }}>
+            {roadUpcoming.map((m, i) => (
+              <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "8px 0", borderBottom: i < roadUpcoming.length - 1 ? "1px solid rgba(255,255,255,0.05)" : "none" }}>
+                <div>
+                  <div style={{ fontSize: 13, fontWeight: 500, color: "#f1f5f9" }}>{m.opp}</div>
+                  <div style={{ fontSize: 11, color: "#475569" }}>{fmtDate(m.date)} · {m.city}{m.km > 0 ? ` · ${m.km}km` : ""}</div>
+                </div>
+                <span style={S.badge("road")}>Upcoming</span>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
+
+      {roadPlayed.length > 0 && (
+        <>
+          <div style={{ fontSize: 11, fontWeight: 600, color: "#475569", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 8 }}>
+            Played · {roadPlayed.length}
+          </div>
+          <div style={S.card()}>
+            {roadPlayed.map((m, i) => (
+              <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "8px 0", borderBottom: i < roadPlayed.length - 1 ? "1px solid rgba(255,255,255,0.05)" : "none", opacity: 0.7 }}>
+                <div>
+                  <div style={{ fontSize: 13, fontWeight: 500, color: "#94a3b8" }}>{m.opp}</div>
+                  <div style={{ fontSize: 11, color: "#475569" }}>{fmtDate(m.date)} · {m.city}{m.km > 0 ? ` · ${m.km}km` : ""}</div>
+                </div>
+                <span style={{ fontSize: 13, color: m.win ? "#22d3a0" : "#ff4757", fontWeight: 600 }}>{m.win ? "W" : "L"} {m.score}</span>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
 
       <div style={S.sectionTitle}>Recent Form</div>
       <div style={{ ...S.card(), display: "flex", gap: 6, flexWrap: "wrap" }}>
