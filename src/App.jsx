@@ -27,26 +27,37 @@ function loadStoredUser() {
   return null;
 }
 
+const shareToken = new URLSearchParams(window.location.search).get("family");
+
 export default function App() {
   const [user, setUser] = useState(loadStoredUser);
   const [tab, setTab] = useState("dash");
-  const [setupKey, setSetupKey] = useState(0); // increment to re-run setup flow
+  const [setupKey, setSetupKey] = useState(0);
+  const [copied, setCopied] = useState(false);
 
-  const { kids, loading: familyLoading, error: familyError } = useFamily(user, setupKey);
+  const { kids, loading: familyLoading, error: familyError, shareUrl } = useFamily(user, setupKey, shareToken);
   const { kidMatches, loading: schedLoading, error: schedError, refresh } = useSchedule(kids);
 
   const loading = familyLoading || (kids?.length > 0 && schedLoading);
   const error = schedError || familyError;
 
-  // Derive per-kid match arrays (positional: k1, k2, k3)
   const k1Matches = kidMatches[kids?.[0]?.id] || [];
   const k2Matches = kidMatches[kids?.[1]?.id] || [];
   const k3Matches = kidMatches[kids?.[2]?.id] || [];
 
-  if (!user) return <LoginScreen onAuth={setUser} />;
+  const copyShare = () => {
+    if (!shareUrl) return;
+    navigator.clipboard.writeText(shareUrl).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  };
 
-  // Family not yet configured — show one-time setup
-  if (!familyLoading && kids !== null && kids.length === 0) {
+  // Token-based access: skip login, go straight to app
+  if (!shareToken && !user) return <LoginScreen onAuth={setUser} />;
+
+  // Family not yet configured — show one-time setup (email flow only)
+  if (!shareToken && !familyLoading && kids !== null && kids.length === 0) {
     return <SetupScreen user={user} onSave={() => setSetupKey(k => k + 1)} />;
   }
 
@@ -68,19 +79,33 @@ export default function App() {
           <div style={S.logo}>PIVOT</div>
           <div style={S.subtitle}>Basketball · BCN</div>
         </div>
-        <div style={{ textAlign: "right" }}>
+        <div style={{ textAlign: "right", display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 4 }}>
           <div style={{ fontSize: 11, color: "#475569", letterSpacing: "0.08em" }}>2025–26</div>
-          <button
-            onClick={() => { sessionStorage.removeItem("pivot_auth"); setUser(null); }}
-            title={`Signed in as ${user.email}`}
-            style={{ background: "none", border: "none", cursor: "pointer", padding: 0, display: "flex", alignItems: "center", gap: 6, marginTop: 2 }}
-          >
-            {user.picture
-              ? <img src={user.picture} alt="" style={{ width: 20, height: 20, borderRadius: "50%", opacity: 0.6 }} />
-              : <span style={{ fontSize: 16 }}>👤</span>
-            }
-            <span style={{ fontSize: 10, color: "#334155" }}>Sign out</span>
-          </button>
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            {shareUrl && (
+              <button onClick={copyShare} style={{
+                background: copied ? "rgba(34,211,160,0.15)" : "rgba(255,255,255,0.05)",
+                border: `1px solid ${copied ? "rgba(34,211,160,0.3)" : "rgba(255,255,255,0.1)"}`,
+                borderRadius: 6, padding: "3px 8px", cursor: "pointer",
+                color: copied ? "#22d3a0" : "#64748b", fontSize: 10, fontWeight: 500,
+              }}>
+                {copied ? "Copied!" : "🔗 Share"}
+              </button>
+            )}
+            {!shareToken && (
+              <button
+                onClick={() => { sessionStorage.removeItem("pivot_auth"); setUser(null); }}
+                title={`Signed in as ${user?.email}`}
+                style={{ background: "none", border: "none", cursor: "pointer", padding: 0, display: "flex", alignItems: "center", gap: 6 }}
+              >
+                {user?.picture
+                  ? <img src={user.picture} alt="" style={{ width: 20, height: 20, borderRadius: "50%", opacity: 0.6 }} />
+                  : <span style={{ fontSize: 16 }}>👤</span>
+                }
+                <span style={{ fontSize: 10, color: "#334155" }}>Sign out</span>
+              </button>
+            )}
+          </div>
         </div>
       </div>
 

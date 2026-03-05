@@ -21,20 +21,28 @@ async function sb(path, opts = {}) {
 }
 
 export default async function handler(req, res) {
+  // GET by share token — no auth required
+  if (req.method === "GET" && req.query.token) {
+    const { token } = req.query;
+    const rows = await sb(
+      `/families?share_token=eq.${encodeURIComponent(token)}&select=*,kids(*)&kids.order=sort_order.asc`
+    ).catch(() => []);
+    if (!rows.length) return res.status(404).json({ error: "Not found" });
+    return res.json({ family: rows[0] });
+  }
+
   const { email } = req.method === "GET" ? req.query : req.body || {};
 
   if (!email) return res.status(400).json({ error: "Missing email" });
 
-  // GET — load family config
+  // GET — load family config by email
   if (req.method === "GET") {
     const rows = await sb(
       `/families?email=eq.${encodeURIComponent(email)}&select=*,kids(*)&kids.order=sort_order.asc`
     ).catch(() => []);
 
     if (!rows.length) return res.json({ family: null });
-
-    const family = rows[0];
-    return res.json({ family });
+    return res.json({ family: rows[0] });
   }
 
   // POST — save (upsert) family config
@@ -77,7 +85,7 @@ export default async function handler(req, res) {
       });
     }
 
-    return res.json({ ok: true });
+    return res.json({ ok: true, shareToken: family.share_token });
   }
 
   res.status(405).end();
