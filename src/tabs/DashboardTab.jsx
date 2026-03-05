@@ -20,9 +20,7 @@ export default function DashboardTab({ kids = [], k1Matches, k2Matches }) {
   const nextK1 = upK1[0];
   const nextK2 = upK2[0];
 
-  const played = k1Matches.filter(m => m.played);
-  const wins = played.filter(m => m.win).length;
-
+  const allMatches = [k1Matches, k2Matches];
   const doubles = upK1.filter(m1 => upK2.some(m2 => m2.date === m1.date));
 
   const showBriefBtn = (nextK1 && daysOut(nextK1.date) <= 4) || (nextK2 && daysOut(nextK2.date) <= 4);
@@ -82,7 +80,7 @@ export default function DashboardTab({ kids = [], k1Matches, k2Matches }) {
           <span style={{ fontSize: 18 }}>⚡</span>
           <div>
             <div style={{ fontSize: 12, fontWeight: 600, color: "#FF6B2B" }}>Match this weekend</div>
-            <div style={{ fontSize: 11, color: "#64748b" }}>{fmtDate(nextK1.date)} · {nextK1.time} · {nextK1.ha === "home" ? "Nau Parc Clot" : nextK1.city}</div>
+            <div style={{ fontSize: 11, color: "#64748b" }}>{fmtDate(nextK1.date)} · {nextK1.time} · {nextK1.ha === "home" ? nextK1.venue : nextK1.city}</div>
           </div>
         </div>
       )}
@@ -92,25 +90,34 @@ export default function DashboardTab({ kids = [], k1Matches, k2Matches }) {
         <div style={{ background: "rgba(168,85,247,0.08)", border: "1px solid rgba(168,85,247,0.2)", borderRadius: 12, padding: "10px 14px", marginBottom: 14 }}>
           <div style={{ fontSize: 12, fontWeight: 600, color: "#a855f7", marginBottom: 4 }}>🏀🏀 Double Match Day · {fmtDate(doubles[0].date)}</div>
           <div style={{ fontSize: 11, color: "#64748b" }}>
-            Rohan · {doubles[0].time} &nbsp;·&nbsp; Sara · {upK2.find(m => m.date === doubles[0].date)?.time}
+            {kids[0]?.label} · {doubles[0].time} &nbsp;·&nbsp; {kids[1]?.label} · {upK2.find(m => m.date === doubles[0].date)?.time}
           </div>
         </div>
       )}
 
-      {/* Season stat pills */}
-      <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
-        <div style={S.statBox}>
-          <div style={{ ...S.statNum, color: "#22d3a0", fontSize: 28 }}>{wins}W</div>
-          <div style={S.statLbl}>Rohan · Cadet</div>
-        </div>
-        <div style={S.statBox}>
-          <div style={{ ...S.statNum, color: "#ff4757", fontSize: 28 }}>{played.length - wins}L</div>
-          <div style={S.statLbl}>{played.length} played</div>
-        </div>
-        <div style={S.statBox}>
-          <div style={{ ...S.statNum, color: "#64748b", fontSize: 28 }}>{k1Matches.filter(m => !m.played).length}</div>
-          <div style={S.statLbl}>Remaining</div>
-        </div>
+      {/* Season stats — one row per kid */}
+      <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 16 }}>
+        {kids.map((kid, idx) => {
+          const matches = allMatches[idx] || [];
+          const played = matches.filter(m => m.played);
+          const wins = played.filter(m => m.win).length;
+          return (
+            <div key={kid.id} style={{ display: "flex", gap: 8 }}>
+              <div style={{ ...S.statBox, flex: 1 }}>
+                <div style={{ ...S.statNum, color: "#22d3a0", fontSize: 24 }}>{wins}W</div>
+                <div style={S.statLbl}>{kid.label}</div>
+              </div>
+              <div style={{ ...S.statBox, flex: 1 }}>
+                <div style={{ ...S.statNum, color: "#ff4757", fontSize: 24 }}>{played.length - wins}L</div>
+                <div style={S.statLbl}>{kid.shortName}</div>
+              </div>
+              <div style={{ ...S.statBox, flex: 1 }}>
+                <div style={{ ...S.statNum, color: "#64748b", fontSize: 24 }}>{matches.filter(m => !m.played).length}</div>
+                <div style={S.statLbl}>Left</div>
+              </div>
+            </div>
+          );
+        })}
       </div>
 
       {/* Next matches */}

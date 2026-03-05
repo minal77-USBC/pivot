@@ -114,9 +114,14 @@ export default function MatchCard({ m, kidColor = "#FF6B2B", compact = false, ar
               href={mapsUrl(m.venue, m.city)}
               target="_blank"
               rel="noreferrer"
-              style={{ ...S.mapsBtn, marginTop: 10, textDecoration: "none", display: "inline-flex" }}
+              style={{
+                display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
+                marginTop: 12, padding: "10px 0", borderRadius: 8, textDecoration: "none",
+                background: `${kidColor}18`, border: `1px solid ${kidColor}44`,
+                color: kidColor, fontSize: 13, fontWeight: 600,
+              }}
             >
-              📍 Open in Maps
+              📍 Open {m.venue} in Maps
             </a>
           )}
         </>
