@@ -65,6 +65,7 @@ export default async function handler(req, res) {
             sort_order: i,
             name: k.name,
             label: k.label,
+            club_name: k.clubName || null,
             fcbq_team_id: k.fcbqTeamId || null,
             category: k.category,
             gender: k.gender || "M",

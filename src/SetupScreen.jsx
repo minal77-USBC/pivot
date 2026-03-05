@@ -3,7 +3,11 @@ import { S } from "./styles";
 
 const CATEGORIES = ["Premini", "Mini", "Infantil", "Cadet", "Junior", "Sènior"];
 const COLORS = ["#FF6B2B", "#A855F7", "#22d3a0", "#3B82F6", "#F59E0B", "#EF4444"];
-const EMPTY_KID = { name: "", label: "", fcbqTeamId: "", category: "Infantil", gender: "M", grupIdPhase1: "", grupIdPhase2: "", color: "#FF6B2B" };
+const EMPTY_KID = { name: "", label: "", clubName: "", fcbqTeamId: "", category: "Infantil", gender: "M", grupIdPhase1: "", grupIdPhase2: "", color: "#FF6B2B" };
+
+function positiveInt(val) {
+  return val.replace(/[^0-9]/g, "");
+}
 
 function KidForm({ kid, index, onChange, onRemove, canRemove }) {
   const set = (field, val) => onChange({ ...kid, [field]: val });
@@ -64,29 +68,47 @@ function KidForm({ kid, index, onChange, onRemove, canRemove }) {
         </div>
       </div>
 
-      {/* FCBQ Team ID */}
+      {/* Club name + Team ID */}
+      <div style={{ marginBottom: 10 }}>
+        <div style={S.label}>Club name</div>
+        <div style={{ display: "flex", gap: 6 }}>
+          <input value={kid.clubName} onChange={e => set("clubName", e.target.value)}
+            placeholder="e.g. Grup Barna, Sant Josep, Joventut"
+            style={{ ...inputStyle, flex: 1 }} />
+          <a
+            href={`https://www.basquetcatala.cat/clubs${kid.clubName ? `?q=${encodeURIComponent(kid.clubName)}` : ""}`}
+            target="_blank" rel="noreferrer"
+            style={{ ...inputStyle, width: "auto", padding: "7px 10px", color: kid.color, border: `1px solid ${kid.color}44`, background: `${kid.color}1a`, textDecoration: "none", whiteSpace: "nowrap", flexShrink: 0 }}>
+            Find →
+          </a>
+        </div>
+        <div style={{ fontSize: 10, color: "#334155", marginTop: 4 }}>
+          Search opens basquetcatala.cat. Click your club → find your kid's team → copy the number from the URL (e.g. /equip/<b style={{ color: "#64748b" }}>80316</b>)
+        </div>
+      </div>
+
       <div style={{ marginBottom: 10 }}>
         <div style={S.label}>FCBQ Team ID</div>
-        <input value={kid.fcbqTeamId} onChange={e => set("fcbqTeamId", e.target.value)}
-          placeholder="e.g. 80316 — from basquetcatala.cat/equip/XXXXX"
-          style={inputStyle} type="number" />
+        <input value={kid.fcbqTeamId} onChange={e => set("fcbqTeamId", positiveInt(e.target.value))}
+          placeholder="e.g. 80316"
+          style={inputStyle} inputMode="numeric" />
       </div>
 
       {/* Grup IDs */}
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
         <div>
           <div style={S.label}>Grup ID — Phase 1</div>
-          <input value={kid.grupIdPhase1} onChange={e => set("grupIdPhase1", e.target.value)}
-            placeholder="e.g. 19848" style={inputStyle} type="number" />
+          <input value={kid.grupIdPhase1} onChange={e => set("grupIdPhase1", positiveInt(e.target.value))}
+            placeholder="e.g. 19848" style={inputStyle} inputMode="numeric" />
         </div>
         <div>
           <div style={S.label}>Grup ID — Phase 2 (optional)</div>
-          <input value={kid.grupIdPhase2} onChange={e => set("grupIdPhase2", e.target.value)}
-            placeholder="e.g. 21202" style={inputStyle} type="number" />
+          <input value={kid.grupIdPhase2} onChange={e => set("grupIdPhase2", positiveInt(e.target.value))}
+            placeholder="e.g. 21202" style={inputStyle} inputMode="numeric" />
         </div>
       </div>
       <div style={{ fontSize: 10, color: "#334155", marginTop: 6 }}>
-        Find Grup IDs on basquetcatala.cat → your kid's competition page → URL contains the grup number
+        On basquetcatala.cat → your kid's competition page → tap the group → the number in the URL is the Grup ID
       </div>
     </div>
   );

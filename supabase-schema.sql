@@ -13,6 +13,7 @@ create table kids (
   sort_order smallint not null default 0,
   name text not null,
   label text not null,
+  club_name text,
   fcbq_team_id text,
   category text not null,
   gender text not null default 'M',
