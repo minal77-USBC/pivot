@@ -27,15 +27,14 @@ function loadStoredUser() {
   return null;
 }
 
-const SHARE_TOKEN_KEY = "pivot_share_token";
-
 function resolveShareToken() {
-  const fromUrl = new URLSearchParams(window.location.search).get("family");
-  if (fromUrl) {
-    localStorage.setItem(SHARE_TOKEN_KEY, fromUrl);
-    return fromUrl;
-  }
-  return localStorage.getItem(SHARE_TOKEN_KEY) || null;
+  // Check query string (?family=abc) — original share link
+  const fromQuery = new URLSearchParams(window.location.search).get("family");
+  if (fromQuery) return fromQuery;
+  // Check hash (#family=abc) — preserved by iOS home screen shortcuts
+  const fromHash = new URLSearchParams(window.location.hash.slice(1)).get("family");
+  if (fromHash) return fromHash;
+  return null;
 }
 
 const shareToken = resolveShareToken();

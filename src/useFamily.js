@@ -28,7 +28,7 @@ export function useFamily(user, refreshKey = 0, shareToken = null) {
       .then(({ family }) => {
         setKids(family ? buildKids(family.kids || []) : []);
         if (family?.share_token) {
-          setShareUrl(`${window.location.origin}?family=${family.share_token}`);
+          setShareUrl(`${window.location.origin}/#family=${family.share_token}`);
         }
         setLoading(false);
       })
