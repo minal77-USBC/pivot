@@ -16,7 +16,7 @@ function StatRow({ p, isRohan, border }) {
   return (
     <div style={{
       display: "grid",
-      gridTemplateColumns: "24px 1fr 36px 40px 44px 36px 36px 40px",
+      gridTemplateColumns: "24px minmax(70px,1fr) 36px 40px 44px 36px 36px 40px",
       gap: 4,
       alignItems: "center",
       padding: "8px 12px",
@@ -118,22 +118,24 @@ function SeasonStats() {
       </div>
 
       {/* Column headers */}
-      <div style={{ ...S.card({ padding: "0", overflow: "hidden" }) }}>
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "24px 1fr 36px 40px 44px 36px 36px 40px",
-          gap: 4,
-          padding: "6px 12px",
-          borderBottom: "1px solid rgba(255,255,255,0.07)",
-          background: "rgba(255,255,255,0.03)",
-        }}>
-          {["#", "Player", "GP", "PPG", "PTS", "FT", "3P", "VAL"].map((h, i) => (
-            <span key={i} style={{ fontSize: 9, color: "#475569", textTransform: "uppercase", letterSpacing: "0.1em", textAlign: i > 1 ? "right" : "left" }}>{h}</span>
+      <div style={{ ...S.card({ padding: "0" }), overflowX: "auto" }}>
+        <div style={{ minWidth: 420 }}>
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: "24px minmax(70px,1fr) 36px 40px 44px 36px 36px 40px",
+            gap: 4,
+            padding: "6px 12px",
+            borderBottom: "1px solid rgba(255,255,255,0.07)",
+            background: "rgba(255,255,255,0.03)",
+          }}>
+            {["#", "Player", "GP", "PPG", "PTS", "FT", "3P", "VAL"].map((h, i) => (
+              <span key={i} style={{ fontSize: 9, color: "#475569", textTransform: "uppercase", letterSpacing: "0.1em", textAlign: i > 1 ? "right" : "left" }}>{h}</span>
+            ))}
+          </div>
+          {players.map((p, i) => (
+            <StatRow key={p.uuid || i} p={p} isRohan={p.name.includes("ROHAN")} border={i < players.length - 1} />
           ))}
         </div>
-        {players.map((p, i) => (
-          <StatRow key={p.uuid || i} p={p} isRohan={p.name.includes("ROHAN")} border={i < players.length - 1} />
-        ))}
       </div>
       <div style={{ fontSize: 10, color: "#334155", textAlign: "center", marginTop: 8 }}>
         VAL = valoration (efficiency). FT/3P = made. Source: FCBQ / msstats
