@@ -102,6 +102,15 @@ export default function ChecklistTab({ kids = [], k1Matches, k2Matches }) {
               <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 28, fontWeight: 700, color: kid.color }}>{leave}</div>
             </div>
           )}
+          {match.km > 0 && (
+            <div>
+              <div style={S.label}>Travel</div>
+              <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 28, fontWeight: 700, color: "#ffb347" }}>
+                {overrideMins ? overrideMins : `~${travelMins(match.km)}`}<span style={{ fontSize: 14, fontWeight: 400 }}>min</span>
+              </div>
+              <div style={{ fontSize: 10, color: "#475569" }}>{match.km}km</div>
+            </div>
+          )}
           <div>
             <div style={S.label}>Latest meal</div>
             <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 28, fontWeight: 700, color: "#22d3a0" }}>{meal}</div>
@@ -112,6 +121,17 @@ export default function ChecklistTab({ kids = [], k1Matches, k2Matches }) {
             <div style={{ fontSize: 11, color: "#64748b" }}>+ {kit.shorts} shorts</div>
           </div>
         </div>
+        {match.ha === "away" && (
+          <a href={mapsUrl(match.venue, match.city)} target="_blank" rel="noreferrer"
+            style={{
+              display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
+              marginTop: 14, padding: "10px 0", borderRadius: 8, textDecoration: "none",
+              background: `${kid.color}18`, border: `1px solid ${kid.color}44`,
+              color: kid.color, fontSize: 13, fontWeight: 600,
+            }}>
+            📍 Open {match.venue} in Maps
+          </a>
+        )}
       </div>
 
       {/* Night Before checklist */}
@@ -183,12 +203,6 @@ export default function ChecklistTab({ kids = [], k1Matches, k2Matches }) {
         </div>
       )}
 
-      {match.ha === "away" && (
-        <a href={mapsUrl(match.venue, match.city)} target="_blank" rel="noreferrer"
-          style={{ ...S.mapsBtn, marginTop: 12, width: "100%", justifyContent: "center", textDecoration: "none", display: "flex", borderColor: `${kid.color}44`, color: kid.color, background: `${kid.color}1a` }}>
-          📍 Open {match.venue} in Maps
-        </a>
-      )}
     </div>
   );
 }
