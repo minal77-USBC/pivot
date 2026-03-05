@@ -27,17 +27,9 @@ function loadStoredUser() {
   return null;
 }
 
-const SHARE_TOKEN_KEY = "pivot_share_token";
-
 function resolveShareToken() {
-  // Check query string (?family=abc)
-  const fromQuery = new URLSearchParams(window.location.search).get("family");
-  if (fromQuery) { localStorage.setItem(SHARE_TOKEN_KEY, fromQuery); return fromQuery; }
-  // Check hash (#family=abc)
-  const fromHash = new URLSearchParams(window.location.hash.slice(1)).get("family");
-  if (fromHash) { localStorage.setItem(SHARE_TOKEN_KEY, fromHash); return fromHash; }
-  // Fallback: localStorage for PWA launches where start_url strips the URL
-  return localStorage.getItem(SHARE_TOKEN_KEY) || null;
+  // Set by /s/TOKEN redirect page via sessionStorage before loading main app
+  return sessionStorage.getItem("pivot_share_token") || null;
 }
 
 const shareToken = resolveShareToken();
