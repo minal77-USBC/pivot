@@ -1,64 +1,66 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
-const CACHE_KEY = "pivot_schedule_v1";
-const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+const CACHE_KEY = "pivot_schedule_v2";
+const CACHE_TTL = 5 * 60 * 1000;
 
-export function useSchedule() {
-  const [k1Matches, setK1] = useState([]);
-  const [k2Matches, setK2] = useState([]);
+function getCached(key) {
+  try {
+    const raw = sessionStorage.getItem(key);
+    if (!raw) return null;
+    const { ts, data } = JSON.parse(raw);
+    if (Date.now() - ts > CACHE_TTL) { sessionStorage.removeItem(key); return null; }
+    return data;
+  } catch { return null; }
+}
+
+function setCache(key, data) {
+  try { sessionStorage.setItem(key, JSON.stringify({ ts: Date.now(), data })); } catch { /* ignore */ }
+}
+
+export function useSchedule(kids) {
+  const [kidMatches, setKidMatches] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const fetchRef = useRef(0);
 
-  useEffect(() => {
-    // Serve from sessionStorage cache if fresh
-    try {
-      const raw = sessionStorage.getItem(CACHE_KEY);
-      if (raw) {
-        const { ts, data } = JSON.parse(raw);
-        if (Date.now() - ts < CACHE_TTL) {
-          setK1(data.k1 || []);
-          setK2(data.k2 || []);
-          setLoading(false);
-          return;
-        }
-      }
-    } catch {}
+  // Cache key is unique per family's grup ID combination
+  const cacheKey = kids?.length
+    ? `${CACHE_KEY}:${kids.map(k => `${k.id}:${(k.grupIds || []).join(",")}`).join("|")}`
+    : null;
 
-    fetch("/api/schedule")
-      .then(r => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json(); })
-      .then(data => {
-        try {
-          sessionStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), data }));
-        } catch {}
-        setK1(data.k1 || []);
-        setK2(data.k2 || []);
-        setLoading(false);
-      })
-      .catch(e => {
-        setError(e.message);
-        setLoading(false);
-      });
-  }, []);
+  const doFetch = async (force = false) => {
+    if (!kids?.length) { setKidMatches({}); setLoading(false); return; }
 
-  const refresh = () => {
-    try { sessionStorage.removeItem(CACHE_KEY); } catch {}
+    if (!force) {
+      const cached = getCached(cacheKey);
+      if (cached) { setKidMatches(cached); setLoading(false); return; }
+    }
+
+    const id = ++fetchRef.current;
     setLoading(true);
     setError(null);
-    fetch("/api/schedule")
-      .then(r => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json(); })
-      .then(data => {
-        try {
-          sessionStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), data }));
-        } catch {}
-        setK1(data.k1 || []);
-        setK2(data.k2 || []);
-        setLoading(false);
-      })
-      .catch(e => {
-        setError(e.message);
-        setLoading(false);
-      });
+
+    try {
+      const param = encodeURIComponent(JSON.stringify(
+        kids.map(k => ({ id: k.id, grupIds: k.grupIds || [] }))
+      ));
+      const res = await fetch(`/api/schedule?kids=${param}`);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+      if (fetchRef.current !== id) return;
+      setCache(cacheKey, data);
+      setKidMatches(data);
+    } catch (e) {
+      if (fetchRef.current === id) setError(e.message);
+    } finally {
+      if (fetchRef.current === id) setLoading(false);
+    }
   };
 
-  return { k1Matches, k2Matches, loading, error, refresh };
+  useEffect(() => {
+    doFetch();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cacheKey]);
+
+  return { kidMatches, loading, error, refresh: () => doFetch(true) };
 }

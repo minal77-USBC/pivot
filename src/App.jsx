@@ -1,17 +1,19 @@
 import { useState } from "react";
 import { S } from "./styles";
 import { useSchedule } from "./useSchedule";
+import { useFamily } from "./useFamily";
 import DashboardTab from "./tabs/DashboardTab";
 import CalendarTab from "./tabs/CalendarTab";
 import ChecklistTab from "./tabs/ChecklistTab";
 import SeasonTab from "./tabs/SeasonTab";
 import StatsTab from "./tabs/StatsTab";
 import LoginScreen from "./LoginScreen";
+import SetupScreen from "./SetupScreen";
 
 const TABS = [
   { id: "dash",     label: "Dashboard", icon: "⚡" },
-  { id: "calendar", label: "Calendar", icon: "📅" },
-  { id: "matchday", label: "Match Day",  icon: "🎒" },
+  { id: "calendar", label: "Calendar",  icon: "📅" },
+  { id: "matchday", label: "Match Day", icon: "🎒" },
   { id: "season",   label: "Season",    icon: "📊" },
   { id: "stats",    label: "Stats",     icon: "🏀" },
 ];
@@ -28,9 +30,25 @@ function loadStoredUser() {
 export default function App() {
   const [user, setUser] = useState(loadStoredUser);
   const [tab, setTab] = useState("dash");
-  const { k1Matches, k2Matches, loading, error, refresh } = useSchedule();
+  const [setupKey, setSetupKey] = useState(0); // increment to re-run setup flow
+
+  const { kids, loading: familyLoading, error: familyError } = useFamily(user, setupKey);
+  const { kidMatches, loading: schedLoading, error: schedError, refresh } = useSchedule(kids);
+
+  const loading = familyLoading || (kids?.length > 0 && schedLoading);
+  const error = schedError || familyError;
+
+  // Derive per-kid match arrays (positional: k1, k2, k3)
+  const k1Matches = kidMatches[kids?.[0]?.id] || [];
+  const k2Matches = kidMatches[kids?.[1]?.id] || [];
+  const k3Matches = kidMatches[kids?.[2]?.id] || [];
 
   if (!user) return <LoginScreen onAuth={setUser} />;
+
+  // Family not yet configured — show one-time setup
+  if (!familyLoading && kids !== null && kids.length === 0) {
+    return <SetupScreen user={user} onSave={() => setSetupKey(k => k + 1)} />;
+  }
 
   return (
     <div style={S.app}>
@@ -80,26 +98,26 @@ export default function App() {
         {loading && (
           <div style={{ textAlign: "center", padding: 48, color: "#475569" }}>
             <div style={{ fontSize: 28, marginBottom: 10 }}>⏳</div>
-            <div style={{ fontSize: 13 }}>Loading schedule…</div>
+            <div style={{ fontSize: 13 }}>Loading…</div>
           </div>
         )}
 
         {!loading && error && (
           <div style={{ ...S.card({ borderColor: "rgba(255,71,87,0.3)" }), color: "#ff4757", fontSize: 13 }}>
-            <div style={{ marginBottom: 8 }}>Failed to load schedule: {error}</div>
+            <div style={{ marginBottom: 8 }}>Failed to load: {error}</div>
             <button onClick={refresh} style={{ background: "#FF6B2B", border: "none", borderRadius: 6, color: "white", fontSize: 12, padding: "6px 14px", cursor: "pointer" }}>
               Retry
             </button>
           </div>
         )}
 
-        {!loading && !error && (
+        {!loading && !error && kids?.length > 0 && (
           <>
-            {tab === "dash"     && <DashboardTab k1Matches={k1Matches} k2Matches={k2Matches} />}
-            {tab === "calendar" && <CalendarTab  k1Matches={k1Matches} k2Matches={k2Matches} />}
-            {tab === "matchday" && <ChecklistTab k1Matches={k1Matches} k2Matches={k2Matches} />}
-            {tab === "season"   && <SeasonTab    k1Matches={k1Matches} k2Matches={k2Matches} />}
-            {tab === "stats"    && <StatsTab     k1Matches={k1Matches} />}
+            {tab === "dash"     && <DashboardTab kids={kids} k1Matches={k1Matches} k2Matches={k2Matches} />}
+            {tab === "calendar" && <CalendarTab  kids={kids} k1Matches={k1Matches} k2Matches={k2Matches} />}
+            {tab === "matchday" && <ChecklistTab kids={kids} k1Matches={k1Matches} k2Matches={k2Matches} />}
+            {tab === "season"   && <SeasonTab    kids={kids} k1Matches={k1Matches} k2Matches={k2Matches} k3Matches={k3Matches} />}
+            {tab === "stats"    && <StatsTab     kids={kids} k1Matches={k1Matches} />}
           </>
         )}
       </div>

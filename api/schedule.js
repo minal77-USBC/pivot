@@ -1,12 +1,6 @@
 const ESB = "https://esb.optimalwayconsulting.com/fcbq/1/jR4rgA5K6Chhh5vyfrxo9wTScdg2NT7K";
 const BARNA = ["GRUP BARNA", "BARNA VERMELL", "GRUP ESP"];
 
-// All 4 competition group IDs
-const GRUPS = {
-  k1: ["19848", "21202"],  // Rohan: Phase 1 + Phase 2
-  k2: ["20111", "21491"],  // Sara:  Phase 1 + Phase 2
-};
-
 // Nau Parc Clot (home venue) coordinates
 const HOME_LAT = 41.4089, HOME_LON = 2.1917;
 
@@ -22,12 +16,6 @@ const CITY_KM = {
 
 // Abbreviations to keep UPPERCASE in team/venue names
 const ABBREVS = new Set(["CB", "JAC", "UE", "TGN", "BBA", "CBM", "CEM", "U15", "U13", "U12"]);
-
-// Schedule changes (canvis badge) — update manually as needed
-const CANVIS = {
-  k1: new Set(["2026-03-21", "2026-03-28", "2026-04-19"]),
-  k2: new Set(),
-};
 
 function isBarna(name) {
   const u = (name || "").toUpperCase();
@@ -49,7 +37,6 @@ function venueKm(m, isHome) {
     const straight = haversineKm(HOME_LAT, HOME_LON, parseFloat(m.latitudeField), parseFloat(m.longitudeField));
     return Math.round(straight * 1.3);
   }
-  // City name fallback
   const city = (m.nameTown || "").toUpperCase();
   for (const [key, km] of Object.entries(CITY_KM)) {
     if (city.includes(key.toUpperCase())) return km;
@@ -70,7 +57,7 @@ function fmtVenue(nameField) {
   return titleCase(parts.length > 1 ? parts.slice(1).join(" - ") : nameField);
 }
 
-function normalizeMatch(m, kidId) {
+function normalizeMatch(m) {
   if (!m.matchDay) return null;
   const barnaLocal = isBarna(m.nameLocalTeam);
   const barnaVisitor = isBarna(m.nameVisitorTeam);
@@ -100,7 +87,6 @@ function normalizeMatch(m, kidId) {
     played,
     ...(played ? { win, score } : {}),
     ...(m.universallyid ? { statsUuid: m.universallyid } : {}),
-    ...(CANVIS[kidId]?.has(datePart) ? { canvis: true } : {}),
   };
 }
 
@@ -120,25 +106,34 @@ export default async function handler(req, res) {
   if (req.method === "OPTIONS") return res.status(200).end();
 
   try {
-    const matches = { k1: [], k2: [] };
+    // Accept dynamic kids config: ?kids=[{"id":"k1","grupIds":["19848","21202"]},...]
+    // Falls back to empty if not provided
+    let kids = [];
+    if (req.query.kids) {
+      try { kids = JSON.parse(req.query.kids); } catch { /* ignore malformed */ }
+    }
 
-    for (const [kidId, grupIds] of Object.entries(GRUPS)) {
-      for (const grupId of grupIds) {
+    const result = {};
+
+    for (const kid of kids) {
+      const kidMatches = [];
+      for (const grupId of (kid.grupIds || [])) {
+        if (!grupId) continue;
         const data = await fetchGrup(grupId);
         const rounds = data.messageData.rounds;
         for (const round of Object.values(rounds)) {
           for (const m of Object.values(round.matches || {})) {
-            const norm = normalizeMatch(m, kidId);
-            if (norm) matches[kidId].push(norm);
+            const norm = normalizeMatch(m);
+            if (norm) kidMatches.push(norm);
           }
         }
       }
-      matches[kidId].sort((a, b) => a.date.localeCompare(b.date));
+      kidMatches.sort((a, b) => a.date.localeCompare(b.date));
+      result[kid.id] = kidMatches;
     }
 
-    // 5-min CDN cache, serve stale while revalidating
     res.setHeader("Cache-Control", "s-maxage=300, stale-while-revalidate=60");
-    return res.status(200).json(matches);
+    return res.status(200).json(result);
   } catch (e) {
     return res.status(502).json({ error: e.message });
   }

@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { S } from "../styles";
-import { KIDS } from "../data";
 import { fmtDate } from "../utils";
 
 const MSSTATS_BASE = "https://msstats.optimalwayconsulting.com/v1/fcbq";
@@ -254,33 +253,36 @@ function MatchBoxScores({ k1Matches }) {
   );
 }
 
-export default function StatsTab({ k1Matches }) {
+export default function StatsTab({ kids = [], k1Matches }) {
   const [kidId, setKidId] = useState("k1");
   const [view, setView] = useState("season");
+  const selectedKid = kids.find(k => k.id === kidId) || kids[0];
 
   return (
     <div>
       {/* Kid selector */}
       <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
-        {KIDS.map(ki => (
+        {kids.map(ki => (
           <button key={ki.id} onClick={() => setKidId(ki.id)} style={S.kidBtn(kidId === ki.id, ki.color)}>
             {ki.label} · {ki.shortName}
           </button>
         ))}
       </div>
 
-      {kidId === "k2" ? (
-        <div style={{ ...S.card({ borderColor: "rgba(168,85,247,0.2)", background: "rgba(168,85,247,0.04)" }), textAlign: "center", padding: 28 }}>
+      {!selectedKid?.statsAvailable ? (
+        <div style={{ ...S.card({ borderColor: `${selectedKid?.color || "#A855F7"}33`, background: `${selectedKid?.color || "#A855F7"}0a` }), textAlign: "center", padding: 28 }}>
           <div style={{ fontSize: 28, marginBottom: 8 }}>📊</div>
-          <div style={{ fontSize: 14, color: "#a855f7", fontWeight: 600, marginBottom: 6 }}>Stats not available</div>
+          <div style={{ fontSize: 14, color: selectedKid?.color || "#a855f7", fontWeight: 600, marginBottom: 6 }}>Stats not available</div>
           <div style={{ fontSize: 12, color: "#64748b", lineHeight: 1.6 }}>
-            FCBQ publishes detailed statistics for Preferent category only.<br />
-            Sara plays Infantil Femení Promoció — no stats published.
+            FCBQ publishes detailed statistics for Cadet Preferent only.<br />
+            {selectedKid?.label} plays {selectedKid?.shortName} — no stats published.
           </div>
-          <a href="https://www.basquetcatala.cat/equip/81179" target="_blank" rel="noreferrer"
-            style={{ ...S.mapsBtn, marginTop: 14, display: "inline-flex", color: "#a855f7", borderColor: "rgba(168,85,247,0.3)", background: "rgba(168,85,247,0.1)" }}>
-            View on FCBQ →
-          </a>
+          {selectedKid?.fcbqId && (
+            <a href={`https://www.basquetcatala.cat/equip/${selectedKid.fcbqId}`} target="_blank" rel="noreferrer"
+              style={{ ...S.mapsBtn, marginTop: 14, display: "inline-flex", color: selectedKid.color, borderColor: `${selectedKid.color}4d`, background: `${selectedKid.color}1a` }}>
+              View on FCBQ →
+            </a>
+          )}
         </div>
       ) : (
         <>

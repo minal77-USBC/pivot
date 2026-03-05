@@ -1,7 +1,6 @@
 import { useState } from "react";
 import MatchCard from "../components/MatchCard";
 import { S } from "../styles";
-import { KIDS } from "../data";
 import { upcoming, daysOut, fmtDate, leaveByFromMins, travelMins, getOverrideMins } from "../utils";
 
 function getLeave(m, arrivalBuffer = 20) {
@@ -10,7 +9,7 @@ function getLeave(m, arrivalBuffer = 20) {
   return leaveByFromMins(m.time, override ?? travelMins(m.km), arrivalBuffer);
 }
 
-export default function DashboardTab({ k1Matches, k2Matches }) {
+export default function DashboardTab({ kids = [], k1Matches, k2Matches }) {
   const [briefing, setBriefing] = useState(null);
   const [briefLoading, setBriefLoading] = useState(false);
   const [briefError, setBriefError] = useState(null);
@@ -35,20 +34,22 @@ export default function DashboardTab({ k1Matches, k2Matches }) {
 
     const matchLines = [];
     if (nextK1 && daysOut(nextK1.date) <= 4) {
-      const leave = getLeave(nextK1, KIDS[0].arrivalBuffer);
+      const k1 = kids[0];
+      const leave = getLeave(nextK1, k1?.arrivalBuffer);
       matchLines.push(
-        `Rohan (Cadet Masculí, 15y): ${fmtDate(nextK1.date)}, ${nextK1.time}, ${nextK1.ha === "home" ? "HOME" : "AWAY"} vs ${nextK1.opp}, ${nextK1.venue}, ${nextK1.city}, ${nextK1.km}km away${leave ? `, leave by ${leave}` : ""}, kit: ${nextK1.ha === "home" ? "NEGRE/VERMELL" : "BLANCA/VERMELL"}`
+        `${k1?.name || "Kid 1"} (${k1?.category || ""}, ${k1?.shortName || ""}): ${fmtDate(nextK1.date)}, ${nextK1.time}, ${nextK1.ha === "home" ? "HOME" : "AWAY"} vs ${nextK1.opp}, ${nextK1.venue}, ${nextK1.city}, ${nextK1.km}km away${leave ? `, leave by ${leave}` : ""}, kit: ${nextK1.ha === "home" ? "NEGRE/VERMELL" : "BLANCA/VERMELL"}`
       );
     } else {
-      matchLines.push("Rohan: No match this weekend.");
+      matchLines.push(`${kids[0]?.label || "Kid 1"}: No match this weekend.`);
     }
     if (nextK2 && daysOut(nextK2.date) <= 4) {
-      const leave = getLeave(nextK2, KIDS[1].arrivalBuffer);
+      const k2 = kids[1];
+      const leave = getLeave(nextK2, k2?.arrivalBuffer);
       matchLines.push(
-        `Sara (Infantil Femení, 12y): ${fmtDate(nextK2.date)}, ${nextK2.time}, ${nextK2.ha === "home" ? "HOME" : "AWAY"} vs ${nextK2.opp}, ${nextK2.venue}, ${nextK2.city}, ${nextK2.km}km away${leave ? `, leave by ${leave}` : ""}, kit: ${nextK2.ha === "home" ? "NEGRE/VERMELL" : "BLANCA/VERMELL"}`
+        `${k2?.name || "Kid 2"} (${k2?.category || ""}, ${k2?.shortName || ""}): ${fmtDate(nextK2.date)}, ${nextK2.time}, ${nextK2.ha === "home" ? "HOME" : "AWAY"} vs ${nextK2.opp}, ${nextK2.venue}, ${nextK2.city}, ${nextK2.km}km away${leave ? `, leave by ${leave}` : ""}, kit: ${nextK2.ha === "home" ? "NEGRE/VERMELL" : "BLANCA/VERMELL"}`
       );
     } else {
-      matchLines.push("Sara: No match this weekend.");
+      matchLines.push(`${kids[1]?.label || "Kid 2"}: No match this weekend.`);
     }
 
     try {
@@ -115,14 +116,14 @@ export default function DashboardTab({ k1Matches, k2Matches }) {
       {/* Next matches */}
       {nextK1 && (
         <>
-          <div style={S.sectionTitle}>Rohan — Next Match</div>
-          <MatchCard m={nextK1} kidColor={KIDS[0].color} arrivalBuffer={KIDS[0].arrivalBuffer} />
+          <div style={S.sectionTitle}>{kids[0]?.label || "Kid 1"} — Next Match</div>
+          <MatchCard m={nextK1} kidColor={kids[0]?.color} arrivalBuffer={kids[0]?.arrivalBuffer} />
         </>
       )}
       {nextK2 && (
         <>
-          <div style={S.sectionTitle}>Sara — Next Match</div>
-          <MatchCard m={nextK2} kidColor={KIDS[1].color} arrivalBuffer={KIDS[1].arrivalBuffer} />
+          <div style={S.sectionTitle}>{kids[1]?.label || "Kid 2"} — Next Match</div>
+          <MatchCard m={nextK2} kidColor={kids[1]?.color} arrivalBuffer={kids[1]?.arrivalBuffer} />
         </>
       )}
 
@@ -131,7 +132,7 @@ export default function DashboardTab({ k1Matches, k2Matches }) {
         <>
           <div style={S.sectionTitle}>Upcoming Road Trips</div>
           {upK1.filter(m => m.km > 60).slice(0, 3).map((m, i) => {
-            const leave = getLeave(m, KIDS[0].arrivalBuffer);
+            const leave = getLeave(m, kids[0]?.arrivalBuffer);
             return (
               <div key={i} style={{ ...S.roadCard, padding: "12px 14px" }}>
                 <div style={S.spaceBetween}>

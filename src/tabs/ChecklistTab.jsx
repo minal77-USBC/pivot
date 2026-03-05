@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { S } from "../styles";
-import { KIDS, CHECKLIST_STD, CHECKLIST_ROAD, CHECKLIST_NIGHT_BEFORE } from "../data";
+import { CHECKLIST_STD, CHECKLIST_ROAD, CHECKLIST_NIGHT_BEFORE } from "../data";
 import { upcoming, tier, fmtDate, leaveByFromMins, travelMins, getOverrideMins, mapsUrl, latestMeal, daysOut } from "../utils";
 
-export default function ChecklistTab({ k1Matches, k2Matches }) {
+export default function ChecklistTab({ kids = [], k1Matches, k2Matches }) {
   const [kidId, setKidId] = useState("k1");
   const [selIdx, setSelIdx] = useState(0);
   const [checked, setChecked] = useState({});
 
-  const kid = KIDS.find(k => k.id === kidId);
+  const kid = kids.find(k => k.id === kidId);
   const upMatches = upcoming(kidId === "k1" ? k1Matches : k2Matches);
   const match = upMatches[selIdx] || upMatches[0];
 
@@ -54,7 +54,7 @@ export default function ChecklistTab({ k1Matches, k2Matches }) {
 
       {/* Kid selector */}
       <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
-        {KIDS.map(ki => (
+        {kids.map(ki => (
           <button key={ki.id} onClick={() => switchKid(ki.id)} style={S.kidBtn(kidId === ki.id, ki.color)}>
             {ki.label} · {ki.shortName}
           </button>

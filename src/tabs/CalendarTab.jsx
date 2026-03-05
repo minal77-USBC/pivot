@@ -1,9 +1,8 @@
 import { useState } from "react";
 import { S } from "../styles";
-import { KIDS } from "../data";
 import { upcoming, tier, fmtDate, daysLabel, leaveByFromMins, travelMins, getOverrideMins } from "../utils";
 
-export default function CalendarTab({ k1Matches, k2Matches }) {
+export default function CalendarTab({ kids = [], k1Matches, k2Matches }) {
   const [filter, setFilter] = useState("all");
 
   // Merge upcoming matches from both kids, tagged with kidId
@@ -33,8 +32,8 @@ export default function CalendarTab({ k1Matches, k2Matches }) {
       <div style={{ display: "flex", gap: 8, marginBottom: 14 }}>
         {[
           ["all",  "Both",  "#64748b"],
-          ["k1",   "Rohan", KIDS[0].color],
-          ["k2",   "Sara",  KIDS[1].color],
+          ["k1", kids[0]?.label || "Kid 1", kids[0]?.color || "#FF6B2B"],
+          ["k2", kids[1]?.label || "Kid 2", kids[1]?.color || "#A855F7"],
         ].map(([id, label, color]) => (
           <button key={id} onClick={() => setFilter(id)}
             style={{
@@ -79,7 +78,7 @@ export default function CalendarTab({ k1Matches, k2Matches }) {
 
             {/* Match rows */}
             {matches.map((m, i) => {
-              const kid = KIDS.find(k => k.id === m.kidId);
+              const kid = kids.find(k => k.id === m.kidId);
               const overrideMins = m.km > 0 ? getOverrideMins(m.venue, m.city) : null;
               const leave = m.km > 0
                 ? leaveByFromMins(m.time, overrideMins ?? travelMins(m.km), kid.arrivalBuffer)
