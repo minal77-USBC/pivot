@@ -43,7 +43,7 @@ function BoxScoreRow({ p, isRohan, border }) {
   return (
     <div style={{
       display: "grid",
-      gridTemplateColumns: "20px 1fr 28px 32px 36px 36px 28px 28px 28px 28px 32px",
+      gridTemplateColumns: "20px minmax(70px,1fr) 28px 32px 36px 36px 28px 28px 28px 28px 32px",
       gap: 3,
       alignItems: "center",
       padding: "7px 10px",
@@ -223,23 +223,25 @@ function MatchBoxScores({ k1Matches }) {
           {grupBarnaTeam && (
             <>
               <div style={S.sectionTitle}>Grup Barna</div>
-              {/* Column headers */}
-              <div style={{ ...S.card({ padding: "0", overflow: "hidden" }) }}>
-                <div style={{
-                  display: "grid",
-                  gridTemplateColumns: "20px 1fr 28px 32px 36px 36px 28px 28px 28px 28px 32px",
-                  gap: 3,
-                  padding: "5px 10px",
-                  borderBottom: "1px solid rgba(255,255,255,0.07)",
-                  background: "rgba(255,255,255,0.03)",
-                }}>
-                  {["#", "Player", "MIN", "PTS", "FT", "2P", "REB", "AST", "STL", "PF", "+/-"].map((h, i) => (
-                    <span key={i} style={{ fontSize: 9, color: "#475569", textTransform: "uppercase", letterSpacing: "0.1em", textAlign: i > 1 ? "right" : "left" }}>{h}</span>
+              <div style={{ ...S.card({ padding: "0" }), overflowX: "auto" }}>
+                <div style={{ minWidth: 480 }}>
+                  {/* Column headers */}
+                  <div style={{
+                    display: "grid",
+                    gridTemplateColumns: "20px minmax(70px,1fr) 28px 32px 36px 36px 28px 28px 28px 28px 32px",
+                    gap: 3,
+                    padding: "5px 10px",
+                    borderBottom: "1px solid rgba(255,255,255,0.07)",
+                    background: "rgba(255,255,255,0.03)",
+                  }}>
+                    {["#", "Player", "MIN", "PTS", "FT", "2P", "REB", "AST", "STL", "PF", "+/-"].map((h, i) => (
+                      <span key={i} style={{ fontSize: 9, color: "#475569", textTransform: "uppercase", letterSpacing: "0.1em", textAlign: i > 1 ? "right" : "left" }}>{h}</span>
+                    ))}
+                  </div>
+                  {grupBarnaTeam.players.map((p, i) => (
+                    <BoxScoreRow key={i} p={p} isRohan={p.name?.includes("ROHAN")} border={i < grupBarnaTeam.players.length - 1} />
                   ))}
                 </div>
-                {grupBarnaTeam.players.map((p, i) => (
-                  <BoxScoreRow key={i} p={p} isRohan={p.name?.includes("ROHAN")} border={i < grupBarnaTeam.players.length - 1} />
-                ))}
               </div>
             </>
           )}
