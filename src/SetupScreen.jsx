@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { S } from "./styles";
 
-const CATEGORIES = ["Benjamí", "Aleví", "Infantil", "Cadet", "Junior", "Sènior"];
+const CATEGORIES = ["Premini", "Mini", "Infantil", "Cadet", "Junior", "Sènior"];
 const COLORS = ["#FF6B2B", "#A855F7", "#22d3a0", "#3B82F6", "#F59E0B", "#EF4444"];
 const EMPTY_KID = { name: "", label: "", fcbqTeamId: "", category: "Infantil", gender: "M", grupIdPhase1: "", grupIdPhase2: "", color: "#FF6B2B" };
 

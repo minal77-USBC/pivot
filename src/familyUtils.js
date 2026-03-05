@@ -1,8 +1,8 @@
 // Converts a Supabase kids row into the app's kid shape (matches old KIDS format)
 
 const ARRIVAL_BUFFERS = {
-  "Benjamí": 45,
-  "Aleví": 45,
+  "Premini": 45,
+  "Mini": 45,
   "Infantil": 45,
   "Cadet": 60,
   "Junior": 60,
