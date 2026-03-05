@@ -29,7 +29,7 @@ function StatRow({ p, isRohan, border }) {
         {p.name.split(" ")[0]}
       </span>
       <span style={{ fontSize: 11, color: "#94a3b8", textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{p.matchesPlayed}</span>
-      <span style={{ fontSize: 11, color: "#64748b", textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{p.sumTimePlayed ?? "—"}</span>
+      <span style={{ fontSize: 11, color: "#64748b", textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{p.timePlayed ?? "—"}</span>
       <span style={{ fontSize: 12, color: "#f1f5f9", textAlign: "right", fontWeight: 600, fontFamily: "'DM Mono', monospace" }}>{p.totalScoreAvgByMatch.toFixed(1)}</span>
       <span style={{ fontSize: 11, color: "#64748b", textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{p.totalScore}</span>
       <span style={{ fontSize: 11, color: "#64748b", textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{p.sumShotsOfOneSuccessful}</span>
