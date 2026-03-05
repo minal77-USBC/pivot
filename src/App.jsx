@@ -6,6 +6,7 @@ import CalendarTab from "./tabs/CalendarTab";
 import ChecklistTab from "./tabs/ChecklistTab";
 import SeasonTab from "./tabs/SeasonTab";
 import StatsTab from "./tabs/StatsTab";
+import LoginScreen from "./LoginScreen";
 
 const TABS = [
   { id: "dash",     label: "Dashboard", icon: "⚡" },
@@ -15,9 +16,21 @@ const TABS = [
   { id: "stats",    label: "Stats",     icon: "🏀" },
 ];
 
+function loadStoredUser() {
+  try {
+    const stored = JSON.parse(sessionStorage.getItem("pivot_auth") || "null");
+    if (stored && stored.exp * 1000 > Date.now()) return stored;
+    sessionStorage.removeItem("pivot_auth");
+  } catch { /* ignore */ }
+  return null;
+}
+
 export default function App() {
+  const [user, setUser] = useState(loadStoredUser);
   const [tab, setTab] = useState("dash");
   const { k1Matches, k2Matches, loading, error, refresh } = useSchedule();
+
+  if (!user) return <LoginScreen onAuth={setUser} />;
 
   return (
     <div style={S.app}>
@@ -39,7 +52,17 @@ export default function App() {
         </div>
         <div style={{ textAlign: "right" }}>
           <div style={{ fontSize: 11, color: "#475569", letterSpacing: "0.08em" }}>2025–26</div>
-          <div style={{ fontSize: 11, color: "#334155" }}>Grup Barna Vermell</div>
+          <button
+            onClick={() => { sessionStorage.removeItem("pivot_auth"); setUser(null); }}
+            title={`Signed in as ${user.email}`}
+            style={{ background: "none", border: "none", cursor: "pointer", padding: 0, display: "flex", alignItems: "center", gap: 6, marginTop: 2 }}
+          >
+            {user.picture
+              ? <img src={user.picture} alt="" style={{ width: 20, height: 20, borderRadius: "50%", opacity: 0.6 }} />
+              : <span style={{ fontSize: 16 }}>👤</span>
+            }
+            <span style={{ fontSize: 10, color: "#334155" }}>Sign out</span>
+          </button>
         </div>
       </div>
 
