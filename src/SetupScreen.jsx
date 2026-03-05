@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { S } from "./styles";
 
 const CATEGORIES = ["Premini", "Mini", "Infantil", "Cadet", "Junior", "Sènior"];
@@ -11,6 +11,61 @@ function positiveInt(val) {
 
 function KidForm({ kid, index, onChange, onRemove, canRemove }) {
   const set = (field, val) => onChange({ ...kid, [field]: val });
+
+  const [clubSearch, setClubSearch] = useState(kid.clubName || "");
+  const [clubResults, setClubResults] = useState([]);
+  const [showClubDrop, setShowClubDrop] = useState(false);
+  const [teams, setTeams] = useState([]);
+  const [teamsLoading, setTeamsLoading] = useState(false);
+  const [grupLoading, setGrupLoading] = useState(false);
+  const clubRef = useRef(null);
+
+  // Debounced club search
+  useEffect(() => {
+    if (clubSearch.length < 2) { setClubResults([]); return; }
+    const t = setTimeout(() => {
+      fetch(`/api/clubs-search?q=${encodeURIComponent(clubSearch)}`)
+        .then(r => r.json())
+        .then(data => { setClubResults(data); setShowClubDrop(data.length > 0); })
+        .catch(() => {});
+    }, 300);
+    return () => clearTimeout(t);
+  }, [clubSearch]);
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    const handler = e => { if (clubRef.current && !clubRef.current.contains(e.target)) setShowClubDrop(false); };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
+  const selectClub = (club) => {
+    set("clubName", club.name);
+    setClubSearch(club.name);
+    setShowClubDrop(false);
+    setTeams([]);
+    setTeamsLoading(true);
+    fetch(`/api/club-teams?clubId=${club.id}`)
+      .then(r => r.json())
+      .then(t => { setTeams(t); setTeamsLoading(false); })
+      .catch(() => setTeamsLoading(false));
+  };
+
+  const selectTeam = (team) => {
+    setGrupLoading(true);
+    fetch(`/api/team-grups?teamId=${team.teamId}`)
+      .then(r => r.json())
+      .then(data => {
+        onChange({
+          ...kid,
+          fcbqTeamId: data.fcbqTeamId || "",
+          grupIdPhase1: data.grupIdPhase1 || "",
+          grupIdPhase2: data.grupIdPhase2 || "",
+        });
+        setGrupLoading(false);
+      })
+      .catch(() => setGrupLoading(false));
+  };
 
   return (
     <div style={{ background: "#111827", border: `1px solid ${kid.color}44`, borderRadius: 12, padding: 16, marginBottom: 12 }}>
@@ -25,7 +80,8 @@ function KidForm({ kid, index, onChange, onRemove, canRemove }) {
       <div style={{ display: "flex", gap: 8, marginBottom: 14 }}>
         {COLORS.map(c => (
           <button key={c} onClick={() => set("color", c)} style={{
-            width: 24, height: 24, borderRadius: "50%", background: c, border: `2px solid ${kid.color === c ? "white" : "transparent"}`,
+            width: 24, height: 24, borderRadius: "50%", background: c,
+            border: `2px solid ${kid.color === c ? "white" : "transparent"}`,
             cursor: "pointer", padding: 0,
           }} />
         ))}
@@ -35,13 +91,11 @@ function KidForm({ kid, index, onChange, onRemove, canRemove }) {
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginBottom: 10 }}>
         <div>
           <div style={S.label}>Full name</div>
-          <input value={kid.name} onChange={e => set("name", e.target.value)} placeholder="e.g. Pau Garcia"
-            style={inputStyle} />
+          <input value={kid.name} onChange={e => set("name", e.target.value)} placeholder="e.g. Pau Garcia" style={inputStyle} />
         </div>
         <div>
           <div style={S.label}>Short name</div>
-          <input value={kid.label} onChange={e => set("label", e.target.value)} placeholder="e.g. Pau"
-            style={inputStyle} />
+          <input value={kid.label} onChange={e => set("label", e.target.value)} placeholder="e.g. Pau" style={inputStyle} />
         </div>
       </div>
 
@@ -68,33 +122,71 @@ function KidForm({ kid, index, onChange, onRemove, canRemove }) {
         </div>
       </div>
 
-      {/* Club name + Team ID */}
-      <div style={{ marginBottom: 10 }}>
+      {/* Club search with autocomplete */}
+      <div style={{ marginBottom: 10 }} ref={clubRef}>
         <div style={S.label}>Club name</div>
-        <div style={{ display: "flex", gap: 6 }}>
-          <input value={kid.clubName} onChange={e => set("clubName", e.target.value)}
-            placeholder="e.g. Grup Barna, Sant Josep, Joventut"
-            style={{ ...inputStyle, flex: 1 }} />
-          <a
-            href={`https://www.basquetcatala.cat/clubs${kid.clubName ? `?q=${encodeURIComponent(kid.clubName)}` : ""}`}
-            target="_blank" rel="noreferrer"
-            style={{ ...inputStyle, width: "auto", padding: "7px 10px", color: kid.color, border: `1px solid ${kid.color}44`, background: `${kid.color}1a`, textDecoration: "none", whiteSpace: "nowrap", flexShrink: 0 }}>
-            Find →
-          </a>
-        </div>
-        <div style={{ fontSize: 10, color: "#334155", marginTop: 4 }}>
-          Search opens basquetcatala.cat. Click your club → find your kid's team → copy the number from the URL (e.g. /equip/<b style={{ color: "#64748b" }}>80316</b>)
+        <div style={{ position: "relative" }}>
+          <input
+            value={clubSearch}
+            onChange={e => { setClubSearch(e.target.value); set("clubName", e.target.value); }}
+            onFocus={() => clubResults.length > 0 && setShowClubDrop(true)}
+            placeholder="Type club name to search…"
+            style={inputStyle}
+          />
+          {showClubDrop && (
+            <div style={{
+              position: "absolute", top: "100%", left: 0, right: 0, zIndex: 10,
+              background: "#1e293b", border: "1px solid rgba(255,255,255,0.1)",
+              borderRadius: 8, marginTop: 2, overflow: "hidden",
+            }}>
+              {clubResults.map(club => (
+                <div key={club.id} onMouseDown={() => selectClub(club)} style={{
+                  padding: "9px 12px", cursor: "pointer", fontSize: 13,
+                  borderBottom: "1px solid rgba(255,255,255,0.05)",
+                }}>
+                  <span style={{ color: "#e2e8f0", fontWeight: 500 }}>{club.name}</span>
+                  <span style={{ color: "#475569", fontSize: 11, marginLeft: 6 }}>{club.town}</span>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 
+      {/* Team picker — appears after club selected */}
+      {(teams.length > 0 || teamsLoading) && (
+        <div style={{ marginBottom: 10 }}>
+          <div style={S.label}>Select team</div>
+          {teamsLoading ? (
+            <div style={{ fontSize: 12, color: "#475569", padding: "8px 0" }}>Loading teams…</div>
+          ) : (
+            <select
+              defaultValue=""
+              onChange={e => {
+                const team = teams.find(t => t.teamId === e.target.value);
+                if (team) selectTeam(team);
+              }}
+              style={inputStyle}
+            >
+              <option value="" disabled>Pick your kid's team…</option>
+              {teams.map(t => (
+                <option key={t.teamId} value={t.teamId}>
+                  {t.name}{t.category ? ` — ${t.category}` : ""}
+                </option>
+              ))}
+            </select>
+          )}
+          {grupLoading && <div style={{ fontSize: 11, color: "#22d3a0", marginTop: 4 }}>Fetching IDs…</div>}
+        </div>
+      )}
+
+      {/* FCBQ Team ID + Grup IDs — auto-filled or manual */}
       <div style={{ marginBottom: 10 }}>
         <div style={S.label}>FCBQ Team ID</div>
         <input value={kid.fcbqTeamId} onChange={e => set("fcbqTeamId", positiveInt(e.target.value))}
-          placeholder="e.g. 80316"
-          style={inputStyle} inputMode="numeric" />
+          placeholder="e.g. 80316" style={inputStyle} inputMode="numeric" />
       </div>
 
-      {/* Grup IDs */}
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
         <div>
           <div style={S.label}>Grup ID — Phase 1</div>
@@ -108,7 +200,7 @@ function KidForm({ kid, index, onChange, onRemove, canRemove }) {
         </div>
       </div>
       <div style={{ fontSize: 10, color: "#334155", marginTop: 6 }}>
-        On basquetcatala.cat → your kid's competition page → tap the group → the number in the URL is the Grup ID
+        IDs auto-fill when you pick a team above. Edit manually if needed.
       </div>
     </div>
   );
