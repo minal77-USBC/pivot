@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 
-const CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+const CLIENT_ID = "110062790266-epf1sbr8in0vmcj6403p05e3hagpq215.apps.googleusercontent.com";
 
 export default function LoginScreen({ onAuth }) {
   const btnRef = useRef(null);
