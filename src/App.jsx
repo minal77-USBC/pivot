@@ -27,14 +27,17 @@ function loadStoredUser() {
   return null;
 }
 
+const SHARE_TOKEN_KEY = "pivot_share_token";
+
 function resolveShareToken() {
-  // Check query string (?family=abc) — original share link
+  // Check query string (?family=abc)
   const fromQuery = new URLSearchParams(window.location.search).get("family");
-  if (fromQuery) return fromQuery;
-  // Check hash (#family=abc) — preserved by iOS home screen shortcuts
+  if (fromQuery) { localStorage.setItem(SHARE_TOKEN_KEY, fromQuery); return fromQuery; }
+  // Check hash (#family=abc)
   const fromHash = new URLSearchParams(window.location.hash.slice(1)).get("family");
-  if (fromHash) return fromHash;
-  return null;
+  if (fromHash) { localStorage.setItem(SHARE_TOKEN_KEY, fromHash); return fromHash; }
+  // Fallback: localStorage for PWA launches where start_url strips the URL
+  return localStorage.getItem(SHARE_TOKEN_KEY) || null;
 }
 
 const shareToken = resolveShareToken();
