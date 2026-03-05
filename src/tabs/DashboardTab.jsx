@@ -165,7 +165,7 @@ export default function DashboardTab({ kids = [], k1Matches, k2Matches }) {
           <div style={S.sectionTitle}>Thursday Briefing</div>
           {!briefing && !briefLoading && (
             <button style={S.primaryBtn} onClick={generateBriefing}>
-              📝 Generate WhatsApp Update for Laura
+              📝 Generate Weekend Briefing
             </button>
           )}
           {briefLoading && (
