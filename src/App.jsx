@@ -27,7 +27,18 @@ function loadStoredUser() {
   return null;
 }
 
-const shareToken = new URLSearchParams(window.location.search).get("family");
+const SHARE_TOKEN_KEY = "pivot_share_token";
+
+function resolveShareToken() {
+  const fromUrl = new URLSearchParams(window.location.search).get("family");
+  if (fromUrl) {
+    localStorage.setItem(SHARE_TOKEN_KEY, fromUrl);
+    return fromUrl;
+  }
+  return localStorage.getItem(SHARE_TOKEN_KEY) || null;
+}
+
+const shareToken = resolveShareToken();
 
 export default function App() {
   const [user, setUser] = useState(loadStoredUser);
