@@ -157,7 +157,7 @@ export default function ChecklistTab({ kids = [], k1Matches, k2Matches }) {
                     <div style={S.checkBox(isChecked)}>{isChecked && "✓"}</div>
                     <span style={{ fontSize: 16 }}>{item.emoji}</span>
                     <span style={{ fontSize: 14, color: isChecked ? "#64748b" : "#e2e8f0", textDecoration: isChecked ? "line-through" : "none" }}>
-                      {item.label}
+                      {t.nightItems?.[item.id] ?? item.label}
                     </span>
                   </div>
                 </div>
@@ -183,6 +183,7 @@ export default function ChecklistTab({ kids = [], k1Matches, k2Matches }) {
       <div style={{ background: "#111827", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 12, overflow: "hidden" }}>
         {matchDayItems.map((item, i) => {
           const isChecked = !!checked[`${ck}-day-${item.id}`];
+          const dayLabels = isRoad ? t.roadItems : t.stdItems;
           return (
             <div key={item.id}>
               {i > 0 && <div style={{ height: 1, background: "rgba(255,255,255,0.04)", margin: "0 12px" }} />}
@@ -190,7 +191,7 @@ export default function ChecklistTab({ kids = [], k1Matches, k2Matches }) {
                 <div style={S.checkBox(isChecked)}>{isChecked && "✓"}</div>
                 <span style={{ fontSize: 16 }}>{item.emoji}</span>
                 <span style={{ fontSize: 14, color: isChecked ? "#64748b" : "#e2e8f0", textDecoration: isChecked ? "line-through" : "none" }}>
-                  {item.label}
+                  {dayLabels?.[item.id] ?? item.label}
                 </span>
               </div>
             </div>

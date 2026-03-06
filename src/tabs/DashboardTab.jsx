@@ -106,11 +106,11 @@ export default function DashboardTab({ kids = [], k1Matches, k2Matches }) {
           return (
             <div key={kid.id} style={{ display: "flex", gap: 8 }}>
               <div style={{ ...S.statBox, flex: 1 }}>
-                <div style={{ ...S.statNum, color: "#22d3a0", fontSize: 24 }}>{wins}W</div>
+                <div style={{ ...S.statNum, color: "#22d3a0", fontSize: 24 }}>{wins}{t.wLabel}</div>
                 <div style={S.statLbl}>{kid.label}</div>
               </div>
               <div style={{ ...S.statBox, flex: 1 }}>
-                <div style={{ ...S.statNum, color: "#ff4757", fontSize: 24 }}>{played.length - wins}L</div>
+                <div style={{ ...S.statNum, color: "#ff4757", fontSize: 24 }}>{played.length - wins}{t.lLabel}</div>
                 <div style={S.statLbl}>{kid.shortName}</div>
               </div>
               <div style={{ ...S.statBox, flex: 1 }}>

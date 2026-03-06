@@ -36,7 +36,7 @@ export function buildKid(dbKid, index) {
     arrivalBuffer: ARRIVAL_BUFFERS[dbKid.category] ?? 45,
     color,
     dimColor: `rgba(${r},${g},${b},0.15)`,
-    statsAvailable: dbKid.category === "Cadet" && !!dbKid.fcbq_team_id,
+    statsAvailable: dbKid.category === "Cadet",
     statsTeamId: dbKid.fcbq_team_id || null,
     grupIds,
     kit: {

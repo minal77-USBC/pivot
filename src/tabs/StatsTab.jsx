@@ -106,11 +106,11 @@ function SeasonStats() {
       {/* Team summary */}
       <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
         <div style={S.statBox}>
-          <div style={{ ...S.statNum, color: "#22d3a0", fontSize: 24 }}>{team.teamResults.wins}W</div>
+          <div style={{ ...S.statNum, color: "#22d3a0", fontSize: 24 }}>{team.teamResults.wins}{t.wLabel}</div>
           <div style={S.statLbl}>{team.sumMatches} {t.playedLabel}</div>
         </div>
         <div style={S.statBox}>
-          <div style={{ ...S.statNum, color: "#ff4757", fontSize: 24 }}>{team.teamResults.losses}L</div>
+          <div style={{ ...S.statNum, color: "#ff4757", fontSize: 24 }}>{team.teamResults.losses}{t.lLabel}</div>
           <div style={S.statLbl}>{t.lossesLabel}</div>
         </div>
         <div style={S.statBox}>
@@ -198,7 +198,7 @@ function MatchBoxScores({ k1Matches }) {
             <div style={{ fontSize: 13, color: "#94a3b8" }}>{m.ha === "home" ? "vs" : "@"} {m.opp}</div>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <span style={{ fontSize: 14, fontWeight: 700, color: m.win ? "#22d3a0" : "#ff4757" }}>{m.win ? "W" : "L"} {m.score}</span>
+            <span style={{ fontSize: 14, fontWeight: 700, color: m.win ? "#22d3a0" : "#ff4757" }}>{m.win ? t.wLabel : t.lLabel} {m.score}</span>
             <span style={{ color: "#334155", fontSize: 14 }}>›</span>
           </div>
         </div>

@@ -116,7 +116,7 @@ export const LOCALES = {
     // Stats
     statsNotAvailable: "Stats not available",
     statsNotAvailableDesc: (label, shortName) =>
-      `FCBQ publishes detailed statistics for Cadet Preferent only.\n${label} plays ${shortName} — no stats published.`,
+      `FCBQ publishes detailed statistics for Preferente teams only.\n${label} plays ${shortName} — no stats published.`,
     viewOnFcbq: "View on FCBQ →",
     seasonTotals: "Season Totals",
     boxScores: "Box Scores",
@@ -133,6 +133,39 @@ export const LOCALES = {
     yours: "✓ yours",
     editTravelTime: "Edit travel time",
     min: "min",
+
+    // W/L labels
+    wLabel: "W",
+    lLabel: "L",
+
+    // Checklist item labels
+    nightItems: {
+      wash:  "Wash & dry match kit",
+      pack:  "Pack kit bag tonight",
+      shoes: "Check & clean shoes",
+      water: "Fill & chill water bottle",
+    },
+    stdItems: {
+      jersey: "Match Jersey",
+      shorts: "Match Shorts",
+      shoes:  "Basketball Shoes",
+      water:  "Water Bottle (full)",
+      snack:  "Pre-match Snack",
+      towel:  "Towel",
+      bag:    "Kit Bag",
+    },
+    roadItems: {
+      jersey:  "Away Jersey (BLANCA)",
+      shorts:  "Match Shorts (VERMELL)",
+      shoes:   "Basketball Shoes",
+      water:   "Large Water Bottle",
+      snack:   "Road Snacks (2h trip)",
+      towel:   "Towel",
+      layer:   "Extra Layer / Hoodie",
+      cash:    "Cash — Food Stop",
+      charger: "Phone Charger",
+      bag:     "Kit Bag",
+    },
   },
 
   es: {
@@ -243,7 +276,7 @@ export const LOCALES = {
 
     statsNotAvailable: "Estadísticas no disponibles",
     statsNotAvailableDesc: (label, shortName) =>
-      `La FCBQ publica estadísticas detalladas solo para Cadet Preferent.\n${label} juega en ${shortName} — sin estadísticas publicadas.`,
+      `La FCBQ publica estadísticas detalladas solo para equipos de Preferente.\n${label} juega en ${shortName} — sin estadísticas publicadas.`,
     viewOnFcbq: "Ver en FCBQ →",
     seasonTotals: "Totales temporada",
     boxScores: "Actas",
@@ -259,6 +292,37 @@ export const LOCALES = {
     yours: "✓ tuyo",
     editTravelTime: "Editar tiempo de viaje",
     min: "min",
+
+    wLabel: "V",
+    lLabel: "D",
+
+    nightItems: {
+      wash:  "Lavar y secar la equipación",
+      pack:  "Preparar la bolsa esta noche",
+      shoes: "Revisar y limpiar zapatillas",
+      water: "Llenar y enfriar la botella",
+    },
+    stdItems: {
+      jersey: "Camiseta de partido",
+      shorts: "Pantalón de partido",
+      shoes:  "Zapatillas de baloncesto",
+      water:  "Botella de agua (llena)",
+      snack:  "Aperitivo pre-partido",
+      towel:  "Toalla",
+      bag:    "Bolsa de equipación",
+    },
+    roadItems: {
+      jersey:  "Camiseta visitante (BLANCA)",
+      shorts:  "Pantalón de partido (VERMELL)",
+      shoes:   "Zapatillas de baloncesto",
+      water:   "Botella de agua grande",
+      snack:   "Tentempiés para el viaje (2h)",
+      towel:   "Toalla",
+      layer:   "Capa extra / Sudadera",
+      cash:    "Efectivo — parada para comer",
+      charger: "Cargador de móvil",
+      bag:     "Bolsa de equipación",
+    },
   },
 
   cat: {
@@ -369,7 +433,7 @@ export const LOCALES = {
 
     statsNotAvailable: "Estadístiques no disponibles",
     statsNotAvailableDesc: (label, shortName) =>
-      `La FCBQ publica estadístiques detallades només per a Cadet Preferent.\n${label} juga a ${shortName} — sense estadístiques publicades.`,
+      `La FCBQ publica estadístiques detallades només per a equips de Preferent.\n${label} juga a ${shortName} — sense estadístiques publicades.`,
     viewOnFcbq: "Veure a FCBQ →",
     seasonTotals: "Totals temporada",
     boxScores: "Actes",
@@ -385,5 +449,36 @@ export const LOCALES = {
     yours: "✓ teu",
     editTravelTime: "Edita el temps de viatge",
     min: "min",
+
+    wLabel: "V",
+    lLabel: "D",
+
+    nightItems: {
+      wash:  "Rentar i assecar l'equipació",
+      pack:  "Preparar la bossa avui al vespre",
+      shoes: "Revisar i netejar les zapatilles",
+      water: "Omplir i refredar l'ampolla",
+    },
+    stdItems: {
+      jersey: "Samarreta de partit",
+      shorts: "Pantalons de partit",
+      shoes:  "Zapatilles de bàsquet",
+      water:  "Ampolla d'aigua (plena)",
+      snack:  "Piscolabis pre-partit",
+      towel:  "Tovallola",
+      bag:    "Bossa d'equipació",
+    },
+    roadItems: {
+      jersey:  "Samarreta de visitant (BLANCA)",
+      shorts:  "Pantalons de partit (VERMELL)",
+      shoes:   "Zapatilles de bàsquet",
+      water:   "Ampolla d'aigua gran",
+      snack:   "Berenar per al viatge (2h)",
+      towel:   "Tovallola",
+      layer:   "Capa extra / Dessuadora",
+      cash:    "Efectiu — parada per menjar",
+      charger: "Carregador del mòbil",
+      bag:     "Bossa d'equipació",
+    },
   },
 };

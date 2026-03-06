@@ -75,12 +75,12 @@ function KidSeason({ matches, kid }) {
       <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
         <div style={S.statBox}>
           <div style={{ fontSize: 11, color: "#22d3a0", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 6 }}>{t.homeLabel}</div>
-          <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 24, fontWeight: 700 }}>{homeWins}W / {homeGames.length - homeWins}L</div>
+          <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 24, fontWeight: 700 }}>{homeWins}{t.wLabel} / {homeGames.length - homeWins}{t.lLabel}</div>
           <div style={{ fontSize: 11, color: "#475569", marginTop: 2 }}>{homeGames.length ? Math.round(homeWins / homeGames.length * 100) : 0}% {t.winRateShort}</div>
         </div>
         <div style={S.statBox}>
           <div style={{ fontSize: 11, color: "#ff4757", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 6 }}>{t.awayLabel}</div>
-          <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 24, fontWeight: 700 }}>{awayWins}W / {awayGames.length - awayWins}L</div>
+          <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 24, fontWeight: 700 }}>{awayWins}{t.wLabel} / {awayGames.length - awayWins}{t.lLabel}</div>
           <div style={{ fontSize: 11, color: "#475569", marginTop: 2 }}>{awayGames.length ? Math.round(awayWins / awayGames.length * 100) : 0}% {t.winRateShort}</div>
         </div>
       </div>
@@ -121,7 +121,7 @@ function KidSeason({ matches, kid }) {
                   <div style={{ fontSize: 13, fontWeight: 500, color: "#94a3b8" }}>{m.opp}</div>
                   <div style={{ fontSize: 11, color: "#475569" }}>{fmtDate(m.date)} · {m.city}{m.km > 0 ? ` · ${m.km}km` : ""}</div>
                 </div>
-                <span style={{ fontSize: 13, color: m.win ? "#22d3a0" : "#ff4757", fontWeight: 600 }}>{m.win ? "W" : "L"} {m.score}</span>
+                <span style={{ fontSize: 13, color: m.win ? "#22d3a0" : "#ff4757", fontWeight: 600 }}>{m.win ? t.wLabel : t.lLabel} {m.score}</span>
               </div>
             ))}
           </div>
@@ -138,7 +138,7 @@ function KidSeason({ matches, kid }) {
             display: "flex", alignItems: "center", justifyContent: "center",
             fontSize: 13, fontWeight: 700, color: m.win ? "#22d3a0" : "#ff4757",
           }}>
-            {m.win ? "W" : "L"}
+            {m.win ? t.wLabel : t.lLabel}
           </div>
         ))}
         <div style={{ fontSize: 11, color: "#475569", alignSelf: "center", marginLeft: 4 }}>{t.last10}</div>
@@ -153,7 +153,7 @@ function KidSeason({ matches, kid }) {
               <div style={{ fontSize: 13, color: "#94a3b8" }}>{m.ha === "home" ? "vs" : "@"} {m.opp}</div>
             </div>
             <span style={{ fontSize: 14, fontWeight: 700, color: m.win ? "#22d3a0" : "#ff4757" }}>
-              {m.win ? "W" : "L"} {m.score}
+              {m.win ? t.wLabel : t.lLabel} {m.score}
             </span>
           </div>
         ))}
