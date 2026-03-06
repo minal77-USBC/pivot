@@ -9,7 +9,7 @@ export const S = {
     position: "relative",
   },
   header: {
-    padding: "20px 20px 0",
+    padding: "max(20px, env(safe-area-inset-top)) 20px 0",
     display: "flex",
     alignItems: "center",
     justifyContent: "space-between",
