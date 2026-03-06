@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { S } from "../styles";
-import { tier, travelMins, leaveByFromMins, fmtDate, daysLabel, mapsUrl, getOverrideMins, saveOverride } from "../utils";
+import { tier, travelMins, leaveByFromMins, fmtDate, daysLabel, daysOut, mapsUrl, getOverrideMins, saveOverride } from "../utils";
 import { useLang } from "../LangContext";
 
 export default function MatchCard({ m, kidColor = "#FF6B2B", compact = false, arrivalBuffer = 20 }) {
   const { t } = useLang();
   const tierLevel = tier(m.km);
   const isRoad = tierLevel === "road";
+  const n = daysOut(m.date);
   const days = daysLabel(m.date);
   const overrideMins = m.km > 0 ? getOverrideMins(m.venue, m.city) : null;
   const effectiveMins = overrideMins ?? travelMins(m.km);
@@ -40,7 +41,13 @@ export default function MatchCard({ m, kidColor = "#FF6B2B", compact = false, ar
           <span style={S.badge(haBadge)}>{haLabel}</span>
           {m.canvis && <span style={S.badge("canvis")}>⚠ Canvis</span>}
         </div>
-        <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, color: "#475569" }}>{days}</span>
+        <span style={{
+          fontFamily: "'Barlow Condensed', sans-serif",
+          fontSize: n <= 1 ? 15 : 13,
+          fontWeight: n <= 1 ? 700 : 500,
+          letterSpacing: "0.04em",
+          color: n === 0 ? "#FF6B2B" : n === 1 ? "#22d3a0" : "#64748b",
+        }}>{days}</span>
       </div>
 
       <div style={{ marginTop: 10 }}>

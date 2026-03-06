@@ -106,15 +106,22 @@ export default function CalendarTab({ kids = [], k1Matches, k2Matches }) {
       {filter !== "away" && dates.map(date => {
         const matches = byDate[date];
         const isDouble = doubleDates.has(date) && filter === "all";
+        const n = daysOut(date);
         const days = daysLabel(date);
 
         return (
           <div key={date} style={{ marginBottom: 14 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6, paddingLeft: 2 }}>
-              <span style={{ fontSize: 11, fontWeight: 600, color: "#64748b", textTransform: "uppercase", letterSpacing: "0.08em" }}>
+              <span style={{ fontSize: 12, fontWeight: 600, color: "#94a3b8", textTransform: "uppercase", letterSpacing: "0.08em" }}>
                 {fmtDate(date)}
               </span>
-              <span style={{ fontSize: 11, color: "#334155" }}>{days}</span>
+              <span style={{
+                fontFamily: "'Barlow Condensed', sans-serif",
+                fontSize: n <= 1 ? 14 : 12,
+                fontWeight: n <= 1 ? 700 : 500,
+                letterSpacing: "0.04em",
+                color: n === 0 ? "#FF6B2B" : n === 1 ? "#22d3a0" : "#475569",
+              }}>{days}</span>
               {isDouble && (
                 <span style={{ ...S.badge("canvis"), marginLeft: 2 }}>{t.bothBadge}</span>
               )}

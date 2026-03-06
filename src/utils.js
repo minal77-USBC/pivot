@@ -39,19 +39,34 @@ export const leaveByFromMins = (time, mins, arrivalBuffer = 20) => {
   return `${String(lh).padStart(2, "0")}:${String(lm).padStart(2, "0")}`;
 };
 
-export const fmtDate = (s) =>
-  new Date(s + "T12:00:00").toLocaleDateString("ca-ES", {
+const LOCALE_MAP = { cat: "ca-ES", es: "es-ES", en: "en-GB" };
+
+function getLang() {
+  try { return localStorage.getItem("pivot_lang") || "cat"; } catch { return "cat"; }
+}
+
+export const fmtDate = (s) => {
+  const locale = LOCALE_MAP[getLang()] || "ca-ES";
+  return new Date(s + "T12:00:00").toLocaleDateString(locale, {
     weekday: "short", day: "numeric", month: "short",
   });
+};
 
 export const daysOut = (s) =>
   Math.round((new Date(s + "T12:00:00") - TODAY) / 86400000);
 
 export const daysLabel = (s) => {
   const n = daysOut(s);
-  if (n < 0) return `${Math.abs(n)}d ago`;
-  if (n === 0) return "AVUI";
-  if (n === 1) return "DEMÀ";
+  const lang = getLang();
+  const labels = {
+    cat: { today: "AVUI", tomorrow: "DEMÀ", ago: (d) => `fa ${d}d` },
+    es:  { today: "HOY",  tomorrow: "MAÑANA", ago: (d) => `hace ${d}d` },
+    en:  { today: "TODAY", tomorrow: "TOMORROW", ago: (d) => `${d}d ago` },
+  }[lang] || { today: "TODAY", tomorrow: "TOMORROW", ago: (d) => `${d}d ago` };
+
+  if (n < 0) return labels.ago(Math.abs(n));
+  if (n === 0) return labels.today;
+  if (n === 1) return labels.tomorrow;
   if (n <= 6) return `${n}d`;
   if (n <= 13) return `${Math.ceil(n / 7)}w ${n % 7}d`;
   return `${Math.ceil(n / 7)}w`;
