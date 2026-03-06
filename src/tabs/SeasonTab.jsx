@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { S } from "../styles";
 import { fmtDate } from "../utils";
+import { useLang } from "../LangContext";
 
 export default function SeasonTab({ kids = [], k1Matches, k2Matches }) {
   const [kidId, setKidId] = useState("k1");
@@ -27,6 +28,7 @@ export default function SeasonTab({ kids = [], k1Matches, k2Matches }) {
 }
 
 function KidSeason({ matches, kid }) {
+  const { t } = useLang();
   const played = matches.filter(m => m.played);
   const wins = played.filter(m => m.win).length;
   const losses = played.length - wins;
@@ -51,47 +53,47 @@ function KidSeason({ matches, kid }) {
 
   return (
     <>
-      <div style={S.sectionTitle}>{kid?.label} — {kid?.shortName} Season</div>
+      <div style={S.sectionTitle}>{kid?.label} — {kid?.shortName} {t.season}</div>
 
       <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
-        <div style={S.statBox}><div style={{ ...S.statNum, color: "#22d3a0" }}>{wins}</div><div style={S.statLbl}>Wins</div></div>
-        <div style={S.statBox}><div style={{ ...S.statNum, color: "#ff4757" }}>{losses}</div><div style={S.statLbl}>Losses</div></div>
-        <div style={S.statBox}><div style={{ ...S.statNum, color: kid?.color || "#FF6B2B" }}>{winPct}%</div><div style={S.statLbl}>Win Rate</div></div>
+        <div style={S.statBox}><div style={{ ...S.statNum, color: "#22d3a0" }}>{wins}</div><div style={S.statLbl}>{t.wins}</div></div>
+        <div style={S.statBox}><div style={{ ...S.statNum, color: "#ff4757" }}>{losses}</div><div style={S.statLbl}>{t.losses}</div></div>
+        <div style={S.statBox}><div style={{ ...S.statNum, color: kid?.color || "#FF6B2B" }}>{winPct}%</div><div style={S.statLbl}>{t.winRate}</div></div>
       </div>
 
       <div style={{ ...S.card(), display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <div>
-          <div style={S.label}>Current Streak</div>
+          <div style={S.label}>{t.currentStreak}</div>
           <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 22, fontWeight: 700, color: streak.win ? "#22d3a0" : "#ff4757" }}>
-            {streak.count} {streak.win ? "wins" : "losses"} in a row
+            {streak.win ? t.winsRow(streak.count) : t.lossesRow(streak.count)}
           </div>
         </div>
         <div style={{ fontSize: 28 }}>{streak.win ? "🔥" : "❄️"}</div>
       </div>
 
-      <div style={S.sectionTitle}>Home / Away Split</div>
+      <div style={S.sectionTitle}>{t.homeAwaySplit}</div>
       <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
         <div style={S.statBox}>
-          <div style={{ fontSize: 11, color: "#22d3a0", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 6 }}>🏠 Home</div>
+          <div style={{ fontSize: 11, color: "#22d3a0", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 6 }}>{t.homeLabel}</div>
           <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 24, fontWeight: 700 }}>{homeWins}W / {homeGames.length - homeWins}L</div>
-          <div style={{ fontSize: 11, color: "#475569", marginTop: 2 }}>{homeGames.length ? Math.round(homeWins / homeGames.length * 100) : 0}% win rate</div>
+          <div style={{ fontSize: 11, color: "#475569", marginTop: 2 }}>{homeGames.length ? Math.round(homeWins / homeGames.length * 100) : 0}% {t.winRateShort}</div>
         </div>
         <div style={S.statBox}>
-          <div style={{ fontSize: 11, color: "#ff4757", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 6 }}>✈ Away</div>
+          <div style={{ fontSize: 11, color: "#ff4757", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 6 }}>{t.awayLabel}</div>
           <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 24, fontWeight: 700 }}>{awayWins}W / {awayGames.length - awayWins}L</div>
-          <div style={{ fontSize: 11, color: "#475569", marginTop: 2 }}>{awayGames.length ? Math.round(awayWins / awayGames.length * 100) : 0}% win rate</div>
+          <div style={{ fontSize: 11, color: "#475569", marginTop: 2 }}>{awayGames.length ? Math.round(awayWins / awayGames.length * 100) : 0}% {t.winRateShort}</div>
         </div>
       </div>
 
-      <div style={S.sectionTitle}>Road Trips</div>
+      <div style={S.sectionTitle}>{t.roadTripsTitle}</div>
       <div style={{ fontSize: 12, color: "#475569", marginBottom: 10 }}>
-        {roadDone} completed · {roadTrips.length - roadDone} remaining
+        {t.roadTripsSummary(roadDone, roadTrips.length - roadDone)}
       </div>
 
       {roadUpcoming.length > 0 && (
         <>
           <div style={{ fontSize: 11, fontWeight: 600, color: "#ffb347", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 8 }}>
-            Upcoming · {roadUpcoming.length}
+            {t.upcoming} · {roadUpcoming.length}
           </div>
           <div style={{ ...S.card(), marginBottom: 12 }}>
             {roadUpcoming.map((m, i) => (
@@ -100,7 +102,7 @@ function KidSeason({ matches, kid }) {
                   <div style={{ fontSize: 13, fontWeight: 500, color: "#f1f5f9" }}>{m.opp}</div>
                   <div style={{ fontSize: 11, color: "#475569" }}>{fmtDate(m.date)} · {m.city}{m.km > 0 ? ` · ${m.km}km` : ""}</div>
                 </div>
-                <span style={S.badge("road")}>Upcoming</span>
+                <span style={S.badge("road")}>{t.upcomingBadge}</span>
               </div>
             ))}
           </div>
@@ -110,7 +112,7 @@ function KidSeason({ matches, kid }) {
       {roadPlayed.length > 0 && (
         <>
           <div style={{ fontSize: 11, fontWeight: 600, color: "#475569", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 8 }}>
-            Played · {roadPlayed.length}
+            {t.played} · {roadPlayed.length}
           </div>
           <div style={S.card()}>
             {roadPlayed.map((m, i) => (
@@ -126,7 +128,7 @@ function KidSeason({ matches, kid }) {
         </>
       )}
 
-      <div style={S.sectionTitle}>Recent Form</div>
+      <div style={S.sectionTitle}>{t.recentForm}</div>
       <div style={{ ...S.card(), display: "flex", gap: 6, flexWrap: "wrap" }}>
         {played.slice(-10).map((m, i) => (
           <div key={i} style={{
@@ -139,13 +141,12 @@ function KidSeason({ matches, kid }) {
             {m.win ? "W" : "L"}
           </div>
         ))}
-        <div style={{ fontSize: 11, color: "#475569", alignSelf: "center", marginLeft: 4 }}>Last 10</div>
+        <div style={{ fontSize: 11, color: "#475569", alignSelf: "center", marginLeft: 4 }}>{t.last10}</div>
       </div>
 
-      <div style={S.sectionTitle}>All Results</div>
+      <div style={S.sectionTitle}>{t.allResults}</div>
       <div style={S.card()}>
         {played.slice().reverse().map((m, i) => (
-
           <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "7px 0", borderBottom: i < played.length - 1 ? "1px solid rgba(255,255,255,0.05)" : "none" }}>
             <div>
               <div style={{ fontSize: 12, color: "#64748b" }}>{fmtDate(m.date)}</div>
@@ -160,4 +161,3 @@ function KidSeason({ matches, kid }) {
     </>
   );
 }
-

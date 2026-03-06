@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { S } from "../styles";
 import { upcoming, tier, fmtDate, daysLabel, daysOut, leaveByFromMins, travelMins, getOverrideMins } from "../utils";
+import { useLang } from "../LangContext";
 
 export default function CalendarTab({ kids = [], k1Matches, k2Matches }) {
+  const { t } = useLang();
   const [filter, setFilter] = useState("all");
 
   // Merge upcoming matches from both kids, tagged with kidId
@@ -43,10 +45,10 @@ export default function CalendarTab({ kids = [], k1Matches, k2Matches }) {
       {/* Filter pills */}
       <div style={{ display: "flex", gap: 8, marginBottom: 14, flexWrap: "wrap" }}>
         {[
-          ["all",  "Both",  "#64748b"],
+          ["all",  t.filterBoth,  "#64748b"],
           ["k1", kids[0]?.label || "Kid 1", kids[0]?.color || "#FF6B2B"],
           ["k2", kids[1]?.label || "Kid 2", kids[1]?.color || "#A855F7"],
-          ["away", "🚗 Away", "#ffb347"],
+          ["away", t.filterAway, "#ffb347"],
         ].map(([id, label, color]) => (
           <button key={id} onClick={() => setFilter(id)}
             style={{
@@ -60,7 +62,7 @@ export default function CalendarTab({ kids = [], k1Matches, k2Matches }) {
           </button>
         ))}
         <span style={{ marginLeft: "auto", fontSize: 11, color: "#334155", alignSelf: "center" }}>
-          {filter === "away" ? `${allAway.length} road trips` : `${filtered.length} matches`}
+          {filter === "away" ? t.roadTrips(allAway.length) : t.matchCount(filtered.length)}
         </span>
       </div>
 
@@ -69,13 +71,13 @@ export default function CalendarTab({ kids = [], k1Matches, k2Matches }) {
         <div>
           {upcomingAway.length === 0 && pastAway.length === 0 && (
             <div style={{ ...S.card(), color: "#64748b", textAlign: "center", padding: 28 }}>
-              No away matches found.
+              {t.noAwayMatches}
             </div>
           )}
           {upcomingAway.length > 0 && (
             <>
               <div style={{ fontSize: 11, fontWeight: 600, color: "#ffb347", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 10 }}>
-                Upcoming · {upcomingAway.length}
+                {t.upcoming} · {upcomingAway.length}
               </div>
               {upcomingAway.map((m, i) => <MatchRow key={i} m={m} kids={kids} />)}
             </>
@@ -86,7 +88,7 @@ export default function CalendarTab({ kids = [], k1Matches, k2Matches }) {
           {pastAway.length > 0 && (
             <>
               <div style={{ fontSize: 11, fontWeight: 600, color: "#475569", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 10 }}>
-                Played · {pastAway.length}
+                {t.played} · {pastAway.length}
               </div>
               {pastAway.map((m, i) => <MatchRow key={i} m={m} kids={kids} past />)}
             </>
@@ -97,7 +99,7 @@ export default function CalendarTab({ kids = [], k1Matches, k2Matches }) {
       {/* Standard timeline */}
       {filter !== "away" && dates.length === 0 && (
         <div style={{ ...S.card(), color: "#64748b", textAlign: "center", padding: 28 }}>
-          Season complete 🏆
+          {t.seasonComplete}
         </div>
       )}
 
@@ -114,7 +116,7 @@ export default function CalendarTab({ kids = [], k1Matches, k2Matches }) {
               </span>
               <span style={{ fontSize: 11, color: "#334155" }}>{days}</span>
               {isDouble && (
-                <span style={{ ...S.badge("canvis"), marginLeft: 2 }}>⚡ Both</span>
+                <span style={{ ...S.badge("canvis"), marginLeft: 2 }}>{t.bothBadge}</span>
               )}
             </div>
             {matches.map((m, i) => <MatchRow key={i} m={m} kids={kids} />)}
@@ -126,13 +128,14 @@ export default function CalendarTab({ kids = [], k1Matches, k2Matches }) {
 }
 
 function MatchRow({ m, kids, past = false }) {
+  const { t } = useLang();
   const kid = kids.find(k => k.id === m.kidId);
   const overrideMins = m.km > 0 ? getOverrideMins(m.venue, m.city) : null;
   const leave = m.km > 0
     ? leaveByFromMins(m.time, overrideMins ?? travelMins(m.km), kid.arrivalBuffer)
     : null;
-  const t = tier(m.km);
-  const haLabel = m.ha === "home" ? "🏠 Home" : t === "road" ? `🚗 ${m.city}` : `✈ ${m.city}`;
+  const tierLevel = tier(m.km);
+  const haLabel = m.ha === "home" ? t.haHome : tierLevel === "road" ? t.haRoad(m.city) : t.haAway(m.city);
 
   return (
     <div style={{
@@ -152,7 +155,7 @@ function MatchRow({ m, kids, past = false }) {
         <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 4, flexWrap: "wrap" }}>
           <span style={{ fontSize: 11, fontWeight: 600, color: past ? "#475569" : kid.color }}>{kid.label}</span>
           <span style={{ fontSize: 11, color: "#64748b" }}>{fmtDate(m.date)}</span>
-          <span style={S.badge(m.ha === "home" ? "home" : t === "road" ? "road" : "away")}>
+          <span style={S.badge(m.ha === "home" ? "home" : tierLevel === "road" ? "road" : "away")}>
             {haLabel}
           </span>
           {m.canvis && <span style={S.badge("canvis")}>⚠ Canvis</span>}
@@ -162,7 +165,7 @@ function MatchRow({ m, kids, past = false }) {
         </div>
         {!past && leave && (
           <div style={{ fontSize: 11, color: "#475569", marginTop: 3 }}>
-            leave by <span style={{ color: kid.color, fontWeight: 600 }}>{leave}</span>
+            {t.leaveby} <span style={{ color: kid.color, fontWeight: 600 }}>{leave}</span>
           </div>
         )}
       </div>

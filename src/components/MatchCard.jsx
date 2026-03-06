@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { S } from "../styles";
 import { tier, travelMins, leaveByFromMins, fmtDate, daysLabel, mapsUrl, getOverrideMins, saveOverride } from "../utils";
+import { useLang } from "../LangContext";
 
 export default function MatchCard({ m, kidColor = "#FF6B2B", compact = false, arrivalBuffer = 20 }) {
-  const t = tier(m.km);
-  const isRoad = t === "road";
+  const { t } = useLang();
+  const tierLevel = tier(m.km);
+  const isRoad = tierLevel === "road";
   const days = daysLabel(m.date);
   const overrideMins = m.km > 0 ? getOverrideMins(m.venue, m.city) : null;
   const effectiveMins = overrideMins ?? travelMins(m.km);
@@ -29,7 +31,7 @@ export default function MatchCard({ m, kidColor = "#FF6B2B", compact = false, ar
   };
 
   const haBadge = m.ha === "home" ? "home" : isRoad ? "road" : "away";
-  const haLabel = m.ha === "home" ? "🏠 Home" : isRoad ? `🚗 ${m.city}` : `✈ Away`;
+  const haLabel = m.ha === "home" ? t.haHome : isRoad ? t.haRoad(m.city) : t.haAway(m.city);
 
   return (
     <div style={isRoad ? S.roadCard : S.card()}>
@@ -56,14 +58,14 @@ export default function MatchCard({ m, kidColor = "#FF6B2B", compact = false, ar
           <div style={S.divider} />
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: 8 }}>
             <div>
-              <div style={S.label}>Kickoff</div>
+              <div style={S.label}>{t.kickoff}</div>
               <div style={{ fontFamily: "'Barlow Condensed', monospace", fontSize: 22, fontWeight: 700, color: "#f1f5f9" }}>
                 {m.time}
               </div>
             </div>
             {leave && (
               <div style={{ textAlign: "right" }}>
-                <div style={S.label}>Leave by</div>
+                <div style={S.label}>{t.leaveBy}</div>
                 <div style={{ fontFamily: "'Barlow Condensed', monospace", fontSize: 22, fontWeight: 700, color: kidColor }}>
                   {leave}
                 </div>
@@ -71,7 +73,7 @@ export default function MatchCard({ m, kidColor = "#FF6B2B", compact = false, ar
             )}
             {m.km > 0 && (
               <div style={{ textAlign: "right" }}>
-                <div style={S.label}>Travel</div>
+                <div style={S.label}>{t.travel}</div>
                 {editing ? (
                   <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
                     <input
@@ -87,7 +89,7 @@ export default function MatchCard({ m, kidColor = "#FF6B2B", compact = false, ar
                         fontFamily: "'DM Mono', monospace",
                       }}
                     />
-                    <span style={{ fontSize: 11, color: "#64748b" }}>min</span>
+                    <span style={{ fontSize: 11, color: "#64748b" }}>{t.min}</span>
                     <button onClick={saveTravel} style={{ background: "#FF6B2B", border: "none", borderRadius: 4, color: "white", fontSize: 11, padding: "3px 8px", cursor: "pointer" }}>✓</button>
                     {overrideMins && (
                       <button onClick={clearOverride} style={{ background: "none", border: "none", color: "#475569", fontSize: 11, cursor: "pointer" }}>reset</button>
@@ -96,13 +98,13 @@ export default function MatchCard({ m, kidColor = "#FF6B2B", compact = false, ar
                 ) : (
                   <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
                     <span style={{ fontSize: 13, color: isRoad ? "#ffb347" : "#94a3b8", fontWeight: 500 }}>
-                      {overrideMins ? `${overrideMins} min` : `~${travelMins(m.km)} min`} · {m.km}km
+                      {overrideMins ? `${overrideMins} ${t.min}` : `~${travelMins(m.km)} ${t.min}`} · {m.km}km
                     </span>
-                    {overrideMins && <span style={{ fontSize: 9, color: "#22d3a0", letterSpacing: "0.08em" }}>✓ yours</span>}
+                    {overrideMins && <span style={{ fontSize: 9, color: "#22d3a0", letterSpacing: "0.08em" }}>{t.yours}</span>}
                     <button
                       onClick={() => { setDraftMins(String(overrideMins ?? travelMins(m.km))); setEditing(true); }}
                       style={{ background: "none", border: "none", color: "#475569", cursor: "pointer", fontSize: 12, padding: "0 2px" }}
-                      title="Edit travel time"
+                      title={t.editTravelTime}
                     >✏️</button>
                   </div>
                 )}
@@ -121,7 +123,7 @@ export default function MatchCard({ m, kidColor = "#FF6B2B", compact = false, ar
                 color: kidColor, fontSize: 13, fontWeight: 600,
               }}
             >
-              📍 Open {m.venue} in Maps
+              {t.openInMaps(m.venue)}
             </a>
           )}
         </>

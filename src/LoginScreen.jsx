@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from "react";
+import { useLang } from "./LangContext";
 
 const CLIENT_ID = "110062790266-epf1sbr8in0vmcj6403p05e3hagpq215.apps.googleusercontent.com";
 
 export default function LoginScreen({ onAuth }) {
+  const { t } = useLang();
   const btnRef = useRef(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -28,7 +30,7 @@ export default function LoginScreen({ onAuth }) {
               setError(data.reason || "Access denied.");
             }
           } catch {
-            setError("Sign-in failed. Try again.");
+            setError(t.signInFailed);
           } finally {
             setLoading(false);
           }
@@ -95,14 +97,14 @@ export default function LoginScreen({ onAuth }) {
       }}>
         <div style={{ fontSize: 32, marginBottom: 12 }}>🏀</div>
         <div style={{ fontSize: 15, fontWeight: 600, color: "#f1f5f9", marginBottom: 6 }}>
-          Family access only
+          {t.familyOnly}
         </div>
         <div style={{ fontSize: 13, color: "#475569", marginBottom: 24, lineHeight: 1.5 }}>
-          Sign in with your Google account to continue.
+          {t.signInPrompt}
         </div>
 
         {loading ? (
-          <div style={{ fontSize: 13, color: "#475569", padding: "12px 0" }}>Signing in…</div>
+          <div style={{ fontSize: 13, color: "#475569", padding: "12px 0" }}>{t.signingIn}</div>
         ) : (
           <div ref={btnRef} style={{ display: "flex", justifyContent: "center" }} />
         )}

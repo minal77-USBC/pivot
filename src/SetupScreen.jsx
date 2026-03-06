@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { S } from "./styles";
+import { useLang } from "./LangContext";
 
 const CATEGORIES = ["Premini", "Mini", "Infantil", "Cadet", "Junior", "Sènior"];
 const COLORS = ["#FF6B2B", "#A855F7", "#22d3a0", "#3B82F6", "#F59E0B", "#EF4444"];
@@ -10,6 +11,7 @@ function positiveInt(val) {
 }
 
 function KidForm({ kid, index, onChange, onRemove, canRemove }) {
+  const { t } = useLang();
   const set = (field, val) => onChange({ ...kid, [field]: val });
 
   const [clubSearch, setClubSearch] = useState(kid.clubName || "");
@@ -70,9 +72,9 @@ function KidForm({ kid, index, onChange, onRemove, canRemove }) {
   return (
     <div style={{ background: "#111827", border: `1px solid ${kid.color}44`, borderRadius: 12, padding: 16, marginBottom: 12 }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
-        <div style={{ fontSize: 13, fontWeight: 600, color: kid.color }}>Kid {index + 1}</div>
+        <div style={{ fontSize: 13, fontWeight: 600, color: kid.color }}>{t.kidN(index + 1)}</div>
         {canRemove && (
-          <button onClick={onRemove} style={{ background: "none", border: "none", color: "#475569", cursor: "pointer", fontSize: 12 }}>Remove</button>
+          <button onClick={onRemove} style={{ background: "none", border: "none", color: "#475569", cursor: "pointer", fontSize: 12 }}>{t.remove}</button>
         )}
       </div>
 
@@ -90,25 +92,25 @@ function KidForm({ kid, index, onChange, onRemove, canRemove }) {
       {/* Name + label */}
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginBottom: 10 }}>
         <div>
-          <div style={S.label}>Full name</div>
-          <input value={kid.name} onChange={e => set("name", e.target.value)} placeholder="e.g. Pau Garcia" style={inputStyle} />
+          <div style={S.label}>{t.fullName}</div>
+          <input value={kid.name} onChange={e => set("name", e.target.value)} placeholder={t.namePlaceholder} style={inputStyle} />
         </div>
         <div>
-          <div style={S.label}>Short name</div>
-          <input value={kid.label} onChange={e => set("label", e.target.value)} placeholder="e.g. Pau" style={inputStyle} />
+          <div style={S.label}>{t.shortName}</div>
+          <input value={kid.label} onChange={e => set("label", e.target.value)} placeholder={t.labelPlaceholder} style={inputStyle} />
         </div>
       </div>
 
       {/* Category + Gender */}
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginBottom: 10 }}>
         <div>
-          <div style={S.label}>Category</div>
+          <div style={S.label}>{t.category}</div>
           <select value={kid.category} onChange={e => set("category", e.target.value)} style={inputStyle}>
             {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
           </select>
         </div>
         <div>
-          <div style={S.label}>Gender</div>
+          <div style={S.label}>{t.gender}</div>
           <div style={{ display: "flex", gap: 6, marginTop: 2 }}>
             {["M", "F"].map(g => (
               <button key={g} onClick={() => set("gender", g)} style={{
@@ -116,7 +118,7 @@ function KidForm({ kid, index, onChange, onRemove, canRemove }) {
                 border: `1px solid ${kid.gender === g ? kid.color : "rgba(255,255,255,0.1)"}`,
                 borderRadius: 6, padding: "6px 0", color: kid.gender === g ? "white" : "#64748b",
                 fontSize: 12, fontWeight: 600, cursor: "pointer",
-              }}>{g === "M" ? "♂ Boy" : "♀ Girl"}</button>
+              }}>{g === "M" ? t.boy : t.girl}</button>
             ))}
           </div>
         </div>
@@ -124,13 +126,13 @@ function KidForm({ kid, index, onChange, onRemove, canRemove }) {
 
       {/* Club search with autocomplete */}
       <div style={{ marginBottom: 10 }} ref={clubRef}>
-        <div style={S.label}>Club name</div>
+        <div style={S.label}>{t.clubName}</div>
         <div style={{ position: "relative" }}>
           <input
             value={clubSearch}
             onChange={e => { setClubSearch(e.target.value); set("clubName", e.target.value); }}
             onFocus={() => clubResults.length > 0 && setShowClubDrop(true)}
-            placeholder="Type club name to search…"
+            placeholder={t.clubPlaceholder}
             style={inputStyle}
           />
           {showClubDrop && (
@@ -156,19 +158,19 @@ function KidForm({ kid, index, onChange, onRemove, canRemove }) {
       {/* Team picker — appears after club selected */}
       {(teams.length > 0 || teamsLoading) && (
         <div style={{ marginBottom: 10 }}>
-          <div style={S.label}>Select team</div>
+          <div style={S.label}>{t.selectTeam}</div>
           {teamsLoading ? (
-            <div style={{ fontSize: 12, color: "#475569", padding: "8px 0" }}>Loading teams…</div>
+            <div style={{ fontSize: 12, color: "#475569", padding: "8px 0" }}>{t.loadingTeams}</div>
           ) : (
             <select
               defaultValue=""
               onChange={e => {
-                const team = teams.find(t => t.teamId === e.target.value);
+                const team = teams.find(tm => tm.teamId === e.target.value);
                 if (team) selectTeam(team);
               }}
               style={inputStyle}
             >
-              <option value="" disabled>Pick your kid's team…</option>
+              <option value="" disabled>{t.pickTeam}</option>
               {teams.map(t => (
                 <option key={t.teamId} value={t.teamId}>
                   {t.name}{t.category ? ` — ${t.category}` : ""}
@@ -176,31 +178,31 @@ function KidForm({ kid, index, onChange, onRemove, canRemove }) {
               ))}
             </select>
           )}
-          {grupLoading && <div style={{ fontSize: 11, color: "#22d3a0", marginTop: 4 }}>Fetching IDs…</div>}
+          {grupLoading && <div style={{ fontSize: 11, color: "#22d3a0", marginTop: 4 }}>{t.fetchingIds}</div>}
         </div>
       )}
 
       {/* FCBQ Team ID + Grup IDs — auto-filled or manual */}
       <div style={{ marginBottom: 10 }}>
-        <div style={S.label}>FCBQ Team ID</div>
+        <div style={S.label}>{t.fcbqTeamId}</div>
         <input value={kid.fcbqTeamId} onChange={e => set("fcbqTeamId", positiveInt(e.target.value))}
           placeholder="e.g. 80316" style={inputStyle} inputMode="numeric" />
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
         <div>
-          <div style={S.label}>Grup ID — Phase 1</div>
+          <div style={S.label}>{t.grupPhase1}</div>
           <input value={kid.grupIdPhase1} onChange={e => set("grupIdPhase1", positiveInt(e.target.value))}
             placeholder="e.g. 19848" style={inputStyle} inputMode="numeric" />
         </div>
         <div>
-          <div style={S.label}>Grup ID — Phase 2 (optional)</div>
+          <div style={S.label}>{t.grupPhase2}</div>
           <input value={kid.grupIdPhase2} onChange={e => set("grupIdPhase2", positiveInt(e.target.value))}
             placeholder="e.g. 21202" style={inputStyle} inputMode="numeric" />
         </div>
       </div>
       <div style={{ fontSize: 10, color: "#334155", marginTop: 6 }}>
-        IDs auto-fill when you pick a team above. Edit manually if needed.
+        {t.idsHint}
       </div>
     </div>
   );
@@ -213,6 +215,7 @@ const inputStyle = {
 };
 
 export default function SetupScreen({ user, onSave }) {
+  const { t } = useLang();
   const [kids, setKids] = useState([{ ...EMPTY_KID }]);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
@@ -256,9 +259,9 @@ export default function SetupScreen({ user, onSave }) {
 
       <div style={{ marginBottom: 24 }}>
         <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 28, fontWeight: 800, color: "#FF6B2B" }}>PIVOT</div>
-        <div style={{ fontSize: 15, fontWeight: 600, color: "#f1f5f9", marginTop: 8 }}>Set up your family</div>
+        <div style={{ fontSize: 15, fontWeight: 600, color: "#f1f5f9", marginTop: 8 }}>{t.setupTitle}</div>
         <div style={{ fontSize: 13, color: "#475569", marginTop: 4 }}>
-          Hi {user.name?.split(" ")[0]} — add up to 3 kids to get started.
+          {t.setupSubtitle(user.name?.split(" ")[0])}
         </div>
       </div>
 
@@ -272,7 +275,7 @@ export default function SetupScreen({ user, onSave }) {
           width: "100%", background: "transparent", border: "1px dashed rgba(255,255,255,0.15)",
           borderRadius: 10, padding: "10px 0", color: "#475569", fontSize: 13, cursor: "pointer", marginBottom: 16,
         }}>
-          + Add another kid
+          {t.addKid}
         </button>
       )}
 
@@ -284,7 +287,7 @@ export default function SetupScreen({ user, onSave }) {
 
       {!isValid && (
         <div style={{ fontSize: 11, color: "#475569", marginBottom: 10 }}>
-          Name, short name, and Phase 1 Grup ID are required for each kid.
+          {t.setupRequired}
         </div>
       )}
 
@@ -293,7 +296,7 @@ export default function SetupScreen({ user, onSave }) {
         opacity: (!isValid || saving) ? 0.5 : 1,
         cursor: (!isValid || saving) ? "not-allowed" : "pointer",
       }}>
-        {saving ? "Saving…" : "Save & Open PIVOT →"}
+        {saving ? t.saving : t.saveBtn}
       </button>
     </div>
   );

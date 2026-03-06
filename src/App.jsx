@@ -2,6 +2,7 @@ import { useState } from "react";
 import { S } from "./styles";
 import { useSchedule } from "./useSchedule";
 import { useFamily } from "./useFamily";
+import { LangProvider, useLang } from "./LangContext";
 import DashboardTab from "./tabs/DashboardTab";
 import CalendarTab from "./tabs/CalendarTab";
 import ChecklistTab from "./tabs/ChecklistTab";
@@ -10,31 +11,23 @@ import StatsTab from "./tabs/StatsTab";
 import LoginScreen from "./LoginScreen";
 import SetupScreen from "./SetupScreen";
 
-const TABS = [
-  { id: "dash",     label: "Dashboard", icon: "⚡" },
-  { id: "calendar", label: "Calendar",  icon: "📅" },
-  { id: "matchday", label: "Match Day", icon: "🎒" },
-  { id: "season",   label: "Season",    icon: "📊" },
-  { id: "stats",    label: "Stats",     icon: "🏀" },
-];
+function AppInner() {
+  const { lang, setLanguage, t } = useLang();
 
-function loadStoredUser() {
-  try {
-    const stored = JSON.parse(sessionStorage.getItem("pivot_auth") || "null");
-    if (stored && stored.exp * 1000 > Date.now()) return stored;
-    sessionStorage.removeItem("pivot_auth");
-  } catch { /* ignore */ }
-  return null;
-}
+  const TABS = [
+    { id: "dash",     label: t.tabDash,     icon: "⚡" },
+    { id: "calendar", label: t.tabCalendar,  icon: "📅" },
+    { id: "matchday", label: t.tabMatchDay,  icon: "🎒" },
+    { id: "season",   label: t.tabSeason,    icon: "📊" },
+    { id: "stats",    label: t.tabStats,     icon: "🏀" },
+  ];
 
-function resolveShareToken() {
-  // Set by /s/TOKEN redirect page via sessionStorage before loading main app
-  return sessionStorage.getItem("pivot_share_token") || null;
-}
+  const LANG_PILLS = [
+    { id: "cat", label: "CAT" },
+    { id: "es",  label: "ES" },
+    { id: "en",  label: "EN" },
+  ];
 
-const shareToken = resolveShareToken();
-
-export default function App() {
   const [user, setUser] = useState(loadStoredUser);
   const [tab, setTab] = useState("dash");
   const [setupKey, setSetupKey] = useState(0);
@@ -58,10 +51,8 @@ export default function App() {
     });
   };
 
-  // Token-based access: skip login, go straight to app
   if (!shareToken && !user) return <LoginScreen onAuth={setUser} />;
 
-  // Family not yet configured — show one-time setup (email flow only)
   if (!shareToken && !familyLoading && kids !== null && kids.length === 0) {
     return <SetupScreen user={user} onSave={() => setSetupKey(k => k + 1)} />;
   }
@@ -82,10 +73,21 @@ export default function App() {
       <div style={S.header}>
         <div>
           <div style={S.logo}>PIVOT</div>
-          <div style={S.subtitle}>Basketball · BCN</div>
+          <div style={S.subtitle}>{t.subtitle}</div>
         </div>
         <div style={{ textAlign: "right", display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 4 }}>
-          <div style={{ fontSize: 11, color: "#475569", letterSpacing: "0.08em" }}>2025–26</div>
+          {/* Language selector */}
+          <div style={{ display: "flex", gap: 3 }}>
+            {LANG_PILLS.map(({ id, label }) => (
+              <button key={id} onClick={() => setLanguage(id)} style={{
+                background: lang === id ? "rgba(255,107,43,0.15)" : "transparent",
+                border: `1px solid ${lang === id ? "rgba(255,107,43,0.4)" : "rgba(255,255,255,0.08)"}`,
+                borderRadius: 4, padding: "2px 6px", cursor: "pointer",
+                color: lang === id ? "#FF6B2B" : "#334155", fontSize: 9, fontWeight: 600,
+                letterSpacing: "0.05em",
+              }}>{label}</button>
+            ))}
+          </div>
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
             {shareUrl && (
               <button onClick={copyShare} style={{
@@ -94,7 +96,7 @@ export default function App() {
                 borderRadius: 6, padding: "3px 8px", cursor: "pointer",
                 color: copied ? "#22d3a0" : "#64748b", fontSize: 10, fontWeight: 500,
               }}>
-                {copied ? "Copied!" : "🔗 Share"}
+                {copied ? t.copied : t.share}
               </button>
             )}
             {!shareToken && (
@@ -107,7 +109,7 @@ export default function App() {
                   ? <img src={user.picture} alt="" style={{ width: 20, height: 20, borderRadius: "50%", opacity: 0.6 }} />
                   : <span style={{ fontSize: 16 }}>👤</span>
                 }
-                <span style={{ fontSize: 10, color: "#334155" }}>Sign out</span>
+                <span style={{ fontSize: 10, color: "#334155" }}>{t.signOut}</span>
               </button>
             )}
           </div>
@@ -116,9 +118,9 @@ export default function App() {
 
       {/* Tab bar */}
       <div style={S.tabBar}>
-        {TABS.map(t => (
-          <button key={t.id} style={S.tab(tab === t.id)} onClick={() => setTab(t.id)}>
-            {t.icon} {t.label}
+        {TABS.map(tb => (
+          <button key={tb.id} style={S.tab(tab === tb.id)} onClick={() => setTab(tb.id)}>
+            {tb.icon} {tb.label}
           </button>
         ))}
       </div>
@@ -128,15 +130,15 @@ export default function App() {
         {loading && (
           <div style={{ textAlign: "center", padding: 48, color: "#475569" }}>
             <div style={{ fontSize: 28, marginBottom: 10 }}>⏳</div>
-            <div style={{ fontSize: 13 }}>Loading…</div>
+            <div style={{ fontSize: 13 }}>{t.loading}</div>
           </div>
         )}
 
         {!loading && error && (
           <div style={{ ...S.card({ borderColor: "rgba(255,71,87,0.3)" }), color: "#ff4757", fontSize: 13 }}>
-            <div style={{ marginBottom: 8 }}>Failed to load: {error}</div>
+            <div style={{ marginBottom: 8 }}>{t.failedToLoad} {error}</div>
             <button onClick={refresh} style={{ background: "#FF6B2B", border: "none", borderRadius: 6, color: "white", fontSize: 12, padding: "6px 14px", cursor: "pointer" }}>
-              Retry
+              {t.retry}
             </button>
           </div>
         )}
@@ -152,5 +154,29 @@ export default function App() {
         )}
       </div>
     </div>
+  );
+}
+
+function loadStoredUser() {
+  try {
+    const stored = JSON.parse(sessionStorage.getItem("pivot_auth") || "null");
+    if (stored && stored.exp * 1000 > Date.now()) return stored;
+    sessionStorage.removeItem("pivot_auth");
+  } catch { /* ignore */ }
+  return null;
+}
+
+function resolveShareToken() {
+  // Set by /s/TOKEN redirect page via sessionStorage before loading main app
+  return sessionStorage.getItem("pivot_share_token") || null;
+}
+
+const shareToken = resolveShareToken();
+
+export default function App() {
+  return (
+    <LangProvider>
+      <AppInner />
+    </LangProvider>
   );
 }

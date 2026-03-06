@@ -2,8 +2,10 @@ import { useState } from "react";
 import { S } from "../styles";
 import { CHECKLIST_STD, CHECKLIST_ROAD, CHECKLIST_NIGHT_BEFORE } from "../data";
 import { upcoming, tier, fmtDate, leaveByFromMins, travelMins, getOverrideMins, mapsUrl, latestMeal, daysOut } from "../utils";
+import { useLang } from "../LangContext";
 
 export default function ChecklistTab({ kids = [], k1Matches, k2Matches }) {
+  const { t } = useLang();
   const [kidId, setKidId] = useState("k1");
   const [selIdx, setSelIdx] = useState(0);
   const [checked, setChecked] = useState({});
@@ -17,7 +19,7 @@ export default function ChecklistTab({ kids = [], k1Matches, k2Matches }) {
   if (!match) return (
     <div style={{ color: "#475569", padding: 20, textAlign: "center" }}>
       <div style={{ fontSize: 32, marginBottom: 8 }}>✅</div>
-      No upcoming matches for {kid.name}.
+      {t.noUpcoming(kid.name)}
     </div>
   );
 
@@ -50,7 +52,7 @@ export default function ChecklistTab({ kids = [], k1Matches, k2Matches }) {
 
   return (
     <div>
-      <div style={S.sectionTitle}>Match Prep</div>
+      <div style={S.sectionTitle}>{t.matchPrep}</div>
 
       {/* Kid selector */}
       <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
@@ -80,7 +82,7 @@ export default function ChecklistTab({ kids = [], k1Matches, k2Matches }) {
         <div style={{ position: "absolute", right: 16, top: "50%", transform: "translateY(-50%)", fontSize: 64, opacity: 0.07, pointerEvents: "none" }}>🏀</div>
         <div style={{ display: "flex", gap: 6, marginBottom: 10, flexWrap: "wrap" }}>
           <span style={S.badge(match.ha === "home" ? "home" : isRoad ? "road" : "away")}>
-            {match.ha === "home" ? "🏠 Home" : isRoad ? "🚗 Road Trip" : "✈ Away"}
+            {match.ha === "home" ? t.haHome : isRoad ? t.haRoadTrip : t.haAway(match.city)}
           </span>
           <span style={S.badge(kidId === "k1" ? "k1" : "k2")}>{kid.label}</span>
           {match.canvis && <span style={S.badge("canvis")}>⚠ Canvis</span>}
@@ -93,30 +95,30 @@ export default function ChecklistTab({ kids = [], k1Matches, k2Matches }) {
         <div style={S.divider} />
         <div style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 12 }}>
           <div>
-            <div style={S.label}>Kickoff</div>
+            <div style={S.label}>{t.kickoff}</div>
             <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 28, fontWeight: 700 }}>{match.time}</div>
           </div>
           {leave && (
             <div>
-              <div style={S.label}>Leave by</div>
+              <div style={S.label}>{t.leaveBy}</div>
               <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 28, fontWeight: 700, color: kid.color }}>{leave}</div>
             </div>
           )}
           {match.km > 0 && (
             <div>
-              <div style={S.label}>Travel</div>
+              <div style={S.label}>{t.travel}</div>
               <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 28, fontWeight: 700, color: "#ffb347" }}>
-                {overrideMins ? overrideMins : `~${travelMins(match.km)}`}<span style={{ fontSize: 14, fontWeight: 400 }}>min</span>
+                {overrideMins ? overrideMins : `~${travelMins(match.km)}`}<span style={{ fontSize: 14, fontWeight: 400 }}>{t.min}</span>
               </div>
               <div style={{ fontSize: 10, color: "#475569" }}>{match.km}km</div>
             </div>
           )}
           <div>
-            <div style={S.label}>Latest meal</div>
+            <div style={S.label}>{t.latestMeal}</div>
             <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 28, fontWeight: 700, color: "#22d3a0" }}>{meal}</div>
           </div>
           <div>
-            <div style={S.label}>Kit</div>
+            <div style={S.label}>{t.kit}</div>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#f1f5f9" }}>{kit.jersey}</div>
             <div style={{ fontSize: 11, color: "#64748b" }}>+ {kit.shorts} shorts</div>
           </div>
@@ -129,7 +131,7 @@ export default function ChecklistTab({ kids = [], k1Matches, k2Matches }) {
               background: `${kid.color}18`, border: `1px solid ${kid.color}44`,
               color: kid.color, fontSize: 13, fontWeight: 600,
             }}>
-            📍 Open {match.venue} in Maps
+            {t.openInMaps(match.venue)}
           </a>
         )}
       </div>
@@ -139,7 +141,7 @@ export default function ChecklistTab({ kids = [], k1Matches, k2Matches }) {
         <>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10, marginTop: 6 }}>
             <div style={{ ...S.sectionTitle, marginBottom: 0 }}>
-              🌙 Night Before
+              {t.nightBefore}
             </div>
             <span style={{ fontSize: 12, color: nightDone === CHECKLIST_NIGHT_BEFORE.length ? "#22d3a0" : "#64748b" }}>
               {nightDone}/{CHECKLIST_NIGHT_BEFORE.length}
@@ -168,13 +170,13 @@ export default function ChecklistTab({ kids = [], k1Matches, k2Matches }) {
       {/* Match Day checklist */}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
         <div style={{ ...S.sectionTitle, marginBottom: 0 }}>
-          {daysAway === 0 ? "⚡ Match Day" : "🎒 Match Day Kit"} {isRoad && <span style={{ color: "#ffb347", fontSize: 13 }}>🚗 Road</span>}
+          {daysAway === 0 ? t.matchDay : t.matchDayKit} {isRoad && <span style={{ color: "#ffb347", fontSize: 13 }}>{t.roadBadge}</span>}
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
           <span style={{ fontSize: 12, color: dayDone === matchDayItems.length ? "#22d3a0" : "#64748b" }}>
             {dayDone}/{matchDayItems.length}
           </span>
-          <button onClick={reset} style={{ background: "none", border: "none", color: "#475569", cursor: "pointer", fontSize: 12 }}>Reset all</button>
+          <button onClick={reset} style={{ background: "none", border: "none", color: "#475569", cursor: "pointer", fontSize: 12 }}>{t.resetAll}</button>
         </div>
       </div>
 
@@ -199,7 +201,7 @@ export default function ChecklistTab({ kids = [], k1Matches, k2Matches }) {
       {dayDone === matchDayItems.length && nightDone === (showNightBefore ? CHECKLIST_NIGHT_BEFORE.length : nightDone) && (
         <div style={{ background: "rgba(34,211,160,0.1)", border: "1px solid rgba(34,211,160,0.25)", borderRadius: 10, padding: 14, marginTop: 12, textAlign: "center" }}>
           <span style={{ fontSize: 16 }}>✅</span>
-          <span style={{ color: "#22d3a0", fontWeight: 600, marginLeft: 8 }}>All set. Let's go.</span>
+          <span style={{ color: "#22d3a0", fontWeight: 600, marginLeft: 8 }}>{t.allSet}</span>
         </div>
       )}
 

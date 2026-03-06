@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { S } from "../styles";
 import { fmtDate } from "../utils";
+import { useLang } from "../LangContext";
 
 const MSSTATS_BASE = "https://msstats.optimalwayconsulting.com/v1/fcbq";
 const TEAM_ID = "80316";
@@ -71,6 +72,7 @@ function BoxScoreRow({ p, isRohan, border }) {
 }
 
 function SeasonStats() {
+  const { t } = useLang();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -86,13 +88,13 @@ function SeasonStats() {
   if (loading) return (
     <div style={{ textAlign: "center", padding: 32, color: "#64748b" }}>
       <div style={{ fontSize: 24, marginBottom: 8 }}>⏳</div>
-      Loading season stats…
+      {t.loadingStats}
     </div>
   );
 
   if (error) return (
     <div style={{ ...S.card({ borderColor: "rgba(255,71,87,0.3)" }), color: "#ff4757", fontSize: 13 }}>
-      Failed to load stats: {error}
+      {t.failedStats} {error}
     </div>
   );
 
@@ -105,15 +107,15 @@ function SeasonStats() {
       <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
         <div style={S.statBox}>
           <div style={{ ...S.statNum, color: "#22d3a0", fontSize: 24 }}>{team.teamResults.wins}W</div>
-          <div style={S.statLbl}>{team.sumMatches} played</div>
+          <div style={S.statLbl}>{team.sumMatches} {t.playedLabel}</div>
         </div>
         <div style={S.statBox}>
           <div style={{ ...S.statNum, color: "#ff4757", fontSize: 24 }}>{team.teamResults.losses}L</div>
-          <div style={S.statLbl}>losses</div>
+          <div style={S.statLbl}>{t.lossesLabel}</div>
         </div>
         <div style={S.statBox}>
           <div style={{ ...S.statNum, color: "#FF6B2B", fontSize: 24 }}>{team.totalScoreAvgByMatch.toFixed(1)}</div>
-          <div style={S.statLbl}>PPG for</div>
+          <div style={S.statLbl}>{t.ppgFor}</div>
         </div>
       </div>
 
@@ -145,6 +147,7 @@ function SeasonStats() {
 }
 
 function MatchBoxScores({ k1Matches }) {
+  const { t } = useLang();
   const [selectedMatch, setSelectedMatch] = useState(null);
   const [boxScore, setBoxScore] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -176,14 +179,14 @@ function MatchBoxScores({ k1Matches }) {
     }
   };
 
-  const grupBarnaTeam = boxScore?.teams?.find(t =>
-    t.name?.includes("BARNA") || t.name?.includes("GRUP")
+  const grupBarnaTeam = boxScore?.teams?.find(tm =>
+    tm.name?.includes("BARNA") || tm.name?.includes("GRUP")
   );
 
   return (
     <div>
       <div style={{ fontSize: 12, color: "#64748b", marginBottom: 12 }}>
-        Tap a match to see the full box score.
+        {t.tapMatch}
       </div>
 
       {/* Match list */}
@@ -206,7 +209,7 @@ function MatchBoxScores({ k1Matches }) {
         <>
           <button onClick={() => { setSelectedMatch(null); setBoxScore(null); setError(null); }}
             style={{ background: "none", border: "none", color: "#FF6B2B", cursor: "pointer", fontSize: 13, marginBottom: 12, padding: 0 }}>
-            ← Back to matches
+            {t.backToMatches}
           </button>
 
           <div style={S.heroCard}>
@@ -219,7 +222,7 @@ function MatchBoxScores({ k1Matches }) {
             </div>
           </div>
 
-          {loading && <div style={{ textAlign: "center", padding: 24, color: "#64748b" }}>⏳ Loading box score…</div>}
+          {loading && <div style={{ textAlign: "center", padding: 24, color: "#64748b" }}>{t.loadingBoxScore}</div>}
           {error && <div style={{ ...S.card({ borderColor: "rgba(255,179,71,0.3)" }), color: "#ffb347", fontSize: 12 }}>{error}</div>}
 
           {grupBarnaTeam && (
@@ -254,6 +257,7 @@ function MatchBoxScores({ k1Matches }) {
 }
 
 export default function StatsTab({ kids = [], k1Matches }) {
+  const { t } = useLang();
   const [kidId, setKidId] = useState("k1");
   const [view, setView] = useState("season");
   const selectedKid = kids.find(k => k.id === kidId) || kids[0];
@@ -272,15 +276,14 @@ export default function StatsTab({ kids = [], k1Matches }) {
       {!selectedKid?.statsAvailable ? (
         <div style={{ ...S.card({ borderColor: `${selectedKid?.color || "#A855F7"}33`, background: `${selectedKid?.color || "#A855F7"}0a` }), textAlign: "center", padding: 28 }}>
           <div style={{ fontSize: 28, marginBottom: 8 }}>📊</div>
-          <div style={{ fontSize: 14, color: selectedKid?.color || "#a855f7", fontWeight: 600, marginBottom: 6 }}>Stats not available</div>
-          <div style={{ fontSize: 12, color: "#64748b", lineHeight: 1.6 }}>
-            FCBQ publishes detailed statistics for Cadet Preferent only.<br />
-            {selectedKid?.label} plays {selectedKid?.shortName} — no stats published.
+          <div style={{ fontSize: 14, color: selectedKid?.color || "#a855f7", fontWeight: 600, marginBottom: 6 }}>{t.statsNotAvailable}</div>
+          <div style={{ fontSize: 12, color: "#64748b", lineHeight: 1.6, whiteSpace: "pre-line" }}>
+            {t.statsNotAvailableDesc(selectedKid?.label, selectedKid?.shortName)}
           </div>
           {selectedKid?.fcbqId && (
             <a href={`https://www.basquetcatala.cat/equip/${selectedKid.fcbqId}`} target="_blank" rel="noreferrer"
               style={{ ...S.mapsBtn, marginTop: 14, display: "inline-flex", color: selectedKid.color, borderColor: `${selectedKid.color}4d`, background: `${selectedKid.color}1a` }}>
-              View on FCBQ →
+              {t.viewOnFcbq}
             </a>
           )}
         </div>
@@ -288,7 +291,7 @@ export default function StatsTab({ kids = [], k1Matches }) {
         <>
           {/* Sub-tab toggle */}
           <div style={{ display: "flex", gap: 4, marginBottom: 16, background: "#111827", borderRadius: 10, padding: 4 }}>
-            {[["season", "Season Totals"], ["box", "Box Scores"]].map(([id, label]) => (
+            {[["season", t.seasonTotals], ["box", t.boxScores]].map(([id, label]) => (
               <button key={id} onClick={() => setView(id)} style={{
                 flex: 1, background: view === id ? "#FF6B2B" : "transparent",
                 border: "none", borderRadius: 7, padding: "7px 0",
