@@ -28,6 +28,7 @@ export function buildKid(dbKid, index) {
   return {
     id: `k${index + 1}`,
     fcbqId: dbKid.fcbq_team_id || null,
+    teamId: dbKid.fcbq_team_id || null,
     name: dbKid.name,
     label: dbKid.label,
     category: dbKid.category,
@@ -36,7 +37,7 @@ export function buildKid(dbKid, index) {
     arrivalBuffer: ARRIVAL_BUFFERS[dbKid.category] ?? 45,
     color,
     dimColor: `rgba(${r},${g},${b},0.15)`,
-    statsAvailable: dbKid.category === "Cadet",
+    statsAvailable: !!dbKid.fcbq_team_id,
     statsTeamId: dbKid.fcbq_team_id || null,
     grupIds,
     kit: {

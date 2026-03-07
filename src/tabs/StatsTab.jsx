@@ -73,18 +73,19 @@ function BoxScoreRow({ p, isHighlighted, border }) {
   );
 }
 
-function SeasonStats({ teamId, kidName }) {
+function SeasonStats({ teamId, kidName, onResult }) {
   const { t } = useLang();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    setData(null); setLoading(true); setError(null);
     const url = `${MSSTATS_BASE}/team-stats/team/${teamId}/season/${SEASON}`;
     fetch(`/api/fcbq?url=${encodeURIComponent(url)}`)
       .then(r => { if (!r.ok) throw new Error(`${r.status}`); return r.json(); })
-      .then(d => { setData(d); setLoading(false); })
-      .catch(e => { setError(e.message); setLoading(false); });
+      .then(d => { setData(d); setLoading(false); onResult?.(true); })
+      .catch(e => { setError(e.message); setLoading(false); onResult?.(false); });
   }, [teamId]);
 
   if (loading) return (
@@ -94,11 +95,8 @@ function SeasonStats({ teamId, kidName }) {
     </div>
   );
 
-  if (error) return (
-    <div style={{ ...S.card({ borderColor: "rgba(255,71,87,0.3)" }), color: "#ff4757", fontSize: 13 }}>
-      {t.failedStats} {error}
-    </div>
-  );
+  // Parent handles the not-available UI via onResult(false)
+  if (error) return null;
 
   const team = data.team;
   const players = [...(data.players || [])].sort((a, b) => b.totalScoreAvgByMatch - a.totalScoreAvgByMatch);
@@ -393,22 +391,30 @@ export default function StatsTab({ kids = [], k1Matches, k2Matches = [], k3Match
   const { t } = useLang();
   const [kidId, setKidId] = useState("k1");
   const [view, setView] = useState("season");
+  const [statsConfirmed, setStatsConfirmed] = useState(null); // null=probing, true=available, false=not available
   const selectedKid = kids.find(k => k.id === kidId) || kids[0];
   const kidMatchesMap = { k1: k1Matches, k2: k2Matches, k3: k3Matches };
   const selectedMatches = kidMatchesMap[selectedKid?.id] || k1Matches;
+
+  const switchKid = (id) => { setKidId(id); setStatsConfirmed(null); setView("season"); };
+
+  const notAvailable = !selectedKid?.statsAvailable || statsConfirmed === false;
+  const subTabs = statsConfirmed === true
+    ? [["season", t.seasonTotals], ["box", t.boxScores], ["log", t.gameLog]]
+    : [["season", t.seasonTotals]];
 
   return (
     <div>
       {/* Kid selector */}
       <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
         {kids.map(ki => (
-          <button key={ki.id} onClick={() => setKidId(ki.id)} style={S.kidBtn(kidId === ki.id, ki.color)}>
+          <button key={ki.id} onClick={() => switchKid(ki.id)} style={S.kidBtn(kidId === ki.id, ki.color)}>
             {ki.label} · {ki.shortName}
           </button>
         ))}
       </div>
 
-      {!selectedKid?.statsAvailable ? (
+      {notAvailable ? (
         <div style={{ ...S.card({ borderColor: `${selectedKid?.color || "#A855F7"}33`, background: `${selectedKid?.color || "#A855F7"}0a` }), textAlign: "center", padding: 28 }}>
           <div style={{ fontSize: 28, marginBottom: 8 }}>📊</div>
           <div style={{ fontSize: 14, color: selectedKid?.color || "#a855f7", fontWeight: 600, marginBottom: 6 }}>{t.statsNotAvailable}</div>
@@ -424,9 +430,9 @@ export default function StatsTab({ kids = [], k1Matches, k2Matches = [], k3Match
         </div>
       ) : (
         <>
-          {/* Sub-tab toggle */}
+          {/* Sub-tab toggle — box/log appear only once stats confirmed via API */}
           <div style={{ display: "flex", gap: 4, marginBottom: 16, background: "#111827", borderRadius: 10, padding: 4 }}>
-            {[["season", t.seasonTotals], ["box", t.boxScores], ["log", t.gameLog]].map(([id, label]) => (
+            {subTabs.map(([id, label]) => (
               <button key={id} onClick={() => setView(id)} style={{
                 flex: 1, background: view === id ? "#FF6B2B" : "transparent",
                 border: "none", borderRadius: 7, padding: "7px 0",
@@ -436,7 +442,7 @@ export default function StatsTab({ kids = [], k1Matches, k2Matches = [], k3Match
             ))}
           </div>
 
-          {view === "season" && <SeasonStats teamId={selectedKid.statsTeamId} kidName={selectedKid.name} />}
+          {view === "season" && <SeasonStats teamId={selectedKid.statsTeamId} kidName={selectedKid.name} onResult={setStatsConfirmed} />}
           {view === "box"    && <MatchBoxScores kidMatches={selectedMatches} kidName={selectedKid.name} />}
           {view === "log"    && <PlayerGameLog kidMatches={selectedMatches} kidName={selectedKid.name} />}
         </>
