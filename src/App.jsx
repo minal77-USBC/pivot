@@ -188,8 +188,12 @@ function loadStoredUser() {
 }
 
 function resolveShareToken() {
-  // Set by /s/TOKEN redirect page via sessionStorage before loading main app
-  return sessionStorage.getItem("pivot_share_token") || null;
+  // sessionStorage is set by /s/TOKEN redirect page.
+  // Fallback to localStorage: iOS Safari clears sessionStorage when navigating
+  // between paths in standalone PWA mode, so localStorage is the durable store.
+  return sessionStorage.getItem("pivot_share_token")
+    || localStorage.getItem("pivot_share_token")
+    || null;
 }
 
 const shareToken = resolveShareToken();

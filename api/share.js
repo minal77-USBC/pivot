@@ -27,7 +27,10 @@ export default function handler(req, res) {
   <title>PIVOT</title>
   <style>body { margin: 0; background: #070912; }</style>
   <script>
+    // sessionStorage is cleared by iOS Safari on navigation in standalone PWA mode.
+    // localStorage persists across PWA restarts and survives the location.replace('/').
     sessionStorage.setItem('pivot_share_token', '${token}');
+    localStorage.setItem('pivot_share_token', '${token}');
     location.replace('/');
   </script>
 </head>
