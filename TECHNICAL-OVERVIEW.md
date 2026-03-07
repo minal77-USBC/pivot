@@ -1,6 +1,6 @@
 # PIVOT — Technical Overview
 
-**Last updated:** 2026-03-07 (settings screen + mobile readability)
+**Last updated:** 2026-03-07
 **Stack:** React 18 + Vite · Vercel (serverless) · Supabase · Google OAuth
 
 ---
@@ -61,14 +61,17 @@ Browser (React SPA)
 - **Key kids columns:** `name`, `label`, `category`, `gender`, `color`, `fcbq_team_id`, `grup_id_phase1`, `grup_id_phase2`
 - **`fcbq_team_id`:** Required for stats features. Flows into `kid.statsTeamId` via `familyUtils.buildKid()`. `statsAvailable` gated on `category === "Cadet"`.
 - **Kid shape built by:** `src/familyUtils.js:buildKid()` — converts DB row to app kid object
-- **Share flow:** `share_token` → `/s/TOKEN` redirect → `sessionStorage` + `localStorage` → `useFamily(shareToken)` → read-only view
-- **PWA share persistence:** iOS Safari clears `sessionStorage` when navigating between paths in standalone mode. `share.js` writes `pivot_share_token` to **both** `sessionStorage` and `localStorage`. `resolveShareToken()` falls back to `localStorage` so the token survives PWA restarts. To activate after install: open the `/s/TOKEN` URL once in Safari (not from home screen icon) to seed `localStorage`.
+- **Share flow:** `share_token` → `/s/TOKEN` redirect → `/?share_token=TOKEN` → `resolveShareToken()` reads URL param → `useFamily(shareToken)` → read-only view
+- **PWA share persistence:** `share-manifest.js` sets `start_url: /?share_token=TOKEN` so iOS always launches the PWA with the token in the URL — no storage dependency. `resolveShareToken()` reads `window.location.search` first, seeds `localStorage` as fallback for in-session SPA navigations, then falls back to `localStorage`. **Prior attempts** (sessionStorage, localStorage-only) failed because iOS standalone mode can clear sessionStorage on path navigation and may skip the redirect on fast resume. URL param in `start_url` is the only approach iOS must honour on every launch.
+- **Reinstall required** when share manifest `start_url` changes — iOS caches the old manifest. User must delete home screen icon and re-add.
 - **Planned:** `match_box_scores` table — cache box score JSON by `stats_uuid` to avoid re-fetching on every Game Log load. See spike: `box-score-caching.md`.
 
 ### 4. FCBQ Team Page (HTML scrape)
 - Used by `api/scout.js` and `api/team-grups.js` to derive grup IDs for a given team
-- `GET https://www.basquetcatala.cat/equip/{teamId}` — regex match on `/competicions/resultats/{grupId}` links
+- `GET https://www.basquetcatala.cat/equip/{teamId}` — parses `<h4 id="news-sidebar">` competition labels + `/competicions/resultats/{grupId}` links
 - Used in scout card to fetch opponent's recent form via ESB (not msstats)
+- **Tournament filtering:** `api/team-grups.js` extracts (label, grupId) pairs and skips any section whose label contains `TROFEU`, `COPA`, `TORNEIG`, or `SUPERCOPA` before assigning Phase 1 / Phase 2. Teams in mid-season tournaments (e.g. Trofeu Molinet) have the tournament grup listed between Phase 1 and Phase 2 on the FCBQ page — without filtering, the tournament ID would be assigned as `grupIdPhase2`. Also returns `allSections[]` for debugging.
+- **Known limitation:** `isBarna()` in `schedule.js` is hardcoded to Grup Barna team name patterns. Breaks for other clubs — generalisation needed before multi-family rollout.
 
 ---
 
@@ -84,10 +87,9 @@ Browser (React SPA)
 - **Locale store:** `src/i18n.js` — inline `LOCALES` object with `cat`, `es`, `en` keys
 - **Context:** `src/LangContext.jsx` — `LangProvider` + `useLang()` hook
 - **Persistence:** `localStorage` key `pivot_lang`; default `"cat"`
-- **Coverage:** All screens including `SettingsScreen` — language selector is present in the Settings header so users can switch locale without returning to the main app
+- **Coverage:** All screens including `SettingsScreen` — language selector is present in the Settings header so users can switch locale without returning to the main app. Stat abbreviations (PTS, REB, AST etc.) stay universal.
 - **Utils integration:** `fmtDate()` and `daysLabel()` in `utils.js` read `pivot_lang` directly from localStorage (avoids prop-drilling locale through all call sites)
 - **Checklist items:** Translated via id-keyed dicts (`nightItems`, `stdItems`, `roadItems`) in each locale; fallback to English `item.label` from `data.js`
-- **Coverage:** All UI strings across all tabs and components. Stat abbreviations (PTS, REB, AST etc.) stay universal.
 
 ### Match Tiers (`src/utils.js:tier()`)
 | Tier | km Range | Badge | Card style |
@@ -166,10 +168,12 @@ Browser (React SPA)
 - **Auth provider:** Google OAuth via `api/auth.js`
 - **Session storage:** `sessionStorage` key `pivot_auth` — stores `{ email, picture, exp }` JWT payload
 - **Auto-expiry:** Checked on load; expired sessions cleared and user returned to login
-- **Share mode:** `sessionStorage` key `pivot_share_token` → bypasses auth, loads family by token, read-only
+- **Share mode:** URL param `?share_token` (set by `share.js` redirect and `start_url` in PWA manifest) → `resolveShareToken()` → bypasses auth, loads family by token, read-only
 - **Setup flow:** New user with no kids → `SetupScreen.jsx` → writes kids to Supabase via `/api/family`
 - **Settings flow:** Existing user → gear icon (⚙) in header → `SettingsScreen.jsx` → edit/delete/add kids → POST `/api/family` (full-replace) → re-fetches family → returns to main app
-- **Shape mismatch warning:** `useFamily` returns kids in `buildKid()` shape (`fcbqId`, `grupIds[]`). `KidForm` expects setup shape (`fcbqTeamId`, `grupIdPhase1`, `grupIdPhase2`). `SettingsScreen` normalises via `toEditShape()` on init — do not pass raw app-shape kids directly to `KidForm`.
+- **Shape mismatch:** `useFamily` returns kids in `buildKid()` shape (`fcbqId`, `grupIds[]`). `KidForm` expects setup shape (`fcbqTeamId`, `grupIdPhase1`, `grupIdPhase2`). `SettingsScreen` normalises via `toEditShape()` on init — do not pass raw app-shape kids directly to `KidForm`.
+- **Add kid UX:** Adding a new kid in SettingsScreen auto-expands the form and shows a `setupRequired` validation hint when Save is disabled. Without this, users cannot save until name, label, and grupIdPhase1 are filled — previously showed no feedback.
+- **Families are per email:** Each Google account gets its own family row in Supabase. Two users setting up the same kids creates duplicate DB rows. Share link is the correct multi-user pattern — one owner sets up, shares read-only URL with others.
 
 ---
 
@@ -187,7 +191,8 @@ Browser (React SPA)
 | Area | Issue | Notes |
 |------|-------|-------|
 | Performance | Cache hit latency similar to cold msstats parallel fetch | Supabase read is serial (~200–400ms); benefit is reliability + eliminating msstats dependency for historical matches. Monitor via `X-Cache-Stats` response header. |
-| Schedule | `BARNA` team names hardcoded in `isBarna()` | Breaks for non-Grup-Barna families. Multi-family generalisation needed. |
+| Schedule | `isBarna()` hardcoded to Grup Barna name patterns | Breaks for other clubs. Multi-family generalisation needed before wider rollout. |
+| Grup IDs | Teams in mid-season tournaments had wrong Phase 2 ID assigned | Fixed 2026-03-07 via label-based filtering in `api/team-grups.js`. Existing DB records set up before fix may need manual correction. |
 | Checklist | `canvis` flag only shows ⚠ label | No push notification or alert mechanism |
 | Stats | `statsUuid` may be null for recent matches | ESB populates `universallyid` 24–48h post-game. Empty state handled. |
 
