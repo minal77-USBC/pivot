@@ -168,6 +168,7 @@ Browser (React SPA)
 - **Share mode:** `sessionStorage` key `pivot_share_token` → bypasses auth, loads family by token, read-only
 - **Setup flow:** New user with no kids → `SetupScreen.jsx` → writes kids to Supabase via `/api/family`
 - **Settings flow:** Existing user → gear icon (⚙) in header → `SettingsScreen.jsx` → edit/delete/add kids → POST `/api/family` (full-replace) → re-fetches family → returns to main app
+- **Shape mismatch warning:** `useFamily` returns kids in `buildKid()` shape (`fcbqId`, `grupIds[]`). `KidForm` expects setup shape (`fcbqTeamId`, `grupIdPhase1`, `grupIdPhase2`). `SettingsScreen` normalises via `toEditShape()` on init — do not pass raw app-shape kids directly to `KidForm`.
 
 ---
 
