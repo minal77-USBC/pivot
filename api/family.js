@@ -49,43 +49,48 @@ export default async function handler(req, res) {
   if (req.method === "POST") {
     const { kids = [] } = req.body || {};
 
-    // Upsert family row
-    const [family] = await sb(
-      `/families?email=eq.${encodeURIComponent(email)}`,
-      {
-        method: "POST",
-        headers: { Prefer: "return=representation,resolution=merge-duplicates" },
-        body: JSON.stringify({ email }),
+    try {
+      // Upsert family row
+      const [family] = await sb(
+        `/families?email=eq.${encodeURIComponent(email)}`,
+        {
+          method: "POST",
+          headers: { Prefer: "return=representation,resolution=merge-duplicates" },
+          body: JSON.stringify({ email }),
+        }
+      );
+
+      const familyId = family.id;
+
+      // Replace kids: delete existing, insert new
+      await sb(`/kids?family_id=eq.${familyId}`, { method: "DELETE" });
+
+      if (kids.length) {
+        await sb("/kids", {
+          method: "POST",
+          body: JSON.stringify(
+            kids.map((k, i) => ({
+              family_id: familyId,
+              sort_order: i,
+              name: k.name,
+              label: k.label,
+              club_name: k.clubName || null,
+              fcbq_team_id: k.fcbqTeamId || null,
+              category: k.category,
+              gender: k.gender || "M",
+              grup_id_phase1: k.grupIdPhase1 || null,
+              grup_id_phase2: k.grupIdPhase2 || null,
+              color: k.color || "#FF6B2B",
+            }))
+          ),
+        });
       }
-    );
 
-    const familyId = family.id;
-
-    // Replace kids: delete existing, insert new
-    await sb(`/kids?family_id=eq.${familyId}`, { method: "DELETE" });
-
-    if (kids.length) {
-      await sb("/kids", {
-        method: "POST",
-        body: JSON.stringify(
-          kids.map((k, i) => ({
-            family_id: familyId,
-            sort_order: i,
-            name: k.name,
-            label: k.label,
-            club_name: k.clubName || null,
-            fcbq_team_id: k.fcbqTeamId || null,
-            category: k.category,
-            gender: k.gender || "M",
-            grup_id_phase1: k.grupIdPhase1 || null,
-            grup_id_phase2: k.grupIdPhase2 || null,
-            color: k.color || "#FF6B2B",
-          }))
-        ),
-      });
+      return res.json({ ok: true, shareToken: family.share_token });
+    } catch (err) {
+      console.error("family POST error:", err.message);
+      return res.status(500).json({ error: err.message });
     }
-
-    return res.json({ ok: true, shareToken: family.share_token });
   }
 
   res.status(405).end();

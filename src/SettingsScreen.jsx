@@ -73,7 +73,10 @@ export default function SettingsScreen({ user, kids: initialKids, onSave, onClos
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: user.email, kids: editKids }),
       });
-      if (!res.ok) throw new Error("Save failed");
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error || "Save failed");
+      }
       onSave();
       onClose();
     } catch (e) {

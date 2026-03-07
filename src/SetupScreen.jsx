@@ -236,7 +236,10 @@ export default function SetupScreen({ user, onSave }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: user.email, kids }),
       });
-      if (!res.ok) throw new Error("Save failed");
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error || "Save failed");
+      }
       onSave();
     } catch (e) {
       setError(e.message);
