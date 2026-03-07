@@ -54,7 +54,9 @@ export default function SettingsScreen({ user, kids: initialKids, onSave, onClos
 
   const addKid = () => {
     if (editKids.length < 3) {
+      const newIndex = editKids.length;
       setEditKids(ks => [...ks, { ...EMPTY_KID, color: COLORS[ks.length] }]);
+      setExpandedIndex(newIndex);
     }
   };
 
@@ -236,6 +238,12 @@ export default function SettingsScreen({ user, kids: initialKids, onSave, onClos
           >
             {t.addKid}
           </button>
+        )}
+
+        {!isValid && (
+          <div style={{ fontSize: 11, color: "#475569", marginBottom: 10 }}>
+            {t.setupRequired}
+          </div>
         )}
 
         {error && (
