@@ -15,7 +15,7 @@ export default function handler(req, res) {
   res.json({
     name: "PIVOT · Basketball BCN",
     short_name: "PIVOT",
-    start_url: `/s/${token}`,
+    start_url: `/?share_token=${token}`,
     display: "standalone",
     background_color: "#070912",
     theme_color: "#070912",
