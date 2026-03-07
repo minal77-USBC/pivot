@@ -9,9 +9,25 @@ const LANG_PILLS = [
   { id: "en",  label: "EN" },
 ];
 
+// buildKid() in familyUtils shapes kids differently from the setup/KidForm shape.
+// This normalises back to the shape KidForm expects before editing.
+function toEditShape(kid) {
+  return {
+    name: kid.name || "",
+    label: kid.label || "",
+    clubName: kid.clubName || "",
+    fcbqTeamId: kid.fcbqTeamId || kid.fcbqId || "",
+    category: kid.category || "Infantil",
+    gender: kid.gender || "M",
+    grupIdPhase1: kid.grupIdPhase1 || kid.grupIds?.[0] || "",
+    grupIdPhase2: kid.grupIdPhase2 || kid.grupIds?.[1] || "",
+    color: kid.color || "#FF6B2B",
+  };
+}
+
 export default function SettingsScreen({ user, kids: initialKids, onSave, onClose }) {
   const { lang, setLanguage, t } = useLang();
-  const [editKids, setEditKids] = useState(initialKids.map(k => ({ ...k })));
+  const [editKids, setEditKids] = useState(() => initialKids.map(toEditShape));
   const [expandedIndex, setExpandedIndex] = useState(-1);
   const [deleteConfirm, setDeleteConfirm] = useState(-1);
   const [saving, setSaving] = useState(false);
