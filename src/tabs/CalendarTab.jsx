@@ -3,14 +3,15 @@ import { S } from "../styles";
 import { upcoming, tier, fmtDate, daysLabel, daysOut, leaveByFromMins, travelMins, getOverrideMins } from "../utils";
 import { useLang } from "../LangContext";
 
-export default function CalendarTab({ kids = [], k1Matches, k2Matches }) {
+export default function CalendarTab({ kids = [], k1Matches, k2Matches, k3Matches = [] }) {
   const { t } = useLang();
   const [filter, setFilter] = useState("all");
 
-  // Merge upcoming matches from both kids, tagged with kidId
+  // Merge upcoming matches from all kids, tagged with kidId
   const allUpcoming = [
-    ...upcoming(k1Matches).map(m => ({ ...m, kidId: "k1" })),
-    ...upcoming(k2Matches).map(m => ({ ...m, kidId: "k2" })),
+    ...upcoming(k1Matches).map(m => ({ ...m, kidId: kids[0]?.id || "k1" })),
+    ...upcoming(k2Matches).map(m => ({ ...m, kidId: kids[1]?.id || "k2" })),
+    ...upcoming(k3Matches).map(m => ({ ...m, kidId: kids[2]?.id || "k3" })),
   ].sort((a, b) => a.date.localeCompare(b.date) || a.time.localeCompare(b.time));
 
   const filtered = filter === "all" ? allUpcoming : allUpcoming.filter(m => m.kidId === filter);
@@ -23,15 +24,21 @@ export default function CalendarTab({ kids = [], k1Matches, k2Matches }) {
     byDate[m.date].push(m);
   }
 
-  // Count double-header dates (both kids play same day)
-  const k1Dates = new Set(upcoming(k1Matches).map(m => m.date));
-  const k2Dates = new Set(upcoming(k2Matches).map(m => m.date));
-  const doubleDates = new Set([...k1Dates].filter(d => k2Dates.has(d)));
+  // Count double-header dates (2+ kids play same day)
+  const kidDateSets = [k1Matches, k2Matches, k3Matches].slice(0, kids.length).map(
+    ms => new Set(upcoming(ms).map(m => m.date))
+  );
+  const doubleDates = new Set(
+    kidDateSets.flatMap((s, i) =>
+      [...s].filter(d => kidDateSets.some((other, j) => j !== i && other.has(d)))
+    )
+  );
 
-  // Road trip view: all away matches across both kids, split upcoming / past
+  // Road trip view: all away matches across all kids, split upcoming / past
   const allAway = [
-    ...(k1Matches || []).map(m => ({ ...m, kidId: "k1" })),
-    ...(k2Matches || []).map(m => ({ ...m, kidId: "k2" })),
+    ...(k1Matches || []).map(m => ({ ...m, kidId: kids[0]?.id || "k1" })),
+    ...(k2Matches || []).map(m => ({ ...m, kidId: kids[1]?.id || "k2" })),
+    ...(k3Matches || []).map(m => ({ ...m, kidId: kids[2]?.id || "k3" })),
   ].filter(m => m.ha === "away");
   const upcomingAway = allAway
     .filter(m => daysOut(m.date) >= 0)
@@ -46,8 +53,7 @@ export default function CalendarTab({ kids = [], k1Matches, k2Matches }) {
       <div style={{ display: "flex", gap: 8, marginBottom: 14, flexWrap: "wrap" }}>
         {[
           ["all",  t.filterBoth,  "#64748b"],
-          ["k1", kids[0]?.label || "Kid 1", kids[0]?.color || "#FF6B2B"],
-          ["k2", kids[1]?.label || "Kid 2", kids[1]?.color || "#A855F7"],
+          ...kids.map(ki => [ki.id, ki.label, ki.color]),
           ["away", t.filterAway, "#ffb347"],
         ].map(([id, label, color]) => (
           <button key={id} onClick={() => setFilter(id)}

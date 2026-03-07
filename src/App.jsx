@@ -167,10 +167,10 @@ function AppInner() {
         {!loading && !error && kids?.length > 0 && (
           <>
             {tab === "dash"     && <DashboardTab kids={kids} k1Matches={k1Matches} k2Matches={k2Matches} k3Matches={k3Matches} />}
-            {tab === "calendar" && <CalendarTab  kids={kids} k1Matches={k1Matches} k2Matches={k2Matches} />}
-            {tab === "matchday" && <ChecklistTab kids={kids} k1Matches={k1Matches} k2Matches={k2Matches} />}
+            {tab === "calendar" && <CalendarTab  kids={kids} k1Matches={k1Matches} k2Matches={k2Matches} k3Matches={k3Matches} />}
+            {tab === "matchday" && <ChecklistTab kids={kids} k1Matches={k1Matches} k2Matches={k2Matches} k3Matches={k3Matches} />}
             {tab === "season"   && <SeasonTab    kids={kids} k1Matches={k1Matches} k2Matches={k2Matches} k3Matches={k3Matches} />}
-            {tab === "stats"    && <StatsTab     kids={kids} k1Matches={k1Matches} k2Matches={k2Matches} />}
+            {tab === "stats"    && <StatsTab     kids={kids} k1Matches={k1Matches} k2Matches={k2Matches} k3Matches={k3Matches} />}
           </>
         )}
       </div>

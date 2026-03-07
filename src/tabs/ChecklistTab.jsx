@@ -4,14 +4,15 @@ import { CHECKLIST_STD, CHECKLIST_ROAD, CHECKLIST_NIGHT_BEFORE } from "../data";
 import { upcoming, tier, fmtDate, leaveByFromMins, travelMins, getOverrideMins, mapsUrl, latestMeal, daysOut } from "../utils";
 import { useLang } from "../LangContext";
 
-export default function ChecklistTab({ kids = [], k1Matches, k2Matches }) {
+export default function ChecklistTab({ kids = [], k1Matches, k2Matches, k3Matches = [] }) {
   const { t } = useLang();
   const [kidId, setKidId] = useState("k1");
   const [selIdx, setSelIdx] = useState(0);
   const [checked, setChecked] = useState({});
 
   const kid = kids.find(k => k.id === kidId);
-  const upMatches = upcoming(kidId === "k1" ? k1Matches : k2Matches);
+  const matchesById = { [kids[0]?.id]: k1Matches, [kids[1]?.id]: k2Matches, [kids[2]?.id]: k3Matches };
+  const upMatches = upcoming(matchesById[kidId] || k1Matches);
   const match = upMatches[selIdx] || upMatches[0];
 
   const switchKid = (id) => { setKidId(id); setSelIdx(0); };

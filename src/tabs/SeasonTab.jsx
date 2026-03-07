@@ -3,7 +3,7 @@ import { S } from "../styles";
 import { fmtDate } from "../utils";
 import { useLang } from "../LangContext";
 
-export default function SeasonTab({ kids = [], k1Matches, k2Matches }) {
+export default function SeasonTab({ kids = [], k1Matches, k2Matches, k3Matches }) {
   const [kidId, setKidId] = useState("k1");
 
   return (
@@ -19,7 +19,12 @@ export default function SeasonTab({ kids = [], k1Matches, k2Matches }) {
 
       {(() => {
         const idx = kids.findIndex(k => k.id === kidId);
-        const matches = [k1Matches, k2Matches][idx] || k1Matches;
+        const matchesById = {
+          [kids[0]?.id]: k1Matches,
+          [kids[1]?.id]: k2Matches,
+          [kids[2]?.id]: k3Matches,
+        };
+        const matches = matchesById[kidId] || k1Matches;
         const kid = kids[idx] || kids[0];
         return <KidSeason matches={matches} kid={kid} />;
       })()}

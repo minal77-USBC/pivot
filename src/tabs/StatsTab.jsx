@@ -389,12 +389,12 @@ function MatchBoxScores({ kidMatches, kidName }) {
   );
 }
 
-export default function StatsTab({ kids = [], k1Matches, k2Matches = [] }) {
+export default function StatsTab({ kids = [], k1Matches, k2Matches = [], k3Matches = [] }) {
   const { t } = useLang();
   const [kidId, setKidId] = useState("k1");
   const [view, setView] = useState("season");
   const selectedKid = kids.find(k => k.id === kidId) || kids[0];
-  const kidMatchesMap = { k1: k1Matches, k2: k2Matches };
+  const kidMatchesMap = { k1: k1Matches, k2: k2Matches, k3: k3Matches };
   const selectedMatches = kidMatchesMap[selectedKid?.id] || k1Matches;
 
   return (

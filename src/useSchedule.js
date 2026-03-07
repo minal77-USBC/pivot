@@ -42,7 +42,7 @@ export function useSchedule(kids) {
 
     try {
       const param = encodeURIComponent(JSON.stringify(
-        kids.map(k => ({ id: k.id, grupIds: k.grupIds || [] }))
+        kids.map(k => ({ id: k.id, grupIds: k.grupIds || [], teamId: k.teamId }))
       ));
       const res = await fetch(`/api/schedule?kids=${param}`);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);

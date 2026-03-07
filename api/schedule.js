@@ -57,10 +57,16 @@ function fmtVenue(nameField) {
   return titleCase(parts.length > 1 ? parts.slice(1).join(" - ") : nameField);
 }
 
-function normalizeMatch(m) {
+function normalizeMatch(m, teamId) {
   if (!m.matchDay) return null;
-  const barnaLocal = isBarna(m.nameLocalTeam);
-  const barnaVisitor = isBarna(m.nameVisitorTeam);
+  let barnaLocal, barnaVisitor;
+  if (teamId) {
+    barnaLocal = String(m.idLocalTeam) === String(teamId);
+    barnaVisitor = String(m.idVisitorTeam) === String(teamId);
+  } else {
+    barnaLocal = isBarna(m.nameLocalTeam);
+    barnaVisitor = isBarna(m.nameVisitorTeam);
+  }
   if (!barnaLocal && !barnaVisitor) return null;
 
   const ha = barnaLocal ? "home" : "away";
@@ -124,7 +130,7 @@ export default async function handler(req, res) {
         const rounds = data.messageData.rounds;
         for (const round of Object.values(rounds)) {
           for (const m of Object.values(round.matches || {})) {
-            const norm = normalizeMatch(m);
+            const norm = normalizeMatch(m, kid.teamId);
             if (norm) kidMatches.push(norm);
           }
         }
