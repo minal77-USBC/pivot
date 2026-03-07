@@ -134,6 +134,26 @@ export const LOCALES = {
     editTravelTime: "Edit travel time",
     min: "min",
 
+    // Scout card
+    scoutReport: "Scout Report",
+    scoutLoading: "Loading scout report…",
+    scoutUnavailable: "Scout report unavailable",
+    scoutPlayed: "played",
+    scoutLosses: "losses",
+    scoutPpgFor: "PPG for",
+    scoutPpgAg: "PPG ag.",
+    h2hLabel: "H2H THIS SEASON",
+    h2hGames: (n) => `(${n} ${n === 1 ? "game" : "games"})`,
+    scoutThreats: "Threats",
+    scoutRecentForm: "Recent Form",
+    scoutSource: "Source: FCBQ / msstats · Season averages",
+
+    // Game log
+    gameLog: "Game Log",
+    loadingGameLog: "Loading game log…",
+    gameLogEmpty: "No game log data available yet — box scores appear 24–48h after each match.",
+    gameLogStarter: "★ Started",
+
     // W/L labels
     wLabel: "W",
     lLabel: "L",
@@ -293,6 +313,26 @@ export const LOCALES = {
     editTravelTime: "Editar tiempo de viaje",
     min: "min",
 
+    // Scout card
+    scoutReport: "Informe Scout",
+    scoutLoading: "Cargando informe…",
+    scoutUnavailable: "Informe no disponible",
+    scoutPlayed: "jugados",
+    scoutLosses: "derrotas",
+    scoutPpgFor: "PPG",
+    scoutPpgAg: "PPG en contra",
+    h2hLabel: "H2H ESTA TEMPORADA",
+    h2hGames: (n) => `(${n} ${n === 1 ? "partido" : "partidos"})`,
+    scoutThreats: "Amenazas",
+    scoutRecentForm: "Forma reciente",
+    scoutSource: "Fuente: FCBQ / msstats · Medias temporada",
+
+    // Game log
+    gameLog: "Partidos",
+    loadingGameLog: "Cargando partidos…",
+    gameLogEmpty: "Aún no hay datos disponibles — las actas aparecen 24–48h después de cada partido.",
+    gameLogStarter: "★ Titular",
+
     wLabel: "V",
     lLabel: "D",
 
@@ -449,6 +489,26 @@ export const LOCALES = {
     yours: "✓ teu",
     editTravelTime: "Edita el temps de viatge",
     min: "min",
+
+    // Scout card
+    scoutReport: "Informe Scout",
+    scoutLoading: "Carregant informe…",
+    scoutUnavailable: "Informe no disponible",
+    scoutPlayed: "jugats",
+    scoutLosses: "derrotes",
+    scoutPpgFor: "PPG",
+    scoutPpgAg: "PPG contra",
+    h2hLabel: "H2H AQUESTA TEMPORADA",
+    h2hGames: (n) => `(${n} ${n === 1 ? "partit" : "partits"})`,
+    scoutThreats: "Amenaces",
+    scoutRecentForm: "Forma recent",
+    scoutSource: "Font: FCBQ / msstats · Mitjanes temporada",
+
+    // Game log
+    gameLog: "Partits",
+    loadingGameLog: "Carregant partits…",
+    gameLogEmpty: "Encara no hi ha dades disponibles — les actes apareixen 24–48h després de cada partit.",
+    gameLogStarter: "★ Titular",
 
     wLabel: "V",
     lLabel: "D",

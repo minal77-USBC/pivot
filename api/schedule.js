@@ -87,6 +87,7 @@ function normalizeMatch(m) {
     played,
     ...(played ? { win, score } : {}),
     ...(m.universallyid ? { statsUuid: m.universallyid } : {}),
+    ...(m.idVisitorTeam ? { oppTeamId: String(barnaLocal ? m.idVisitorTeam : m.idLocalTeam) } : {}),
   };
 }
 
