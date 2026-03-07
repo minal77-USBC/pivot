@@ -11,14 +11,37 @@ export default async function handler(req, res) {
     .then((r) => r.text())
     .catch(() => "");
 
-  // Extract all grup IDs from /competicions/resultats/{id} links in order of appearance
-  const grupMatches = [...html.matchAll(/\/competicions\/resultats\/(\d+)/g)];
-  const grupIds = [...new Set(grupMatches.map((m) => m[1]))];
+  // Extract (label, grupId) pairs using the FCBQ page structure:
+  //   <h4 id="news-sidebar">COMPETITION NAME:</h4>
+  //   <h4><a href="/competicions/resultats/ID">Veure resultats</a></h4>
+  const sectionRe = /id="news-sidebar"[^>]*>\s*([^<]+?)\s*<\/h4>.*?\/competicions\/resultats\/(\d+)/gs;
+  const sections = [...html.matchAll(sectionRe)].map((m) => ({
+    label: m[1].trim().toUpperCase(),
+    grupId: m[2],
+  }));
 
+  // Deduplicate (preserve first occurrence)
+  const seen = new Set();
+  const unique = sections.filter(({ grupId }) => {
+    if (seen.has(grupId)) return false;
+    seen.add(grupId);
+    return true;
+  });
+
+  // Filter out mid-season tournaments — their labels contain known keywords.
+  // Teams like those in the Trofeu Molinet have 3+ grups; blindly taking [0],[1]
+  // would assign the tournament grup as Phase 2 instead of the actual SEGONA FASE.
+  const TOURNAMENT_KEYWORDS = ["COPA", "TORNEIG", "TROFEU", "SUPERCOPA"];
+  const leaguePhases = unique.filter(
+    ({ label }) => !TOURNAMENT_KEYWORDS.some((kw) => label.includes(kw))
+  );
+
+  // Expose all detected sections for debugging / manual override in Settings
   res.setHeader("Cache-Control", "public, s-maxage=3600");
   res.json({
     fcbqTeamId: teamId,
-    grupIdPhase1: grupIds[0] || null,
-    grupIdPhase2: grupIds[1] || null,
+    grupIdPhase1: leaguePhases[0]?.grupId || null,
+    grupIdPhase2: leaguePhases[1]?.grupId || null,
+    allSections: unique.map(({ label, grupId }) => ({ label, grupId })),
   });
 }
