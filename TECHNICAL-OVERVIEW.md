@@ -9,16 +9,18 @@
 
 ```
 Browser (React SPA)
-  ├── /api/auth          ← Google OAuth token exchange
-  ├── /api/family        ← Supabase: load kids config for user or share token
-  ├── /api/schedule      ← ESB (FCBQ): fetch + normalise match schedule
-  ├── /api/fcbq          ← Proxy: msstats season stats + box scores
-  ├── /api/brief         ← AI match briefing generation
-  ├── /api/share         ← Share token creation
+  ├── /api/auth           ← Google OAuth token exchange
+  ├── /api/family         ← Supabase: load kids config for user or share token
+  ├── /api/schedule       ← ESB (FCBQ): fetch + normalise match schedule
+  ├── /api/fcbq           ← CORS proxy: msstats season stats + box scores
+  ├── /api/scout          ← Opponent scouting: season record, top players, H2H, recent form
+  ├── /api/player-log     ← Kid's per-game stats log (box score extraction)
+  ├── /api/brief          ← AI match briefing generation
+  ├── /api/share          ← Share token creation
   ├── /api/share-manifest ← Share manifest for PWA
-  ├── /api/club-teams    ← FCBQ club team lookup (setup)
-  ├── /api/clubs-search  ← FCBQ club search (setup)
-  └── /api/team-grups    ← FCBQ grup IDs for a team (setup)
+  ├── /api/club-teams     ← FCBQ club team lookup (setup)
+  ├── /api/clubs-search   ← FCBQ club search (setup)
+  └── /api/team-grups     ← FCBQ grup IDs for a team (setup)
 ```
 
 ---
@@ -34,6 +36,7 @@ Browser (React SPA)
   - `date`, `time`, `ha` (home/away), `opp`, `venue`, `city`, `km`
   - `played`, `win`, `score` (if result available)
   - `statsUuid` — from `m.universallyid`; used to fetch box scores from msstats
+  - `oppTeamId` — from `m.idLocalTeam` / `m.idVisitorTeam`; used by scout card
 - **Team detection:** `isBarna()` — matches any of `["GRUP BARNA", "BARNA VERMELL", "GRUP ESP"]`
 - **km calculation:** Haversine from Nau Parc Clot (home) if lat/lon present; else `CITY_KM` lookup table
 - **Caching:** `s-maxage=300, stale-while-revalidate=60` (Vercel edge); client sessionStorage TTL 5 min
@@ -42,18 +45,29 @@ Browser (React SPA)
 - **Base URL:** `https://msstats.optimalwayconsulting.com/v1/fcbq`
 - **Proxied via:** `api/fcbq.js` (CORS proxy — allowlist-gated to basquetcatala.cat + msstats)
 - **Endpoints used:**
-  - `team-stats/team/{TEAM_ID}/season/{SEASON}` — season totals (team + player averages)
-  - `getJsonWithMatchStats/{statsUuid}` — individual match box score
-- **Current state:** `TEAM_ID = "80316"` and `SEASON = "2025"` are **hardcoded** in `StatsTab.jsx`
+
+| Endpoint | Used by | Cache |
+|---|---|---|
+| `team-stats/team/{teamId}/season/{year}` | StatsTab (SeasonStats), api/scout.js | Edge 1h |
+| `getJsonWithMatchStats/{statsUuid}` | StatsTab (MatchBoxScores), api/player-log.js | Edge 5min; Supabase (planned) |
+| `head-to-head/full-prematch/{teamA}/{teamB}/{year}` | api/scout.js (≤14 days only) | Edge 1h |
+
+- **SEASON derivation:** `new Date().getMonth() >= 8 ? currentYear : currentYear - 1` — auto-rolls each September
 - **Availability:** Stats only available for Cadet Preferent category (`statsAvailable: category === "Cadet"`)
-- **`statsUuid` source:** Populated from `m.universallyid` in ESB schedule response. May be null for future matches or if ESB omits it.
+- **`statsUuid`:** Populated from ESB `m.universallyid` 24–48h after match is entered. Null for future or recent unprocessed matches.
 
 ### 3. Supabase — Family / Kids Config
 - **Tables:** `families` (user → family mapping, share_token), `kids` (one row per child)
 - **Key kids columns:** `name`, `label`, `category`, `gender`, `color`, `fcbq_team_id`, `grup_id_phase1`, `grup_id_phase2`
-- **`fcbq_team_id`:** Team ID for msstats/basquetcatala lookups. Currently used for `statsTeamId` in kid shape; `statsAvailable` gated on `category === "Cadet"` only (fcbq_team_id not required).
+- **`fcbq_team_id`:** Required for stats features. Flows into `kid.statsTeamId` via `familyUtils.buildKid()`. `statsAvailable` gated on `category === "Cadet"`.
 - **Kid shape built by:** `src/familyUtils.js:buildKid()` — converts DB row to app kid object
 - **Share flow:** `share_token` → `/s/TOKEN` redirect → `sessionStorage` → `useFamily(shareToken)` → read-only view
+- **Planned:** `match_box_scores` table — cache box score JSON by `stats_uuid` to avoid re-fetching on every Game Log load. See spike: `box-score-caching.md`.
+
+### 4. FCBQ Team Page (HTML scrape)
+- Used by `api/scout.js` and `api/team-grups.js` to derive grup IDs for a given team
+- `GET https://www.basquetcatala.cat/equip/{teamId}` — regex match on `/competicions/resultats/{grupId}` links
+- Used in scout card to fetch opponent's recent form via ESB (not msstats)
 
 ---
 
@@ -69,8 +83,9 @@ Browser (React SPA)
 - **Locale store:** `src/i18n.js` — inline `LOCALES` object with `cat`, `es`, `en` keys
 - **Context:** `src/LangContext.jsx` — `LangProvider` + `useLang()` hook
 - **Persistence:** `localStorage` key `pivot_lang`; default `"cat"`
-- **Utils integration:** `fmtDate()` and `daysLabel()` in `utils.js` read `pivot_lang` directly from localStorage (avoids prop-drilling locale through 9+ call sites)
+- **Utils integration:** `fmtDate()` and `daysLabel()` in `utils.js` read `pivot_lang` directly from localStorage (avoids prop-drilling locale through all call sites)
 - **Checklist items:** Translated via id-keyed dicts (`nightItems`, `stdItems`, `roadItems`) in each locale; fallback to English `item.label` from `data.js`
+- **Coverage:** All UI strings across all tabs and components. Stat abbreviations (PTS, REB, AST etc.) stay universal.
 
 ### Match Tiers (`src/utils.js:tier()`)
 | Tier | km Range | Badge | Card style |
@@ -91,15 +106,52 @@ Browser (React SPA)
 
 | Tab | File | Data consumed |
 |-----|------|---------------|
-| Dashboard | `src/tabs/DashboardTab.jsx` | kids, k1Matches, k2Matches |
+| Dashboard | `src/tabs/DashboardTab.jsx` | kids, k1Matches, k2Matches, k3Matches |
 | Calendar | `src/tabs/CalendarTab.jsx` | kids, k1Matches, k2Matches |
 | Match Day (Checklist) | `src/tabs/ChecklistTab.jsx` | kids, k1Matches, k2Matches |
 | Season | `src/tabs/SeasonTab.jsx` | kids, k1Matches, k2Matches, k3Matches |
-| Stats | `src/tabs/StatsTab.jsx` | kids, k1Matches (Cadet only) |
+| Stats | `src/tabs/StatsTab.jsx` | kids, k1Matches, k2Matches (Cadet only) |
 
 **Shared components:**
 - `src/components/MatchCard.jsx` — full match card (used in Dashboard/Checklist)
+- `src/components/ScoutCard.jsx` — opponent scout report (used in Dashboard, Cadet kids only)
 - `src/styles.js` — centralised style tokens (`S.*`)
+
+### Stats Tab — Sub-tabs
+| Sub-tab | Component | Data source |
+|---------|-----------|-------------|
+| Season Totals | `SeasonStats` | msstats `team-stats` via `/api/fcbq` proxy |
+| Box Scores | `MatchBoxScores` | msstats `getJsonWithMatchStats` via `/api/fcbq` proxy |
+| Game Log | `PlayerGameLog` | `/api/player-log` — extracts kid's row from each box score |
+
+### Dashboard — Scout Card
+- Renders below each kid's MatchCard when `kid.statsAvailable && match.oppTeamId`
+- Fetches from `/api/scout`: opponent season record, H2H (≤14 days), recent form (last 5), top 5 threats by PPG
+- Recent form sourced from ESB via FCBQ team page scrape — not msstats
+- Fully localised (EN/ES/CAT)
+
+---
+
+## API Endpoints Detail
+
+### `api/scout.js`
+- **Inputs:** `oppTeamId`, `ourTeamId`, `matchDate`
+- **Calls:** msstats team-stats + FCBQ team page scrape + ESB match records (parallel)
+- **H2H:** Only fetched if `matchDate` ≤14 days away (msstats returns 400 otherwise)
+- **Returns:** `{ record, topPlayers[5], h2h|null, recentForm[5] }`
+- **Cache:** `s-maxage=3600`
+
+### `api/player-log.js`
+- **Inputs:** `kidName`, `matches` (JSON array of `{statsUuid, date, opp, ha, win, score}`)
+- **Calls:** msstats `getJsonWithMatchStats` in parallel for all matches with a `statsUuid`
+- **Player match:** `p.name.toUpperCase().includes(kidName.toUpperCase())`
+- **Returns:** `{ log: [{ date, opp, ha, win, matchScore, min, pts, twoM, twoA, ftM, ftA, reb, ast, stl, pf, plusMinus, starting }] }`
+- **Cache:** `s-maxage=300` (short — new matches enter msstats 24–48h after game)
+- **Known issue:** Re-fetches all box scores on every load. Supabase caching planned — see spike `box-score-caching.md`.
+
+### `api/schedule.js`
+- Normalised match fields include `oppTeamId` (added 2026-03-07) for scout card
+- `statsUuid` from `m.universallyid` — populated by msstats 24–48h post-match
 
 ---
 
@@ -126,10 +178,18 @@ Browser (React SPA)
 
 | Area | Issue | Notes |
 |------|-------|-------|
-| msstats | `TEAM_ID` hardcoded to `"80316"` | Should use `kid.statsTeamId` from Supabase |
-| msstats | `SEASON` hardcoded to `"2025"` | Needs auto-detection or config |
-| msstats | `statsUuid` may be null | ESB sometimes omits `universallyid`; box score falls back to error message |
-| msstats | Team name match in box score hardcoded | `includes("BARNA") \|\| includes("GRUP")` — breaks for other families using app |
-| Stats tab | Only supports k1 (first kid) | k2 stats not wired; StatsTab receives only `k1Matches` |
+| Performance | Game Log re-fetches all box scores on every load | Supabase caching planned — spike: `box-score-caching.md` |
+| Schedule | `BARNA` team names hardcoded in `isBarna()` | Breaks for non-Grup-Barna families. Multi-family generalisation needed. |
 | Checklist | `canvis` flag only shows ⚠ label | No push notification or alert mechanism |
-| Schedule | `BARNA` team names hardcoded | `isBarna()` must be generalised for multi-family use |
+| Stats | `statsUuid` may be null for recent matches | ESB populates `universallyid` 24–48h post-game. Empty state handled. |
+
+---
+
+## Spikes
+
+| File | Status | Summary |
+|------|--------|---------|
+| `language-selector.md` | Complete | EN/ES/CAT i18n via inline locale objects + React context |
+| `msstats-api.md` | Complete | API exploration: accessible endpoints, data quality notes, box score correction |
+| `msstats-implementation-fixes.md` | Implemented | 6 hardcoded issues fixed in StatsTab + App |
+| `box-score-caching.md` | Ready to implement | Cache box scores in Supabase — avoid re-fetching per game log load |
