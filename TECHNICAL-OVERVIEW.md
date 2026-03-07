@@ -61,7 +61,8 @@ Browser (React SPA)
 - **Key kids columns:** `name`, `label`, `category`, `gender`, `color`, `fcbq_team_id`, `grup_id_phase1`, `grup_id_phase2`
 - **`fcbq_team_id`:** Required for stats features. Flows into `kid.statsTeamId` via `familyUtils.buildKid()`. `statsAvailable` gated on `category === "Cadet"`.
 - **Kid shape built by:** `src/familyUtils.js:buildKid()` — converts DB row to app kid object
-- **Share flow:** `share_token` → `/s/TOKEN` redirect → `sessionStorage` → `useFamily(shareToken)` → read-only view
+- **Share flow:** `share_token` → `/s/TOKEN` redirect → `sessionStorage` + `localStorage` → `useFamily(shareToken)` → read-only view
+- **PWA share persistence:** iOS Safari clears `sessionStorage` when navigating between paths in standalone mode. `share.js` writes `pivot_share_token` to **both** `sessionStorage` and `localStorage`. `resolveShareToken()` falls back to `localStorage` so the token survives PWA restarts. To activate after install: open the `/s/TOKEN` URL once in Safari (not from home screen icon) to seed `localStorage`.
 - **Planned:** `match_box_scores` table — cache box score JSON by `stats_uuid` to avoid re-fetching on every Game Log load. See spike: `box-score-caching.md`.
 
 ### 4. FCBQ Team Page (HTML scrape)
