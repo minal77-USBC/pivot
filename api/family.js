@@ -52,7 +52,7 @@ export default async function handler(req, res) {
     try {
       // Upsert family row
       const [family] = await sb(
-        `/families?email=eq.${encodeURIComponent(email)}`,
+        `/families?on_conflict=email`,
         {
           method: "POST",
           headers: { Prefer: "return=representation,resolution=merge-duplicates" },
