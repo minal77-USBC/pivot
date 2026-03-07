@@ -1,4 +1,5 @@
 const MSSTATS_BASE = "https://msstats.optimalwayconsulting.com/v1/fcbq";
+const ESB = "https://esb.optimalwayconsulting.com/fcbq/1/jR4rgA5K6Chhh5vyfrxo9wTScdg2NT7K";
 const SEASON = String(
   new Date().getMonth() >= 8 ? new Date().getFullYear() : new Date().getFullYear() - 1
 );
@@ -12,6 +13,63 @@ function ftPct(made, attempted) {
   return `${Math.round((made / attempted) * 100)}%`;
 }
 
+async function fetchRecentForm(oppTeamId) {
+  // Step 1: get opponent's grup IDs from FCBQ team page
+  const html = await fetch(`https://www.basquetcatala.cat/equip/${oppTeamId}`, {
+    headers: { "User-Agent": "Mozilla/5.0" },
+  }).then(r => r.text()).catch(() => "");
+
+  const grupIds = [...new Set(
+    [...html.matchAll(/\/competicions\/resultats\/(\d+)/g)].map(m => m[1])
+  )].slice(0, 2);
+
+  if (!grupIds.length) return [];
+
+  // Step 2: fetch ESB match records for each grup and filter to opponent's played games
+  const allMatches = [];
+
+  for (const grupId of grupIds) {
+    try {
+      const res = await fetch(
+        `${ESB}/FCBQWeb/getAllGamesByGrupWithMatchRecords/${grupId}`,
+        { headers: { "User-Agent": "Pivot/1.0" } }
+      );
+      const raw = await res.arrayBuffer();
+      const json = Buffer.from(Buffer.from(raw).toString("ascii"), "base64").toString("utf-8");
+      const rounds = JSON.parse(json).messageData.rounds;
+
+      for (const round of Object.values(rounds)) {
+        for (const m of Object.values(round.matches || {})) {
+          if (!m.matchDay) continue;
+          const isLocal = String(m.idLocalTeam) === String(oppTeamId);
+          const isVisitor = String(m.idVisitorTeam) === String(oppTeamId);
+          if (!isLocal && !isVisitor) continue;
+
+          const ls = m.localScore != null ? parseInt(m.localScore) : null;
+          const vs = m.visitorScore != null ? parseInt(m.visitorScore) : null;
+          if (ls === null || vs === null) continue;
+
+          const isWalkover = (ls === 0 && vs === 2) || (ls === 2 && vs === 0);
+          const win = isLocal ? ls > vs : vs > ls;
+          const [datePart] = m.matchDay.split(" ");
+
+          allMatches.push({
+            date: datePart,
+            opp: (isLocal ? m.nameVisitorTeam : m.nameLocalTeam) || "—",
+            ha: isLocal ? "home" : "away",
+            win,
+            score: isWalkover ? "W/O" : `${ls}–${vs}`,
+          });
+        }
+      }
+    } catch { /* skip grup on error */ }
+  }
+
+  return allMatches
+    .sort((a, b) => b.date.localeCompare(a.date))
+    .slice(0, 5);
+}
+
 export default async function handler(req, res) {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "GET,OPTIONS");
@@ -23,11 +81,14 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Opponent season stats
-    const statsRes = await fetch(
-      `${MSSTATS_BASE}/team-stats/team/${oppTeamId}/season/${SEASON}`,
-      { headers: { "User-Agent": "Pivot/1.0" } }
-    );
+    // Fetch all three in parallel
+    const [statsRes, recentForm] = await Promise.all([
+      fetch(`${MSSTATS_BASE}/team-stats/team/${oppTeamId}/season/${SEASON}`, {
+        headers: { "User-Agent": "Pivot/1.0" },
+      }),
+      fetchRecentForm(oppTeamId),
+    ]);
+
     if (!statsRes.ok) throw new Error(`msstats ${statsRes.status}`);
     const statsData = await statsRes.json();
 
@@ -39,7 +100,7 @@ export default async function handler(req, res) {
 
     const topPlayers = [...(statsData.players || [])]
       .sort((a, b) => b.totalScoreAvgByMatch - a.totalScoreAvgByMatch)
-      .slice(0, 3)
+      .slice(0, 5)
       .map(p => ({
         name: p.name.split(" ")[0],
         dorsal: p.dorsal || "—",
@@ -63,7 +124,7 @@ export default async function handler(req, res) {
           const h2hData = await h2hRes.json();
           h2h = h2hData.thisSeason || null;
         }
-      } catch { /* H2H is optional — don't fail the whole response */ }
+      } catch { /* H2H is optional */ }
     }
 
     res.setHeader("Cache-Control", "s-maxage=3600, stale-while-revalidate=300");
@@ -77,6 +138,7 @@ export default async function handler(req, res) {
       },
       topPlayers,
       h2h,
+      recentForm,
     });
   } catch (e) {
     return res.status(502).json({ error: e.message });
