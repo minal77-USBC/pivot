@@ -115,9 +115,10 @@ function AppInner() {
             {!shareToken && (
               <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                 <button
+                  type="button"
                   onClick={() => setShowSettings(true)}
                   title={t.settings}
-                  style={{ background: "none", border: "none", cursor: "pointer", padding: 0, fontSize: 16, lineHeight: 1, opacity: 0.5 }}
+                  style={{ background: "none", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 6, cursor: "pointer", padding: "3px 6px", fontSize: 14, lineHeight: 1, color: "#64748b" }}
                 >⚙</button>
                 <button
                   onClick={() => { sessionStorage.removeItem("pivot_auth"); setUser(null); }}
