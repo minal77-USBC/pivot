@@ -178,7 +178,7 @@ Browser (React SPA)
 
 | Area | Issue | Notes |
 |------|-------|-------|
-| Performance | Game Log re-fetches all box scores on every load | Supabase caching planned — spike: `box-score-caching.md` |
+| Performance | Cache hit latency similar to cold msstats parallel fetch | Supabase read is serial (~200–400ms); benefit is reliability + eliminating msstats dependency for historical matches. Monitor via `X-Cache-Stats` response header. |
 | Schedule | `BARNA` team names hardcoded in `isBarna()` | Breaks for non-Grup-Barna families. Multi-family generalisation needed. |
 | Checklist | `canvis` flag only shows ⚠ label | No push notification or alert mechanism |
 | Stats | `statsUuid` may be null for recent matches | ESB populates `universallyid` 24–48h post-game. Empty state handled. |
@@ -192,4 +192,4 @@ Browser (React SPA)
 | `language-selector.md` | Complete | EN/ES/CAT i18n via inline locale objects + React context |
 | `msstats-api.md` | Complete | API exploration: accessible endpoints, data quality notes, box score correction |
 | `msstats-implementation-fixes.md` | Implemented | 6 hardcoded issues fixed in StatsTab + App |
-| `box-score-caching.md` | Ready to implement | Cache box scores in Supabase — avoid re-fetching per game log load |
+| `box-score-caching.md` | Implemented | Cache box scores in Supabase — read-before-fetch in `api/player-log.js`; fire-and-forget fixed to await |
