@@ -153,6 +153,132 @@ function SeasonStats({ teamId, kidName }) {
   );
 }
 
+function PlayerGameLog({ kidMatches, kidName }) {
+  const { t } = useLang();
+  const [log, setLog] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const played = kidMatches
+      .filter(m => m.played)
+      .map(({ statsUuid, date, opp, ha, win, score }) => ({ statsUuid, date, opp, ha, win, score }));
+
+    const params = new URLSearchParams({
+      kidName,
+      matches: JSON.stringify(played),
+    });
+    fetch(`/api/player-log?${params}`)
+      .then(r => { if (!r.ok) throw new Error(`${r.status}`); return r.json(); })
+      .then(d => { setLog(d.log); setLoading(false); })
+      .catch(e => { setError(e.message); setLoading(false); });
+  }, [kidName]);
+
+  if (loading) return (
+    <div style={{ textAlign: "center", padding: 32, color: "#64748b" }}>
+      <div style={{ fontSize: 24, marginBottom: 8 }}>⏳</div>
+      {t.loadingGameLog}
+    </div>
+  );
+
+  if (error) return (
+    <div style={{ ...S.card({ borderColor: "rgba(255,71,87,0.3)" }), color: "#ff4757", fontSize: 13 }}>
+      {t.failedStats} {error}
+    </div>
+  );
+
+  if (!log?.length) return (
+    <div style={{ ...S.card(), color: "#64748b", fontSize: 12, textAlign: "center", padding: 28, lineHeight: 1.6 }}>
+      {t.gameLogEmpty}
+    </div>
+  );
+
+  // Totals row
+  const gp = log.length;
+  const avgOf = (key) => (log.reduce((s, r) => s + (r[key] ?? 0), 0) / gp).toFixed(1);
+
+  return (
+    <div>
+      {/* Averages summary */}
+      <div style={{ display: "flex", gap: 6, marginBottom: 12 }}>
+        {[
+          { val: avgOf("pts"),  lbl: "PPG" },
+          { val: avgOf("reb"),  lbl: "RPG" },
+          { val: avgOf("ast"),  lbl: "APG" },
+          { val: avgOf("plusMinus"), lbl: "+/-" },
+        ].map(({ val, lbl }) => (
+          <div key={lbl} style={{ ...S.statBox, flex: 1, padding: "8px 10px" }}>
+            <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 22, fontWeight: 700, color: "#FF6B2B", lineHeight: 1 }}>{val}</div>
+            <div style={{ fontSize: 9, color: "#475569", textTransform: "uppercase", letterSpacing: "0.1em", marginTop: 2 }}>{lbl}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* Game log table */}
+      <div style={{ ...S.card({ padding: 0 }), overflowX: "auto" }}>
+        <div style={{ minWidth: 480 }}>
+          {/* Column headers */}
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: "minmax(90px,1fr) 28px 34px 38px 38px 28px 26px 34px",
+            gap: 3, padding: "6px 10px",
+            borderBottom: "1px solid rgba(255,255,255,0.07)",
+            background: "rgba(255,255,255,0.03)",
+          }}>
+            {["Match", "MIN", "PTS", "2P", "FT", "REB", "AST", "+/-"].map((h, i) => (
+              <span key={i} style={{ fontSize: 9, color: "#475569", textTransform: "uppercase", letterSpacing: "0.1em", textAlign: i > 0 ? "right" : "left" }}>{h}</span>
+            ))}
+          </div>
+
+          {log.map((r, i) => (
+            <div key={i} style={{
+              display: "grid",
+              gridTemplateColumns: "minmax(90px,1fr) 28px 34px 38px 38px 28px 26px 34px",
+              gap: 3, padding: "8px 10px",
+              borderBottom: i < log.length - 1 ? "1px solid rgba(255,255,255,0.04)" : "none",
+              background: r.starting ? "rgba(255,107,43,0.04)" : "transparent",
+            }}>
+              {/* Match cell — two lines */}
+              <div style={{ minWidth: 0 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
+                  <span style={{
+                    fontSize: 11, fontWeight: 700,
+                    color: r.win ? "#22d3a0" : "#ff4757",
+                    fontFamily: "'Barlow Condensed', sans-serif",
+                  }}>
+                    {r.win ? t.wLabel : t.lLabel}
+                  </span>
+                  <span style={{ fontSize: 10, color: "#64748b", fontFamily: "'DM Mono', monospace" }}>{r.matchScore}</span>
+                </div>
+                <div style={{ fontSize: 10, color: "#64748b", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", marginTop: 1 }}>
+                  {r.ha === "home" ? "vs" : "@"} {r.opp}
+                </div>
+              </div>
+
+              <span style={{ fontSize: 10, color: "#94a3b8", textAlign: "right", fontFamily: "'DM Mono', monospace", alignSelf: "center" }}>{r.min}</span>
+              <span style={{ fontSize: 13, color: "#f1f5f9", fontWeight: 700, textAlign: "right", fontFamily: "'DM Mono', monospace", alignSelf: "center" }}>{r.pts}</span>
+              <span style={{ fontSize: 10, color: "#64748b", textAlign: "right", fontFamily: "'DM Mono', monospace", alignSelf: "center" }}>{r.twoM}/{r.twoA}</span>
+              <span style={{ fontSize: 10, color: "#64748b", textAlign: "right", fontFamily: "'DM Mono', monospace", alignSelf: "center" }}>{r.ftM}/{r.ftA}</span>
+              <span style={{ fontSize: 10, color: "#64748b", textAlign: "right", fontFamily: "'DM Mono', monospace", alignSelf: "center" }}>{r.reb}</span>
+              <span style={{ fontSize: 10, color: "#64748b", textAlign: "right", fontFamily: "'DM Mono', monospace", alignSelf: "center" }}>{r.ast}</span>
+              <span style={{
+                fontSize: 10, textAlign: "right", fontFamily: "'DM Mono', monospace", alignSelf: "center",
+                color: r.plusMinus > 0 ? "#22d3a0" : r.plusMinus < 0 ? "#ff4757" : "#64748b",
+              }}>
+                {r.plusMinus > 0 ? "+" : ""}{r.plusMinus}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div style={{ fontSize: 10, color: "#334155", textAlign: "center", marginTop: 8 }}>
+        {gp} {t.playedLabel} · Source: FCBQ / msstats
+      </div>
+    </div>
+  );
+}
+
 function MatchBoxScores({ kidMatches, kidName }) {
   const { t } = useLang();
   const [selectedMatch, setSelectedMatch] = useState(null);
@@ -300,7 +426,7 @@ export default function StatsTab({ kids = [], k1Matches, k2Matches = [] }) {
         <>
           {/* Sub-tab toggle */}
           <div style={{ display: "flex", gap: 4, marginBottom: 16, background: "#111827", borderRadius: 10, padding: 4 }}>
-            {[["season", t.seasonTotals], ["box", t.boxScores]].map(([id, label]) => (
+            {[["season", t.seasonTotals], ["box", t.boxScores], ["log", t.gameLog]].map(([id, label]) => (
               <button key={id} onClick={() => setView(id)} style={{
                 flex: 1, background: view === id ? "#FF6B2B" : "transparent",
                 border: "none", borderRadius: 7, padding: "7px 0",
@@ -310,10 +436,9 @@ export default function StatsTab({ kids = [], k1Matches, k2Matches = [] }) {
             ))}
           </div>
 
-          {view === "season"
-            ? <SeasonStats teamId={selectedKid.statsTeamId} kidName={selectedKid.name} />
-            : <MatchBoxScores kidMatches={selectedMatches} kidName={selectedKid.name} />
-          }
+          {view === "season" && <SeasonStats teamId={selectedKid.statsTeamId} kidName={selectedKid.name} />}
+          {view === "box"    && <MatchBoxScores kidMatches={selectedMatches} kidName={selectedKid.name} />}
+          {view === "log"    && <PlayerGameLog kidMatches={selectedMatches} kidName={selectedKid.name} />}
         </>
       )}
     </div>

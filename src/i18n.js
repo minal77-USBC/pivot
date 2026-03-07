@@ -148,6 +148,12 @@ export const LOCALES = {
     scoutRecentForm: "Recent Form",
     scoutSource: "Source: FCBQ / msstats · Season averages",
 
+    // Game log
+    gameLog: "Game Log",
+    loadingGameLog: "Loading game log…",
+    gameLogEmpty: "No game log data available yet — box scores appear 24–48h after each match.",
+    gameLogStarter: "★ Started",
+
     // W/L labels
     wLabel: "W",
     lLabel: "L",
@@ -321,6 +327,12 @@ export const LOCALES = {
     scoutRecentForm: "Forma reciente",
     scoutSource: "Fuente: FCBQ / msstats · Medias temporada",
 
+    // Game log
+    gameLog: "Partidos",
+    loadingGameLog: "Cargando partidos…",
+    gameLogEmpty: "Aún no hay datos disponibles — las actas aparecen 24–48h después de cada partido.",
+    gameLogStarter: "★ Titular",
+
     wLabel: "V",
     lLabel: "D",
 
@@ -491,6 +503,12 @@ export const LOCALES = {
     scoutThreats: "Amenaces",
     scoutRecentForm: "Forma recent",
     scoutSource: "Font: FCBQ / msstats · Mitjanes temporada",
+
+    // Game log
+    gameLog: "Partits",
+    loadingGameLog: "Carregant partits…",
+    gameLogEmpty: "Encara no hi ha dades disponibles — les actes apareixen 24–48h després de cada partit.",
+    gameLogStarter: "★ Titular",
 
     wLabel: "V",
     lLabel: "D",
