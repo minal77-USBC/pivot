@@ -23,7 +23,7 @@ export const S = {
     lineHeight: 1,
   },
   subtitle: {
-    fontSize: 11, color: "#475569",
+    fontSize: 12, color: "#475569",
     letterSpacing: "0.12em", textTransform: "uppercase", marginTop: 2,
   },
   tabBar: {
@@ -40,9 +40,9 @@ export const S = {
     borderBottom: active ? `2px solid ${color}` : "2px solid transparent",
     color: active ? color : "#475569",
     cursor: "pointer",
-    padding: "10px 12px 8px",
+    padding: "12px 14px 10px",
     fontFamily: "'DM Sans', sans-serif",
-    fontSize: 13,
+    fontSize: 14,
     fontWeight: 500,
     whiteSpace: "nowrap",
     transition: "color 0.2s",
@@ -103,7 +103,7 @@ export const S = {
       background: c.bg, color: c.color,
       border: `1px solid ${c.border}`,
       borderRadius: 6, padding: "2px 8px",
-      fontSize: 11, fontWeight: 600, letterSpacing: "0.06em",
+      fontSize: 12, fontWeight: 600, letterSpacing: "0.06em",
       textTransform: "uppercase",
     };
   },
@@ -117,7 +117,7 @@ export const S = {
     fontSize: 32, fontWeight: 700, lineHeight: 1,
   },
   statLbl: {
-    fontSize: 10, letterSpacing: "0.1em",
+    fontSize: 11, letterSpacing: "0.1em",
     color: "#475569", textTransform: "uppercase", marginTop: 2,
   },
   checkItem: (checked) => ({

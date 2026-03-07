@@ -3,14 +3,14 @@ import { S } from "./styles";
 import { useLang } from "./LangContext";
 
 const CATEGORIES = ["Premini", "Mini", "Infantil", "Cadet", "Junior", "Sènior"];
-const COLORS = ["#FF6B2B", "#A855F7", "#22d3a0", "#3B82F6", "#F59E0B", "#EF4444"];
-const EMPTY_KID = { name: "", label: "", clubName: "", fcbqTeamId: "", category: "Infantil", gender: "M", grupIdPhase1: "", grupIdPhase2: "", color: "#FF6B2B" };
+export const COLORS = ["#FF6B2B", "#A855F7", "#22d3a0", "#3B82F6", "#F59E0B", "#EF4444"];
+export const EMPTY_KID = { name: "", label: "", clubName: "", fcbqTeamId: "", category: "Infantil", gender: "M", grupIdPhase1: "", grupIdPhase2: "", color: "#FF6B2B" };
 
 function positiveInt(val) {
   return val.replace(/[^0-9]/g, "");
 }
 
-function KidForm({ kid, index, onChange, onRemove, canRemove }) {
+export function KidForm({ kid, index, onChange, onRemove, canRemove }) {
   const { t } = useLang();
   const set = (field, val) => onChange({ ...kid, [field]: val });
 
@@ -208,7 +208,7 @@ function KidForm({ kid, index, onChange, onRemove, canRemove }) {
   );
 }
 
-const inputStyle = {
+export const inputStyle = {
   width: "100%", background: "#0f172a", border: "1px solid rgba(255,255,255,0.1)",
   borderRadius: 6, padding: "7px 10px", color: "#e2e8f0", fontSize: 13,
   fontFamily: "inherit", outline: "none", boxSizing: "border-box",

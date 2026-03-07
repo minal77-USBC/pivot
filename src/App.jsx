@@ -10,6 +10,7 @@ import SeasonTab from "./tabs/SeasonTab";
 import StatsTab from "./tabs/StatsTab";
 import LoginScreen from "./LoginScreen";
 import SetupScreen from "./SetupScreen";
+import SettingsScreen from "./SettingsScreen";
 
 function AppInner() {
   const { lang, setLanguage, t } = useLang();
@@ -32,6 +33,7 @@ function AppInner() {
   const [tab, setTab] = useState("dash");
   const [setupKey, setSetupKey] = useState(0);
   const [copied, setCopied] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
 
   const { kids, loading: familyLoading, error: familyError, shareUrl } = useFamily(user, setupKey, shareToken);
   const { kidMatches, loading: schedLoading, error: schedError, refresh } = useSchedule(kids);
@@ -55,6 +57,17 @@ function AppInner() {
 
   if (!shareToken && !familyLoading && kids !== null && kids.length === 0) {
     return <SetupScreen user={user} onSave={() => setSetupKey(k => k + 1)} />;
+  }
+
+  if (showSettings && kids?.length > 0) {
+    return (
+      <SettingsScreen
+        user={user}
+        kids={kids}
+        onSave={() => setSetupKey(k => k + 1)}
+        onClose={() => setShowSettings(false)}
+      />
+    );
   }
 
   return (
@@ -100,17 +113,24 @@ function AppInner() {
               </button>
             )}
             {!shareToken && (
-              <button
-                onClick={() => { sessionStorage.removeItem("pivot_auth"); setUser(null); }}
-                title={`Signed in as ${user?.email}`}
-                style={{ background: "none", border: "none", cursor: "pointer", padding: 0, display: "flex", alignItems: "center", gap: 6 }}
-              >
-                {user?.picture
-                  ? <img src={user.picture} alt="" style={{ width: 20, height: 20, borderRadius: "50%", opacity: 0.6 }} />
-                  : <span style={{ fontSize: 16 }}>👤</span>
-                }
-                <span style={{ fontSize: 10, color: "#334155" }}>{t.signOut}</span>
-              </button>
+              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <button
+                  onClick={() => setShowSettings(true)}
+                  title={t.settings}
+                  style={{ background: "none", border: "none", cursor: "pointer", padding: 0, fontSize: 16, lineHeight: 1, opacity: 0.5 }}
+                >⚙</button>
+                <button
+                  onClick={() => { sessionStorage.removeItem("pivot_auth"); setUser(null); }}
+                  title={`Signed in as ${user?.email}`}
+                  style={{ background: "none", border: "none", cursor: "pointer", padding: 0, display: "flex", alignItems: "center", gap: 6 }}
+                >
+                  {user?.picture
+                    ? <img src={user.picture} alt="" style={{ width: 20, height: 20, borderRadius: "50%", opacity: 0.6 }} />
+                    : <span style={{ fontSize: 16 }}>👤</span>
+                  }
+                  <span style={{ fontSize: 10, color: "#334155" }}>{t.signOut}</span>
+                </button>
+              </div>
             )}
           </div>
         </div>

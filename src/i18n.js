@@ -1,5 +1,15 @@
 export const LOCALES = {
   en: {
+    // Settings
+    settings: "Settings",
+    editKid: "Edit",
+    deleteKid: "Delete",
+    confirmDelete: "Are you sure?",
+    saveChanges: "Save",
+    back: "Settings",
+    yes: "Yes",
+    no: "No",
+
     // App / header
     subtitle: "Basketball · BCN",
     signOut: "Sign out",
@@ -189,6 +199,16 @@ export const LOCALES = {
   },
 
   es: {
+    // Settings
+    settings: "Ajustes",
+    editKid: "Editar",
+    deleteKid: "Eliminar",
+    confirmDelete: "¿Estás seguro?",
+    saveChanges: "Guardar",
+    back: "Ajustes",
+    yes: "Sí",
+    no: "No",
+
     subtitle: "Baloncesto · BCN",
     signOut: "Cerrar sesión",
     share: "🔗 Compartir",
@@ -366,6 +386,16 @@ export const LOCALES = {
   },
 
   cat: {
+    // Settings
+    settings: "Configuració",
+    editKid: "Edita",
+    deleteKid: "Elimina",
+    confirmDelete: "Estàs segur?",
+    saveChanges: "Desa",
+    back: "Configuració",
+    yes: "Sí",
+    no: "No",
+
     subtitle: "Bàsquet · BCN",
     signOut: "Tancar sessió",
     share: "🔗 Compartir",

@@ -1,6 +1,6 @@
 # PIVOT — Technical Overview
 
-**Last updated:** 2026-03-07
+**Last updated:** 2026-03-07 (settings screen + mobile readability)
 **Stack:** React 18 + Vite · Vercel (serverless) · Supabase · Google OAuth
 
 ---
@@ -83,6 +83,7 @@ Browser (React SPA)
 - **Locale store:** `src/i18n.js` — inline `LOCALES` object with `cat`, `es`, `en` keys
 - **Context:** `src/LangContext.jsx` — `LangProvider` + `useLang()` hook
 - **Persistence:** `localStorage` key `pivot_lang`; default `"cat"`
+- **Coverage:** All screens including `SettingsScreen` — language selector is present in the Settings header so users can switch locale without returning to the main app
 - **Utils integration:** `fmtDate()` and `daysLabel()` in `utils.js` read `pivot_lang` directly from localStorage (avoids prop-drilling locale through all call sites)
 - **Checklist items:** Translated via id-keyed dicts (`nightItems`, `stdItems`, `roadItems`) in each locale; fallback to English `item.label` from `data.js`
 - **Coverage:** All UI strings across all tabs and components. Stat abbreviations (PTS, REB, AST etc.) stay universal.
@@ -116,6 +117,10 @@ Browser (React SPA)
 - `src/components/MatchCard.jsx` — full match card (used in Dashboard/Checklist)
 - `src/components/ScoutCard.jsx` — opponent scout report (used in Dashboard, Cadet kids only)
 - `src/styles.js` — centralised style tokens (`S.*`)
+
+**Screens:**
+- `src/SetupScreen.jsx` — initial kid setup for new users. Exports `KidForm`, `EMPTY_KID`, `COLORS`, `inputStyle` as named exports for reuse in SettingsScreen.
+- `src/SettingsScreen.jsx` — edit/delete/add kids post-setup. Accessed via ⚙ gear icon in App header. Renders as full-page replacement (not modal). Includes language selector. Saves via POST `/api/family` (same full-replace endpoint as setup). `onSave` increments `setupKey` in App to trigger `useFamily` re-fetch.
 
 ### Stats Tab — Sub-tabs
 | Sub-tab | Component | Data source |
@@ -162,6 +167,7 @@ Browser (React SPA)
 - **Auto-expiry:** Checked on load; expired sessions cleared and user returned to login
 - **Share mode:** `sessionStorage` key `pivot_share_token` → bypasses auth, loads family by token, read-only
 - **Setup flow:** New user with no kids → `SetupScreen.jsx` → writes kids to Supabase via `/api/family`
+- **Settings flow:** Existing user → gear icon (⚙) in header → `SettingsScreen.jsx` → edit/delete/add kids → POST `/api/family` (full-replace) → re-fetches family → returns to main app
 
 ---
 
@@ -185,6 +191,15 @@ Browser (React SPA)
 
 ---
 
+## Deploy
+
+- **Remote:** `https://github.com/minal77-USBC/pivot.git` (branch: `main`)
+- **CI/CD:** Vercel auto-deploys on push to `main` — no manual `vercel` CLI step needed
+- **Process:** `git add → git commit → git push origin main` → Vercel picks up automatically
+- **Config:** `vercel.json` — rewrites for `/api/*`, `/s/:token` (share redirect), and SPA fallback
+
+---
+
 ## Spikes
 
 | File | Status | Summary |
@@ -193,3 +208,4 @@ Browser (React SPA)
 | `msstats-api.md` | Complete | API exploration: accessible endpoints, data quality notes, box score correction |
 | `msstats-implementation-fixes.md` | Implemented | 6 hardcoded issues fixed in StatsTab + App |
 | `box-score-caching.md` | Implemented | Cache box scores in Supabase — read-before-fetch in `api/player-log.js`; fire-and-forget fixed to await |
+| `dark-light-mode.md` | Spike only | ThemeContext approach recommended (~L effort); light palette defined; no implementation yet |
