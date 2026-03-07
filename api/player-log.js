@@ -100,9 +100,9 @@ export default async function handler(req, res) {
       });
     }
 
-    // 3. Upsert new rows — fire-and-forget
+    // 3. Upsert new rows — await before response (Vercel kills process on res.end)
     if (toUpsert.length) {
-      upsertBoxScores(toUpsert).catch(() => {});
+      await upsertBoxScores(toUpsert).catch(() => {});
     }
   }
 
