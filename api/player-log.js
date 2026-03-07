@@ -141,5 +141,6 @@ export default async function handler(req, res) {
     .sort((a, b) => b.date.localeCompare(a.date));
 
   res.setHeader("Cache-Control", "s-maxage=300, stale-while-revalidate=60");
+  res.setHeader("X-Cache-Stats", `cached:${cachedUuids.size} fetched:${missing.length}`);
   return res.status(200).json({ log });
 }
