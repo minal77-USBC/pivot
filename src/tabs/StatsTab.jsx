@@ -4,15 +4,17 @@ import { fmtDate } from "../utils";
 import { useLang } from "../LangContext";
 
 const MSSTATS_BASE = "https://msstats.optimalwayconsulting.com/v1/fcbq";
-const TEAM_ID = "80316";
-const SEASON = "2025";
+// Season: basketball year starts in September (month >= 8)
+const SEASON = String(
+  new Date().getMonth() >= 8 ? new Date().getFullYear() : new Date().getFullYear() - 1
+);
 
 function pct(made, attempted) {
   if (!attempted) return "—";
   return `${Math.round((made / attempted) * 100)}%`;
 }
 
-function StatRow({ p, isRohan, border }) {
+function StatRow({ p, isHighlighted, border }) {
   return (
     <div style={{
       display: "grid",
@@ -21,11 +23,11 @@ function StatRow({ p, isRohan, border }) {
       alignItems: "center",
       padding: "8px 12px",
       borderBottom: border ? "1px solid rgba(255,255,255,0.04)" : "none",
-      background: isRohan ? "rgba(255,107,43,0.07)" : "transparent",
-      borderLeft: isRohan ? "2px solid #FF6B2B" : "2px solid transparent",
+      background: isHighlighted ? "rgba(255,107,43,0.07)" : "transparent",
+      borderLeft: isHighlighted ? "2px solid #FF6B2B" : "2px solid transparent",
     }}>
       <span style={{ fontSize: 10, color: "#475569", fontFamily: "'DM Mono', monospace" }}>{p.dorsal || "—"}</span>
-      <span style={{ fontSize: 12, color: isRohan ? "#FF6B2B" : "#e2e8f0", fontWeight: isRohan ? 600 : 400, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+      <span style={{ fontSize: 12, color: isHighlighted ? "#FF6B2B" : "#e2e8f0", fontWeight: isHighlighted ? 600 : 400, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
         {p.name.split(" ")[0]}
       </span>
       <span style={{ fontSize: 11, color: "#94a3b8", textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{p.matchesPlayed}</span>
@@ -39,7 +41,7 @@ function StatRow({ p, isRohan, border }) {
   );
 }
 
-function BoxScoreRow({ p, isRohan, border }) {
+function BoxScoreRow({ p, isHighlighted, border }) {
   const d = p.data || {};
   return (
     <div style={{
@@ -49,11 +51,11 @@ function BoxScoreRow({ p, isRohan, border }) {
       alignItems: "center",
       padding: "7px 10px",
       borderBottom: border ? "1px solid rgba(255,255,255,0.04)" : "none",
-      background: isRohan ? "rgba(255,107,43,0.07)" : "transparent",
-      borderLeft: isRohan ? "2px solid #FF6B2B" : "2px solid transparent",
+      background: isHighlighted ? "rgba(255,107,43,0.07)" : "transparent",
+      borderLeft: isHighlighted ? "2px solid #FF6B2B" : "2px solid transparent",
     }}>
       <span style={{ fontSize: 9, color: "#475569", fontFamily: "'DM Mono', monospace" }}>{p.dorsal}</span>
-      <span style={{ fontSize: 11, color: isRohan ? "#FF6B2B" : "#e2e8f0", fontWeight: isRohan ? 600 : 400, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+      <span style={{ fontSize: 11, color: isHighlighted ? "#FF6B2B" : "#e2e8f0", fontWeight: isHighlighted ? 600 : 400, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
         {p.starting ? "★ " : ""}{p.name.split(" ")[0]}
       </span>
       <span style={{ fontSize: 10, color: "#64748b", textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{p.timePlayed}</span>
@@ -71,19 +73,19 @@ function BoxScoreRow({ p, isRohan, border }) {
   );
 }
 
-function SeasonStats() {
+function SeasonStats({ teamId, kidName }) {
   const { t } = useLang();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const url = `${MSSTATS_BASE}/team-stats/team/${TEAM_ID}/season/${SEASON}`;
+    const url = `${MSSTATS_BASE}/team-stats/team/${teamId}/season/${SEASON}`;
     fetch(`/api/fcbq?url=${encodeURIComponent(url)}`)
       .then(r => { if (!r.ok) throw new Error(`${r.status}`); return r.json(); })
       .then(d => { setData(d); setLoading(false); })
       .catch(e => { setError(e.message); setLoading(false); });
-  }, []);
+  }, [teamId]);
 
   if (loading) return (
     <div style={{ textAlign: "center", padding: 32, color: "#64748b" }}>
@@ -135,7 +137,12 @@ function SeasonStats() {
             ))}
           </div>
           {players.map((p, i) => (
-            <StatRow key={p.uuid || i} p={p} isRohan={p.name.includes("ROHAN")} border={i < players.length - 1} />
+            <StatRow
+              key={p.uuid || i}
+              p={p}
+              isHighlighted={p.name.toUpperCase().includes(kidName.toUpperCase())}
+              border={i < players.length - 1}
+            />
           ))}
         </div>
       </div>
@@ -146,20 +153,20 @@ function SeasonStats() {
   );
 }
 
-function MatchBoxScores({ k1Matches }) {
+function MatchBoxScores({ kidMatches, kidName }) {
   const { t } = useLang();
   const [selectedMatch, setSelectedMatch] = useState(null);
   const [boxScore, setBoxScore] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const playedMatches = k1Matches.filter(m => m.played).slice().reverse();
+  const playedMatches = kidMatches.filter(m => m.played).slice().reverse();
 
   const loadBoxScore = async (match) => {
     if (!match.statsUuid) {
       setSelectedMatch(match);
       setBoxScore(null);
-      setError("Box score not yet available — UUID not loaded. Check back after proxy scraping is set up.");
+      setError("Box score not yet available — check back 24–48h after the match.");
       return;
     }
     setSelectedMatch(match);
@@ -178,10 +185,6 @@ function MatchBoxScores({ k1Matches }) {
       setLoading(false);
     }
   };
-
-  const grupBarnaTeam = boxScore?.teams?.find(tm =>
-    tm.name?.includes("BARNA") || tm.name?.includes("GRUP")
-  );
 
   return (
     <div>
@@ -218,19 +221,18 @@ function MatchBoxScores({ k1Matches }) {
               {selectedMatch.ha === "home" ? "vs" : "@"} {selectedMatch.opp}
             </div>
             <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 28, fontWeight: 700, color: selectedMatch.win ? "#22d3a0" : "#ff4757", marginTop: 4 }}>
-              {selectedMatch.win ? "W" : "L"} {selectedMatch.score}
+              {selectedMatch.win ? t.wLabel : t.lLabel} {selectedMatch.score}
             </div>
           </div>
 
           {loading && <div style={{ textAlign: "center", padding: 24, color: "#64748b" }}>{t.loadingBoxScore}</div>}
           {error && <div style={{ ...S.card({ borderColor: "rgba(255,179,71,0.3)" }), color: "#ffb347", fontSize: 12 }}>{error}</div>}
 
-          {grupBarnaTeam && (
-            <>
-              <div style={S.sectionTitle}>Grup Barna</div>
-              <div style={{ ...S.card({ padding: "0" }), overflowX: "auto" }}>
+          {boxScore?.teams?.map((team, ti) => (
+            <div key={ti}>
+              <div style={S.sectionTitle}>{team.name}</div>
+              <div style={{ ...S.card({ padding: "0" }), overflowX: "auto", marginBottom: 12 }}>
                 <div style={{ minWidth: 480 }}>
-                  {/* Column headers */}
                   <div style={{
                     display: "grid",
                     gridTemplateColumns: "20px minmax(70px,1fr) 28px 32px 36px 36px 28px 28px 28px 28px 32px",
@@ -243,24 +245,31 @@ function MatchBoxScores({ k1Matches }) {
                       <span key={i} style={{ fontSize: 9, color: "#475569", textTransform: "uppercase", letterSpacing: "0.1em", textAlign: i > 1 ? "right" : "left" }}>{h}</span>
                     ))}
                   </div>
-                  {grupBarnaTeam.players.map((p, i) => (
-                    <BoxScoreRow key={i} p={p} isRohan={p.name?.includes("ROHAN")} border={i < grupBarnaTeam.players.length - 1} />
+                  {team.players.map((p, i) => (
+                    <BoxScoreRow
+                      key={i}
+                      p={p}
+                      isHighlighted={p.name?.toUpperCase().includes(kidName.toUpperCase())}
+                      border={i < team.players.length - 1}
+                    />
                   ))}
                 </div>
               </div>
-            </>
-          )}
+            </div>
+          ))}
         </>
       )}
     </div>
   );
 }
 
-export default function StatsTab({ kids = [], k1Matches }) {
+export default function StatsTab({ kids = [], k1Matches, k2Matches = [] }) {
   const { t } = useLang();
   const [kidId, setKidId] = useState("k1");
   const [view, setView] = useState("season");
   const selectedKid = kids.find(k => k.id === kidId) || kids[0];
+  const kidMatchesMap = { k1: k1Matches, k2: k2Matches };
+  const selectedMatches = kidMatchesMap[selectedKid?.id] || k1Matches;
 
   return (
     <div>
@@ -301,7 +310,10 @@ export default function StatsTab({ kids = [], k1Matches }) {
             ))}
           </div>
 
-          {view === "season" ? <SeasonStats /> : <MatchBoxScores k1Matches={k1Matches} />}
+          {view === "season"
+            ? <SeasonStats teamId={selectedKid.statsTeamId} kidName={selectedKid.name} />
+            : <MatchBoxScores kidMatches={selectedMatches} kidName={selectedKid.name} />
+          }
         </>
       )}
     </div>

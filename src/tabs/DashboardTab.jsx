@@ -1,5 +1,6 @@
 import { useState } from "react";
 import MatchCard from "../components/MatchCard";
+import ScoutCard from "../components/ScoutCard";
 import { S } from "../styles";
 import { upcoming, daysOut, fmtDate, leaveByFromMins, travelMins, getOverrideMins } from "../utils";
 import { useLang } from "../LangContext";
@@ -10,47 +11,37 @@ function getLeave(m, arrivalBuffer = 20) {
   return leaveByFromMins(m.time, override ?? travelMins(m.km), arrivalBuffer);
 }
 
-export default function DashboardTab({ kids = [], k1Matches, k2Matches }) {
+export default function DashboardTab({ kids = [], k1Matches, k2Matches, k3Matches = [] }) {
   const { t } = useLang();
   const [briefing, setBriefing] = useState(null);
   const [briefLoading, setBriefLoading] = useState(false);
   const [briefError, setBriefError] = useState(null);
   const [copied, setCopied] = useState(false);
 
-  const upK1 = upcoming(k1Matches);
-  const upK2 = upcoming(k2Matches);
-  const nextK1 = upK1[0];
-  const nextK2 = upK2[0];
+  const allMatchesList = [k1Matches, k2Matches, k3Matches];
+  const upcomingPerKid = allMatchesList.map(upcoming);
+  const nextPerKid = upcomingPerKid.map(u => u[0]);
 
-  const allMatches = [k1Matches, k2Matches];
-  const doubles = upK1.filter(m1 => upK2.some(m2 => m2.date === m1.date));
+  // Double-header: any date where ≥2 kids play
+  const allUpcomingDates = upcomingPerKid.flatMap(u => u.map(m => m.date));
+  const dateCounts = allUpcomingDates.reduce((acc, d) => { acc[d] = (acc[d] || 0) + 1; return acc; }, {});
+  const doubleDates = Object.keys(dateCounts).filter(d => dateCounts[d] >= 2).sort();
+  const firstDouble = doubleDates[0];
 
-  const showBriefBtn = (nextK1 && daysOut(nextK1.date) <= 4) || (nextK2 && daysOut(nextK2.date) <= 4);
+  const nextK1 = nextPerKid[0];
+  const showBriefBtn = nextPerKid.some(m => m && daysOut(m.date) <= 4);
 
   const generateBriefing = async () => {
     setBriefLoading(true);
     setBriefError(null);
     setBriefing(null);
 
-    const matchLines = [];
-    if (nextK1 && daysOut(nextK1.date) <= 4) {
-      const k1 = kids[0];
-      const leave = getLeave(nextK1, k1?.arrivalBuffer);
-      matchLines.push(
-        `${k1?.name || "Kid 1"} (${k1?.category || ""}, ${k1?.shortName || ""}): ${fmtDate(nextK1.date)}, ${nextK1.time}, ${nextK1.ha === "home" ? "HOME" : "AWAY"} vs ${nextK1.opp}, ${nextK1.venue}, ${nextK1.city}, ${nextK1.km}km away${leave ? `, leave by ${leave}` : ""}, kit: ${nextK1.ha === "home" ? "NEGRE/VERMELL" : "BLANCA/VERMELL"}`
-      );
-    } else {
-      matchLines.push(`${kids[0]?.label || "Kid 1"}: No match this weekend.`);
-    }
-    if (nextK2 && daysOut(nextK2.date) <= 4) {
-      const k2 = kids[1];
-      const leave = getLeave(nextK2, k2?.arrivalBuffer);
-      matchLines.push(
-        `${k2?.name || "Kid 2"} (${k2?.category || ""}, ${k2?.shortName || ""}): ${fmtDate(nextK2.date)}, ${nextK2.time}, ${nextK2.ha === "home" ? "HOME" : "AWAY"} vs ${nextK2.opp}, ${nextK2.venue}, ${nextK2.city}, ${nextK2.km}km away${leave ? `, leave by ${leave}` : ""}, kit: ${nextK2.ha === "home" ? "NEGRE/VERMELL" : "BLANCA/VERMELL"}`
-      );
-    } else {
-      matchLines.push(`${kids[1]?.label || "Kid 2"}: No match this weekend.`);
-    }
+    const matchLines = kids.map((kid, idx) => {
+      const m = nextPerKid[idx];
+      if (!m || daysOut(m.date) > 4) return `${kid.label}: No match this weekend.`;
+      const leave = getLeave(m, kid.arrivalBuffer);
+      return `${kid.name} (${kid.category}, ${kid.shortName}): ${fmtDate(m.date)}, ${m.time}, ${m.ha === "home" ? "HOME" : "AWAY"} vs ${m.opp}, ${m.venue}, ${m.city}, ${m.km}km away${leave ? `, leave by ${leave}` : ""}, kit: ${m.ha === "home" ? "NEGRE/VERMELL" : "BLANCA/VERMELL"}`;
+    });
 
     try {
       const res = await fetch("/api/brief", {
@@ -76,7 +67,7 @@ export default function DashboardTab({ kids = [], k1Matches, k2Matches }) {
 
   return (
     <div>
-      {/* Weekend alert */}
+      {/* Weekend alert — based on first kid's next match */}
       {nextK1 && daysOut(nextK1.date) <= 3 && (
         <div style={{ background: "rgba(255,107,43,0.08)", border: "1px solid rgba(255,107,43,0.2)", borderRadius: 12, padding: "10px 14px", marginBottom: 14, display: "flex", gap: 10, alignItems: "center" }}>
           <span style={{ fontSize: 18 }}>⚡</span>
@@ -88,11 +79,14 @@ export default function DashboardTab({ kids = [], k1Matches, k2Matches }) {
       )}
 
       {/* Double-header alert */}
-      {doubles.length > 0 && (
+      {firstDouble && (
         <div style={{ background: "rgba(168,85,247,0.08)", border: "1px solid rgba(168,85,247,0.2)", borderRadius: 12, padding: "10px 14px", marginBottom: 14 }}>
-          <div style={{ fontSize: 12, fontWeight: 600, color: "#a855f7", marginBottom: 4 }}>{t.doubleMatchDay(fmtDate(doubles[0].date))}</div>
+          <div style={{ fontSize: 12, fontWeight: 600, color: "#a855f7", marginBottom: 4 }}>{t.doubleMatchDay(fmtDate(firstDouble))}</div>
           <div style={{ fontSize: 11, color: "#64748b" }}>
-            {kids[0]?.label} · {doubles[0].time} &nbsp;·&nbsp; {kids[1]?.label} · {upK2.find(m => m.date === doubles[0].date)?.time}
+            {kids.map((kid, idx) => {
+              const m = upcomingPerKid[idx].find(m => m.date === firstDouble);
+              return m ? `${kid.label} · ${m.time}` : null;
+            }).filter(Boolean).join("  ·  ")}
           </div>
         </div>
       )}
@@ -100,7 +94,7 @@ export default function DashboardTab({ kids = [], k1Matches, k2Matches }) {
       {/* Season stats — one row per kid */}
       <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 16 }}>
         {kids.map((kid, idx) => {
-          const matches = allMatches[idx] || [];
+          const matches = allMatchesList[idx] || [];
           const played = matches.filter(m => m.played);
           const wins = played.filter(m => m.win).length;
           return (
@@ -122,25 +116,26 @@ export default function DashboardTab({ kids = [], k1Matches, k2Matches }) {
         })}
       </div>
 
-      {/* Next matches */}
-      {nextK1 && (
-        <>
-          <div style={S.sectionTitle}>{kids[0]?.label || "Kid 1"} — {t.nextMatch}</div>
-          <MatchCard m={nextK1} kidColor={kids[0]?.color} arrivalBuffer={kids[0]?.arrivalBuffer} />
-        </>
-      )}
-      {nextK2 && (
-        <>
-          <div style={S.sectionTitle}>{kids[1]?.label || "Kid 2"} — {t.nextMatch}</div>
-          <MatchCard m={nextK2} kidColor={kids[1]?.color} arrivalBuffer={kids[1]?.arrivalBuffer} />
-        </>
-      )}
+      {/* Next match + scout card per kid */}
+      {kids.map((kid, idx) => {
+        const next = nextPerKid[idx];
+        if (!next) return null;
+        return (
+          <div key={kid.id}>
+            <div style={S.sectionTitle}>{kid.label} — {t.nextMatch}</div>
+            <MatchCard m={next} kidColor={kid.color} arrivalBuffer={kid.arrivalBuffer} />
+            {kid.statsAvailable && next.oppTeamId && (
+              <ScoutCard match={next} kid={kid} />
+            )}
+          </div>
+        );
+      })}
 
-      {/* Upcoming road trips */}
-      {upK1.filter(m => m.km > 60).length > 0 && (
+      {/* Upcoming road trips (k1 only — Cadet Preferent has the long trips) */}
+      {upcomingPerKid[0].filter(m => m.km > 60).length > 0 && (
         <>
           <div style={S.sectionTitle}>{t.upcomingRoadTrips}</div>
-          {upK1.filter(m => m.km > 60).slice(0, 3).map((m, i) => {
+          {upcomingPerKid[0].filter(m => m.km > 60).slice(0, 3).map((m, i) => {
             const leave = getLeave(m, kids[0]?.arrivalBuffer);
             return (
               <div key={i} style={{ ...S.roadCard, padding: "12px 14px" }}>
