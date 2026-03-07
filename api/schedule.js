@@ -87,7 +87,7 @@ function normalizeMatch(m, teamId) {
     time,
     ha,
     opp,
-    venue: ha === "home" ? "Nau Parc Clot" : fmtVenue(m.nameField),
+    venue: fmtVenue(m.nameField),
     city: m.nameTown || "",
     km,
     played,
@@ -131,7 +131,7 @@ export default async function handler(req, res) {
         for (const round of Object.values(rounds)) {
           for (const m of Object.values(round.matches || {})) {
             const norm = normalizeMatch(m, kid.teamId);
-            if (norm) kidMatches.push(norm);
+            if (norm) kidMatches.push({ ...norm, grupId });
           }
         }
       }

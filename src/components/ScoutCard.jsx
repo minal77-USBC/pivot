@@ -18,12 +18,13 @@ export default function ScoutCard({ match, kid }) {
       oppTeamId: match.oppTeamId,
       ourTeamId: kid.statsTeamId,
       matchDate: match.date,
+      ...(match.grupId ? { grupId: match.grupId } : {}),
     });
     fetch(`/api/scout?${params}`)
       .then(r => { if (!r.ok) throw new Error(`${r.status}`); return r.json(); })
       .then(d => { setData(d); setLoading(false); })
       .catch(e => { setError(e.message); setLoading(false); });
-  }, [match?.oppTeamId, kid?.statsTeamId, match?.date]);
+  }, [match?.oppTeamId, kid?.statsTeamId, match?.date, match?.grupId]);
 
   if (!match?.oppTeamId || !kid?.statsTeamId) return null;
 
