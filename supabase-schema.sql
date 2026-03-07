@@ -29,3 +29,16 @@ alter table kids enable row level security;
 
 create policy "allow all" on families for all using (true) with check (true);
 create policy "allow all" on kids for all using (true) with check (true);
+
+-- Box score cache — avoids re-fetching msstats on every Game Log load
+-- stats_uuid is the natural PK (m.universallyid from ESB, populated 24-48h post-game)
+-- data stores the full raw box score JSON so any family's kid can be extracted from the same row
+create table match_box_scores (
+  stats_uuid   text primary key,
+  data         jsonb not null,
+  match_date   text not null,
+  fetched_at   timestamptz default now()
+);
+
+alter table match_box_scores enable row level security;
+create policy "allow all" on match_box_scores for all using (true) with check (true);
