@@ -5,7 +5,7 @@ import { useTheme } from "../ThemeContext";
 
 export default function ScoutCard({ match, kid }) {
   const { t } = useLang();
-  const { S } = useTheme();
+  const { S, theme } = useTheme();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -47,7 +47,7 @@ export default function ScoutCard({ match, kid }) {
 
   return (
     <div style={{
-      background: "#0f172a",
+      background: theme.cardAlt,
       border: `1px solid ${c}22`,
       borderLeft: `3px solid ${c}`,
       borderRadius: 12,
@@ -86,7 +86,7 @@ export default function ScoutCard({ match, kid }) {
           </div>
         </div>
         <div style={{ ...S.statBox, flex: 1, padding: "8px 10px" }}>
-          <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 20, fontWeight: 700, color: "#f1f5f9", lineHeight: 1 }}>
+          <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 20, fontWeight: 700, color: theme.textBright, lineHeight: 1 }}>
             {record.ppf?.toFixed(1)}
           </div>
           <div style={{ fontSize: 9, color: "#475569", textTransform: "uppercase", letterSpacing: "0.1em", marginTop: 2 }}>
@@ -95,7 +95,7 @@ export default function ScoutCard({ match, kid }) {
         </div>
         {record.ppa != null && (
           <div style={{ ...S.statBox, flex: 1, padding: "8px 10px" }}>
-            <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 20, fontWeight: 700, color: "#94a3b8", lineHeight: 1 }}>
+            <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 20, fontWeight: 700, color: theme.textSubtle, lineHeight: 1 }}>
               {record.ppa?.toFixed(1)}
             </div>
             <div style={{ fontSize: 9, color: "#475569", textTransform: "uppercase", letterSpacing: "0.1em", marginTop: 2 }}>
@@ -145,7 +145,7 @@ export default function ScoutCard({ match, kid }) {
             <div key={i} style={{
               display: "flex", alignItems: "center", justifyContent: "space-between",
               padding: "5px 4px",
-              borderBottom: i < recentForm.length - 1 ? "1px solid rgba(255,255,255,0.04)" : "none",
+              borderBottom: i < recentForm.length - 1 ? `1px solid ${theme.rowBorder}` : "none",
             }}>
               <div style={{ display: "flex", alignItems: "center", gap: 8, minWidth: 0 }}>
                 <span style={{
@@ -159,7 +159,7 @@ export default function ScoutCard({ match, kid }) {
                 <span style={{ fontSize: 11, color: "#475569", flexShrink: 0 }}>
                   {m.ha === "home" ? "vs" : "@"}
                 </span>
-                <span style={{ fontSize: 11, color: "#94a3b8", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                <span style={{ fontSize: 11, color: theme.textSubtle, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                   {m.opp}
                 </span>
               </div>
@@ -175,7 +175,7 @@ export default function ScoutCard({ match, kid }) {
       {/* Threats */}
       {topPlayers.length > 0 && (
         <>
-          <div style={{ height: 1, background: "rgba(255,255,255,0.05)", margin: "10px 0 8px" }} />
+          <div style={{ height: 1, background: theme.divider, margin: "10px 0 8px" }} />
           <div style={{ fontSize: 9, fontWeight: 700, color: "#334155", textTransform: "uppercase", letterSpacing: "0.12em", marginBottom: 6 }}>
             {t.scoutThreats}
           </div>
@@ -183,11 +183,11 @@ export default function ScoutCard({ match, kid }) {
             display: "grid",
             gridTemplateColumns: "18px minmax(60px,1fr) 36px 36px 36px 32px 36px",
             gap: 4, padding: "0 4px 4px",
-            borderBottom: "1px solid rgba(255,255,255,0.05)",
+            borderBottom: `1px solid ${theme.rowBorder}`,
             marginBottom: 4,
           }}>
             {["#", "Name", "GP", "PPG", "RPG", "APG", "FT%"].map((h, i) => (
-              <span key={i} style={{ fontSize: 9, color: "#334155", textTransform: "uppercase", letterSpacing: "0.08em", textAlign: i > 1 ? "right" : "left" }}>{h}</span>
+              <span key={i} style={{ fontSize: 9, color: theme.textSecondary, textTransform: "uppercase", letterSpacing: "0.08em", textAlign: i > 1 ? "right" : "left" }}>{h}</span>
             ))}
           </div>
           {topPlayers.map((p, i) => (
@@ -195,12 +195,12 @@ export default function ScoutCard({ match, kid }) {
               display: "grid",
               gridTemplateColumns: "18px minmax(60px,1fr) 36px 36px 36px 32px 36px",
               gap: 4, padding: "6px 4px",
-              borderBottom: i < topPlayers.length - 1 ? "1px solid rgba(255,255,255,0.04)" : "none",
+              borderBottom: i < topPlayers.length - 1 ? `1px solid ${theme.rowBorder}` : "none",
             }}>
               <span style={{ fontSize: 10, color: "#475569", fontFamily: "'DM Mono', monospace" }}>{p.dorsal}</span>
-              <span style={{ fontSize: 12, color: "#e2e8f0", fontWeight: 500, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{p.name}</span>
+              <span style={{ fontSize: 12, color: theme.textPrimary, fontWeight: 500, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{p.name}</span>
               <span style={{ fontSize: 10, color: "#475569", textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{p.gp}</span>
-              <span style={{ fontSize: 12, color: "#f1f5f9", fontWeight: 700, textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{p.ppg.toFixed(1)}</span>
+              <span style={{ fontSize: 12, color: theme.textBright, fontWeight: 700, textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{p.ppg.toFixed(1)}</span>
               <span style={{ fontSize: 10, color: "#64748b", textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{p.rpg.toFixed(1)}</span>
               <span style={{ fontSize: 10, color: "#64748b", textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{p.apg.toFixed(1)}</span>
               <span style={{ fontSize: 10, color: "#64748b", textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{p.ft}</span>
@@ -209,7 +209,7 @@ export default function ScoutCard({ match, kid }) {
         </>
       )}
 
-      <div style={{ fontSize: 9, color: "#1e293b", textAlign: "right", marginTop: 8 }}>
+      <div style={{ fontSize: 9, color: theme.textMuted, textAlign: "right", marginTop: 8 }}>
         {t.scoutSource}
       </div>
     </div>

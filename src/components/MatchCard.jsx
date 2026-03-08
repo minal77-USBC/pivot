@@ -5,7 +5,7 @@ import { useTheme } from "../ThemeContext";
 
 export default function MatchCard({ m, kidColor = "#FF6B2B", compact = false, arrivalBuffer = 20 }) {
   const { t } = useLang();
-  const { S } = useTheme();
+  const { S, theme } = useTheme();
   const tierLevel = tier(m.km);
   const isRoad = tierLevel === "road";
   const n = daysOut(m.date);
@@ -55,7 +55,7 @@ export default function MatchCard({ m, kidColor = "#FF6B2B", compact = false, ar
         <div style={{ fontSize: 10, letterSpacing: "0.1em", textTransform: "uppercase", color: "#475569" }}>
           {fmtDate(m.date)}
         </div>
-        <div style={{ fontSize: 16, fontWeight: 600, color: "#f1f5f9", marginTop: 2, lineHeight: 1.3 }}>
+        <div style={{ fontSize: 16, fontWeight: 600, color: theme.textBright, marginTop: 2, lineHeight: 1.3 }}>
           {m.ha === "home" ? "vs" : "@"} {m.opp}
         </div>
         <div style={{ fontSize: 12, color: "#64748b", marginTop: 3 }}>{m.venue}</div>
@@ -67,7 +67,7 @@ export default function MatchCard({ m, kidColor = "#FF6B2B", compact = false, ar
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: 8 }}>
             <div>
               <div style={S.label}>{t.kickoff}</div>
-              <div style={{ fontFamily: "'Barlow Condensed', monospace", fontSize: 22, fontWeight: 700, color: "#f1f5f9" }}>
+              <div style={{ fontFamily: "'Barlow Condensed', monospace", fontSize: 22, fontWeight: 700, color: theme.textBright }}>
                 {m.time}
               </div>
             </div>
@@ -93,7 +93,7 @@ export default function MatchCard({ m, kidColor = "#FF6B2B", compact = false, ar
                       placeholder={String(travelMins(m.km))}
                       style={{
                         width: 60, background: "#1e293b", border: "1px solid #475569",
-                        borderRadius: 6, color: "#f1f5f9", fontSize: 13, padding: "3px 8px",
+                        borderRadius: 6, color: theme.textBright, fontSize: 13, padding: "3px 8px",
                         fontFamily: "'DM Mono', monospace",
                       }}
                     />
@@ -105,7 +105,7 @@ export default function MatchCard({ m, kidColor = "#FF6B2B", compact = false, ar
                   </div>
                 ) : (
                   <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                    <span style={{ fontSize: 13, color: isRoad ? "#ffb347" : "#94a3b8", fontWeight: 500 }}>
+                    <span style={{ fontSize: 13, color: isRoad ? "#ffb347" : theme.textSubtle, fontWeight: 500 }}>
                       {overrideMins ? `${overrideMins} ${t.min}` : `~${travelMins(m.km)} ${t.min}`} · {m.km}km
                     </span>
                     {overrideMins && <span style={{ fontSize: 9, color: "#22d3a0", letterSpacing: "0.08em" }}>{t.yours}</span>}

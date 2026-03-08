@@ -90,7 +90,7 @@ export default function CalendarTab({ kids = [], k1Matches, k2Matches, k3Matches
             </>
           )}
           {upcomingAway.length > 0 && pastAway.length > 0 && (
-            <div style={{ height: 1, background: "rgba(255,255,255,0.06)", margin: "16px 0" }} />
+            <div style={{ height: 1, background: theme.divider, margin: "16px 0" }} />
           )}
           {pastAway.length > 0 && (
             <>
@@ -119,7 +119,7 @@ export default function CalendarTab({ kids = [], k1Matches, k2Matches, k3Matches
         return (
           <div key={date} style={{ marginBottom: 14 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6, paddingLeft: 2 }}>
-              <span style={{ fontSize: 12, fontWeight: 600, color: "#94a3b8", textTransform: "uppercase", letterSpacing: "0.08em" }}>
+              <span style={{ fontSize: 12, fontWeight: 600, color: theme.textSubtle, textTransform: "uppercase", letterSpacing: "0.08em" }}>
                 {fmtDate(date)}
               </span>
               <span style={{
@@ -143,7 +143,7 @@ export default function CalendarTab({ kids = [], k1Matches, k2Matches, k3Matches
 
 function MatchRow({ m, kids, past = false }) {
   const { t } = useLang();
-  const { S } = useTheme();
+  const { S, theme } = useTheme();
   const kid = kids.find(k => k.id === m.kidId);
   const overrideMins = m.km > 0 ? getOverrideMins(m.venue, m.city) : null;
   const leave = m.km > 0
@@ -154,8 +154,8 @@ function MatchRow({ m, kids, past = false }) {
 
   return (
     <div style={{
-      background: "#0f172a",
-      border: "1px solid rgba(255,255,255,0.06)",
+      background: theme.cardAlt,
+      border: `1px solid ${theme.cardBorder}`,
       borderLeft: `3px solid ${past ? "#334155" : kid.color}`,
       borderRadius: 10,
       padding: "10px 12px",
@@ -175,7 +175,7 @@ function MatchRow({ m, kids, past = false }) {
           </span>
           {m.canvis && <span style={S.badge("canvis")}>⚠ Canvis</span>}
         </div>
-        <div style={{ fontSize: 14, fontWeight: 600, color: past ? "#64748b" : "#e2e8f0", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+        <div style={{ fontSize: 14, fontWeight: 600, color: past ? theme.textDim : theme.textPrimary, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
           @ {m.opp}
         </div>
         {!past && leave && (
@@ -185,7 +185,7 @@ function MatchRow({ m, kids, past = false }) {
         )}
       </div>
       <div style={{ textAlign: "right", flexShrink: 0 }}>
-        <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 22, fontWeight: 700, color: past ? "#475569" : "#f1f5f9", lineHeight: 1 }}>
+        <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 22, fontWeight: 700, color: past ? theme.textSecondary : theme.textBright, lineHeight: 1 }}>
           {m.time}
         </div>
         {m.km > 0 && (

@@ -6,7 +6,7 @@ import { useTheme } from "../ThemeContext";
 
 export default function ChecklistTab({ kids = [], k1Matches, k2Matches, k3Matches = [] }) {
   const { t } = useLang();
-  const { S } = useTheme();
+  const { S, theme } = useTheme();
   const [kidId, setKidId] = useState("k1");
   const [selIdx, setSelIdx] = useState(0);
   const [checked, setChecked] = useState({});
@@ -69,8 +69,8 @@ export default function ChecklistTab({ kids = [], k1Matches, k2Matches, k3Matche
       <div style={{ display: "flex", gap: 8, overflowX: "auto", paddingBottom: 8, marginBottom: 16 }}>
         {upMatches.slice(0, 6).map((m, i) => (
           <button key={i} onClick={() => setSelIdx(i)} style={{
-            background: i === selIdx ? kid.color : "#111827",
-            border: `1px solid ${i === selIdx ? kid.color : "rgba(255,255,255,0.07)"}`,
+            background: i === selIdx ? kid.color : theme.cardBg,
+            border: `1px solid ${i === selIdx ? kid.color : theme.cardBorder}`,
             borderRadius: 8, padding: "6px 12px", cursor: "pointer", whiteSpace: "nowrap",
             color: i === selIdx ? "white" : "#64748b", fontSize: 12, fontWeight: 500,
           }}>
@@ -90,7 +90,7 @@ export default function ChecklistTab({ kids = [], k1Matches, k2Matches, k3Matche
           {match.canvis && <span style={S.badge("canvis")}>⚠ Canvis</span>}
         </div>
         <div style={{ fontSize: 11, color: "#475569", letterSpacing: "0.1em", textTransform: "uppercase" }}>{fmtDate(match.date)}</div>
-        <div style={{ fontSize: 18, fontWeight: 600, color: "#f1f5f9", marginTop: 2 }}>
+        <div style={{ fontSize: 18, fontWeight: 600, color: theme.textBright, marginTop: 2 }}>
           {match.ha === "home" ? "vs" : "@"} {match.opp}
         </div>
         <div style={{ fontSize: 12, color: "#64748b", marginTop: 2 }}>{match.venue} · {match.city}</div>
@@ -121,7 +121,7 @@ export default function ChecklistTab({ kids = [], k1Matches, k2Matches, k3Matche
           </div>
           <div>
             <div style={S.label}>{t.kit}</div>
-            <div style={{ fontSize: 13, fontWeight: 600, color: "#f1f5f9" }}>{kit.jersey}</div>
+            <div style={{ fontSize: 13, fontWeight: 600, color: theme.textBright }}>{kit.jersey}</div>
             <div style={{ fontSize: 11, color: "#64748b" }}>+ {kit.shorts} shorts</div>
           </div>
         </div>
@@ -154,11 +154,11 @@ export default function ChecklistTab({ kids = [], k1Matches, k2Matches, k3Matche
               const isChecked = !!checked[`${ck}-night-${item.id}`];
               return (
                 <div key={item.id}>
-                  {i > 0 && <div style={{ height: 1, background: "rgba(255,255,255,0.04)", margin: "0 12px" }} />}
+                  {i > 0 && <div style={{ height: 1, background: theme.rowBorder, margin: "0 12px" }} />}
                   <div style={S.checkItem(isChecked)} onClick={() => toggle("night", item.id)}>
                     <div style={S.checkBox(isChecked)}>{isChecked && "✓"}</div>
                     <span style={{ fontSize: 16 }}>{item.emoji}</span>
-                    <span style={{ fontSize: 14, color: isChecked ? "#64748b" : "#e2e8f0", textDecoration: isChecked ? "line-through" : "none" }}>
+                    <span style={{ fontSize: 14, color: isChecked ? "#64748b" : theme.textPrimary, textDecoration: isChecked ? "line-through" : "none" }}>
                       {t.nightItems?.[item.id] ?? item.label}
                     </span>
                   </div>
@@ -182,17 +182,17 @@ export default function ChecklistTab({ kids = [], k1Matches, k2Matches, k3Matche
         </div>
       </div>
 
-      <div style={{ background: "#111827", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 12, overflow: "hidden" }}>
+      <div style={{ background: theme.cardBg, border: `1px solid ${theme.cardBorder}`, borderRadius: 12, overflow: "hidden" }}>
         {matchDayItems.map((item, i) => {
           const isChecked = !!checked[`${ck}-day-${item.id}`];
           const dayLabels = isRoad ? t.roadItems : t.stdItems;
           return (
             <div key={item.id}>
-              {i > 0 && <div style={{ height: 1, background: "rgba(255,255,255,0.04)", margin: "0 12px" }} />}
+              {i > 0 && <div style={{ height: 1, background: theme.rowBorder, margin: "0 12px" }} />}
               <div style={S.checkItem(isChecked)} onClick={() => toggle("day", item.id)}>
                 <div style={S.checkBox(isChecked)}>{isChecked && "✓"}</div>
                 <span style={{ fontSize: 16 }}>{item.emoji}</span>
-                <span style={{ fontSize: 14, color: isChecked ? "#64748b" : "#e2e8f0", textDecoration: isChecked ? "line-through" : "none" }}>
+                <span style={{ fontSize: 14, color: isChecked ? "#64748b" : theme.textPrimary, textDecoration: isChecked ? "line-through" : "none" }}>
                   {dayLabels?.[item.id] ?? item.label}
                 </span>
               </div>

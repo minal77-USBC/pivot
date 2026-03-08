@@ -35,7 +35,7 @@ export default function SeasonTab({ kids = [], k1Matches, k2Matches, k3Matches }
 
 function KidSeason({ matches, kid }) {
   const { t } = useLang();
-  const { S } = useTheme();
+  const { S, theme } = useTheme();
   const played = matches.filter(m => m.played);
   const wins = played.filter(m => m.win).length;
   const losses = played.length - wins;
@@ -104,9 +104,9 @@ function KidSeason({ matches, kid }) {
           </div>
           <div style={{ ...S.card(), marginBottom: 12 }}>
             {roadUpcoming.map((m, i) => (
-              <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "8px 0", borderBottom: i < roadUpcoming.length - 1 ? "1px solid rgba(255,255,255,0.05)" : "none" }}>
+              <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "8px 0", borderBottom: i < roadUpcoming.length - 1 ? `1px solid ${theme.rowBorder}` : "none" }}>
                 <div>
-                  <div style={{ fontSize: 13, fontWeight: 500, color: "#f1f5f9" }}>{m.opp}</div>
+                  <div style={{ fontSize: 13, fontWeight: 500, color: theme.textBright }}>{m.opp}</div>
                   <div style={{ fontSize: 11, color: "#475569" }}>{fmtDate(m.date)} · {m.city}{m.km > 0 ? ` · ${m.km}km` : ""}</div>
                 </div>
                 <span style={S.badge("road")}>{t.upcomingBadge}</span>
@@ -123,9 +123,9 @@ function KidSeason({ matches, kid }) {
           </div>
           <div style={S.card()}>
             {roadPlayed.map((m, i) => (
-              <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "8px 0", borderBottom: i < roadPlayed.length - 1 ? "1px solid rgba(255,255,255,0.05)" : "none", opacity: 0.7 }}>
+              <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "8px 0", borderBottom: i < roadPlayed.length - 1 ? `1px solid ${theme.rowBorder}` : "none", opacity: 0.7 }}>
                 <div>
-                  <div style={{ fontSize: 13, fontWeight: 500, color: "#94a3b8" }}>{m.opp}</div>
+                  <div style={{ fontSize: 13, fontWeight: 500, color: theme.textSubtle }}>{m.opp}</div>
                   <div style={{ fontSize: 11, color: "#475569" }}>{fmtDate(m.date)} · {m.city}{m.km > 0 ? ` · ${m.km}km` : ""}</div>
                 </div>
                 <span style={{ fontSize: 13, color: m.win ? "#22d3a0" : "#ff4757", fontWeight: 600 }}>{m.win ? t.wLabel : t.lLabel} {m.score}</span>
@@ -154,10 +154,10 @@ function KidSeason({ matches, kid }) {
       <div style={S.sectionTitle}>{t.allResults}</div>
       <div style={S.card()}>
         {played.slice().reverse().map((m, i) => (
-          <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "7px 0", borderBottom: i < played.length - 1 ? "1px solid rgba(255,255,255,0.05)" : "none" }}>
+          <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "7px 0", borderBottom: i < played.length - 1 ? `1px solid ${theme.rowBorder}` : "none" }}>
             <div>
               <div style={{ fontSize: 12, color: "#64748b" }}>{fmtDate(m.date)}</div>
-              <div style={{ fontSize: 13, color: "#94a3b8" }}>{m.ha === "home" ? "vs" : "@"} {m.opp}</div>
+              <div style={{ fontSize: 13, color: theme.textSubtle }}>{m.ha === "home" ? "vs" : "@"} {m.opp}</div>
             </div>
             <span style={{ fontSize: 14, fontWeight: 700, color: m.win ? "#22d3a0" : "#ff4757" }}>
               {m.win ? t.wLabel : t.lLabel} {m.score}

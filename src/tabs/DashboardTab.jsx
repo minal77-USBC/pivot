@@ -13,7 +13,7 @@ function getLeave(m, arrivalBuffer = 20) {
 
 export default function DashboardTab({ kids = [], k1Matches, k2Matches, k3Matches = [] }) {
   const { t } = useLang();
-  const { S } = useTheme();
+  const { S, theme } = useTheme();
   const [briefing, setBriefing] = useState(null);
   const [briefLoading, setBriefLoading] = useState(false);
   const [briefError, setBriefError] = useState(null);
@@ -143,7 +143,7 @@ export default function DashboardTab({ kids = [], k1Matches, k2Matches, k3Matche
                 <div style={S.spaceBetween}>
                   <div>
                     <div style={{ fontSize: 12, color: "#ffb347", fontWeight: 600 }}>🚗 {m.city} · {m.km}km</div>
-                    <div style={{ fontSize: 14, color: "#f1f5f9", marginTop: 2 }}>vs {m.opp}</div>
+                    <div style={{ fontSize: 14, color: theme.textBright, marginTop: 2 }}>vs {m.opp}</div>
                   </div>
                   <div style={{ textAlign: "right" }}>
                     <div style={{ fontSize: 11, color: "#475569" }}>{fmtDate(m.date)}</div>
@@ -180,7 +180,7 @@ export default function DashboardTab({ kids = [], k1Matches, k2Matches, k3Matche
           )}
           {briefing && (
             <div style={{ ...S.card({ borderColor: "rgba(34,211,160,0.2)", background: "rgba(34,211,160,0.04)" }) }}>
-              <div style={{ fontSize: 14, color: "#e2e8f0", lineHeight: 1.6, marginBottom: 12 }}>{briefing}</div>
+              <div style={{ fontSize: 14, color: theme.textPrimary, lineHeight: 1.6, marginBottom: 12 }}>{briefing}</div>
               <button onClick={copyBriefing} style={{ ...S.primaryBtn, background: copied ? "#22d3a0" : undefined }}>
                 {copied ? t.copied : t.copyClipboard}
               </button>

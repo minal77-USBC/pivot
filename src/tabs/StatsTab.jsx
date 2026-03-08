@@ -15,6 +15,7 @@ function pct(made, attempted) {
 }
 
 function StatRow({ p, isHighlighted, border }) {
+  const { theme } = useTheme();
   return (
     <div style={{
       display: "grid",
@@ -22,26 +23,27 @@ function StatRow({ p, isHighlighted, border }) {
       gap: 4,
       alignItems: "center",
       padding: "8px 12px",
-      borderBottom: border ? "1px solid rgba(255,255,255,0.04)" : "none",
+      borderBottom: border ? `1px solid ${theme.rowBorder}` : "none",
       background: isHighlighted ? "rgba(255,107,43,0.07)" : "transparent",
       borderLeft: isHighlighted ? "2px solid #FF6B2B" : "2px solid transparent",
     }}>
-      <span style={{ fontSize: 10, color: "#475569", fontFamily: "'DM Mono', monospace" }}>{p.dorsal || "—"}</span>
-      <span style={{ fontSize: 12, color: isHighlighted ? "#FF6B2B" : "#e2e8f0", fontWeight: isHighlighted ? 600 : 400, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+      <span style={{ fontSize: 10, color: theme.textSecondary, fontFamily: "'DM Mono', monospace" }}>{p.dorsal || "—"}</span>
+      <span style={{ fontSize: 12, color: isHighlighted ? "#FF6B2B" : theme.textPrimary, fontWeight: isHighlighted ? 600 : 400, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
         {p.name.split(" ")[0]}
       </span>
-      <span style={{ fontSize: 11, color: "#94a3b8", textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{p.matchesPlayed}</span>
-      <span style={{ fontSize: 11, color: "#64748b", textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{p.timePlayed ?? "—"}</span>
-      <span style={{ fontSize: 12, color: "#f1f5f9", textAlign: "right", fontWeight: 600, fontFamily: "'DM Mono', monospace" }}>{p.totalScoreAvgByMatch.toFixed(1)}</span>
+      <span style={{ fontSize: 11, color: theme.textSubtle, textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{p.matchesPlayed}</span>
+      <span style={{ fontSize: 11, color: theme.textDim, textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{p.timePlayed ?? "—"}</span>
+      <span style={{ fontSize: 12, color: theme.textBright, textAlign: "right", fontWeight: 600, fontFamily: "'DM Mono', monospace" }}>{p.totalScoreAvgByMatch.toFixed(1)}</span>
       <span style={{ fontSize: 11, color: "#64748b", textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{p.totalScore}</span>
       <span style={{ fontSize: 11, color: "#64748b", textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{p.sumShotsOfOneSuccessful}</span>
       <span style={{ fontSize: 11, color: "#64748b", textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{p.sumShotsOfThreeSuccessful}</span>
-      <span style={{ fontSize: 11, color: "#94a3b8", textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{p.sumValorationAvgByMatch.toFixed(1)}</span>
+      <span style={{ fontSize: 11, color: theme.textSubtle, textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{p.sumValorationAvgByMatch.toFixed(1)}</span>
     </div>
   );
 }
 
 function BoxScoreRow({ p, isHighlighted, border }) {
+  const { theme } = useTheme();
   const d = p.data || {};
   return (
     <div style={{
@@ -50,16 +52,16 @@ function BoxScoreRow({ p, isHighlighted, border }) {
       gap: 3,
       alignItems: "center",
       padding: "7px 10px",
-      borderBottom: border ? "1px solid rgba(255,255,255,0.04)" : "none",
+      borderBottom: border ? `1px solid ${theme.rowBorder}` : "none",
       background: isHighlighted ? "rgba(255,107,43,0.07)" : "transparent",
       borderLeft: isHighlighted ? "2px solid #FF6B2B" : "2px solid transparent",
     }}>
-      <span style={{ fontSize: 9, color: "#475569", fontFamily: "'DM Mono', monospace" }}>{p.dorsal}</span>
-      <span style={{ fontSize: 11, color: isHighlighted ? "#FF6B2B" : "#e2e8f0", fontWeight: isHighlighted ? 600 : 400, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+      <span style={{ fontSize: 9, color: theme.textSecondary, fontFamily: "'DM Mono', monospace" }}>{p.dorsal}</span>
+      <span style={{ fontSize: 11, color: isHighlighted ? "#FF6B2B" : theme.textPrimary, fontWeight: isHighlighted ? 600 : 400, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
         {p.starting ? "★ " : ""}{p.name.split(" ")[0]}
       </span>
       <span style={{ fontSize: 10, color: "#64748b", textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{p.timePlayed}</span>
-      <span style={{ fontSize: 12, color: "#f1f5f9", textAlign: "right", fontWeight: 600, fontFamily: "'DM Mono', monospace" }}>{d.score ?? 0}</span>
+      <span style={{ fontSize: 12, color: theme.textBright, textAlign: "right", fontWeight: 600, fontFamily: "'DM Mono', monospace" }}>{d.score ?? 0}</span>
       <span style={{ fontSize: 10, color: "#64748b", textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{d.shotsOfOneSuccessful ?? 0}/{d.shotsOfOneAttempted ?? 0}</span>
       <span style={{ fontSize: 10, color: "#64748b", textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{d.shotsOfTwoSuccessful ?? 0}/{d.shotsOfTwoAttempted ?? 0}</span>
       <span style={{ fontSize: 10, color: "#64748b", textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{d.rebounds ?? 0}</span>
@@ -75,7 +77,7 @@ function BoxScoreRow({ p, isHighlighted, border }) {
 
 function SeasonStats({ teamId, kidName, onResult }) {
   const { t } = useLang();
-  const { S } = useTheme();
+  const { S, theme } = useTheme();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -128,11 +130,11 @@ function SeasonStats({ teamId, kidName, onResult }) {
             gridTemplateColumns: "24px minmax(70px,1fr) 30px 40px 40px 44px 36px 36px 40px",
             gap: 4,
             padding: "6px 12px",
-            borderBottom: "1px solid rgba(255,255,255,0.07)",
-            background: "rgba(255,255,255,0.03)",
+            borderBottom: `1px solid ${theme.cardBorder}`,
+            background: theme.rowBg,
           }}>
             {["#", "Player", "GP", "MIN", "PPG", "PTS", "FT", "3P", "VAL"].map((h, i) => (
-              <span key={i} style={{ fontSize: 9, color: "#475569", textTransform: "uppercase", letterSpacing: "0.1em", textAlign: i > 1 ? "right" : "left" }}>{h}</span>
+              <span key={i} style={{ fontSize: 9, color: theme.textSecondary, textTransform: "uppercase", letterSpacing: "0.1em", textAlign: i > 1 ? "right" : "left" }}>{h}</span>
             ))}
           </div>
           {players.map((p, i) => (
@@ -154,7 +156,7 @@ function SeasonStats({ teamId, kidName, onResult }) {
 
 function PlayerGameLog({ kidMatches, kidName }) {
   const { t } = useLang();
-  const { S } = useTheme();
+  const { S, theme } = useTheme();
   const [log, setLog] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -222,11 +224,11 @@ function PlayerGameLog({ kidMatches, kidName }) {
             display: "grid",
             gridTemplateColumns: "minmax(90px,1fr) 28px 34px 38px 38px 28px 26px 34px",
             gap: 3, padding: "6px 10px",
-            borderBottom: "1px solid rgba(255,255,255,0.07)",
-            background: "rgba(255,255,255,0.03)",
+            borderBottom: `1px solid ${theme.cardBorder}`,
+            background: theme.rowBg,
           }}>
             {["Match", "MIN", "PTS", "2P", "FT", "REB", "AST", "+/-"].map((h, i) => (
-              <span key={i} style={{ fontSize: 9, color: "#475569", textTransform: "uppercase", letterSpacing: "0.1em", textAlign: i > 0 ? "right" : "left" }}>{h}</span>
+              <span key={i} style={{ fontSize: 9, color: theme.textSecondary, textTransform: "uppercase", letterSpacing: "0.1em", textAlign: i > 0 ? "right" : "left" }}>{h}</span>
             ))}
           </div>
 
@@ -235,7 +237,7 @@ function PlayerGameLog({ kidMatches, kidName }) {
               display: "grid",
               gridTemplateColumns: "minmax(90px,1fr) 28px 34px 38px 38px 28px 26px 34px",
               gap: 3, padding: "8px 10px",
-              borderBottom: i < log.length - 1 ? "1px solid rgba(255,255,255,0.04)" : "none",
+              borderBottom: i < log.length - 1 ? `1px solid ${theme.rowBorder}` : "none",
               background: r.starting ? "rgba(255,107,43,0.04)" : "transparent",
             }}>
               {/* Match cell — two lines */}
@@ -255,8 +257,8 @@ function PlayerGameLog({ kidMatches, kidName }) {
                 </div>
               </div>
 
-              <span style={{ fontSize: 10, color: "#94a3b8", textAlign: "right", fontFamily: "'DM Mono', monospace", alignSelf: "center" }}>{r.min}</span>
-              <span style={{ fontSize: 13, color: "#f1f5f9", fontWeight: 700, textAlign: "right", fontFamily: "'DM Mono', monospace", alignSelf: "center" }}>{r.pts}</span>
+              <span style={{ fontSize: 10, color: theme.textSubtle, textAlign: "right", fontFamily: "'DM Mono', monospace", alignSelf: "center" }}>{r.min}</span>
+              <span style={{ fontSize: 13, color: theme.textBright, fontWeight: 700, textAlign: "right", fontFamily: "'DM Mono', monospace", alignSelf: "center" }}>{r.pts}</span>
               <span style={{ fontSize: 10, color: "#64748b", textAlign: "right", fontFamily: "'DM Mono', monospace", alignSelf: "center" }}>{r.twoM}/{r.twoA}</span>
               <span style={{ fontSize: 10, color: "#64748b", textAlign: "right", fontFamily: "'DM Mono', monospace", alignSelf: "center" }}>{r.ftM}/{r.ftA}</span>
               <span style={{ fontSize: 10, color: "#64748b", textAlign: "right", fontFamily: "'DM Mono', monospace", alignSelf: "center" }}>{r.reb}</span>
@@ -281,7 +283,7 @@ function PlayerGameLog({ kidMatches, kidName }) {
 
 function MatchBoxScores({ kidMatches, kidName }) {
   const { t } = useLang();
-  const { S } = useTheme();
+  const { S, theme } = useTheme();
   const [selectedMatch, setSelectedMatch] = useState(null);
   const [boxScore, setBoxScore] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -325,7 +327,7 @@ function MatchBoxScores({ kidMatches, kidName }) {
           style={{ ...S.card({ cursor: "pointer", display: "flex", justifyContent: "space-between", alignItems: "center" }) }}>
           <div>
             <div style={{ fontSize: 11, color: "#475569" }}>{fmtDate(m.date)}</div>
-            <div style={{ fontSize: 13, color: "#94a3b8" }}>{m.ha === "home" ? "vs" : "@"} {m.opp}</div>
+            <div style={{ fontSize: 13, color: theme.textSubtle }}>{m.ha === "home" ? "vs" : "@"} {m.opp}</div>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
             <span style={{ fontSize: 14, fontWeight: 700, color: m.win ? "#22d3a0" : "#ff4757" }}>{m.win ? t.wLabel : t.lLabel} {m.score}</span>
@@ -344,7 +346,7 @@ function MatchBoxScores({ kidMatches, kidName }) {
 
           <div style={S.heroCard}>
             <div style={{ fontSize: 11, color: "#475569", textTransform: "uppercase", letterSpacing: "0.1em" }}>{fmtDate(selectedMatch.date)}</div>
-            <div style={{ fontSize: 17, fontWeight: 600, color: "#f1f5f9", marginTop: 2 }}>
+            <div style={{ fontSize: 17, fontWeight: 600, color: theme.textBright, marginTop: 2 }}>
               {selectedMatch.ha === "home" ? "vs" : "@"} {selectedMatch.opp}
             </div>
             <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 28, fontWeight: 700, color: selectedMatch.win ? "#22d3a0" : "#ff4757", marginTop: 4 }}>
@@ -365,11 +367,11 @@ function MatchBoxScores({ kidMatches, kidName }) {
                     gridTemplateColumns: "20px minmax(70px,1fr) 28px 32px 36px 36px 28px 28px 28px 28px 32px",
                     gap: 3,
                     padding: "5px 10px",
-                    borderBottom: "1px solid rgba(255,255,255,0.07)",
-                    background: "rgba(255,255,255,0.03)",
+                    borderBottom: `1px solid ${theme.cardBorder}`,
+                    background: theme.rowBg,
                   }}>
                     {["#", "Player", "MIN", "PTS", "FT", "2P", "REB", "AST", "STL", "PF", "+/-"].map((h, i) => (
-                      <span key={i} style={{ fontSize: 9, color: "#475569", textTransform: "uppercase", letterSpacing: "0.1em", textAlign: i > 1 ? "right" : "left" }}>{h}</span>
+                      <span key={i} style={{ fontSize: 9, color: theme.textSecondary, textTransform: "uppercase", letterSpacing: "0.1em", textAlign: i > 1 ? "right" : "left" }}>{h}</span>
                     ))}
                   </div>
                   {team.players.map((p, i) => (
@@ -392,7 +394,7 @@ function MatchBoxScores({ kidMatches, kidName }) {
 
 export default function StatsTab({ kids = [], k1Matches, k2Matches = [], k3Matches = [] }) {
   const { t } = useLang();
-  const { S } = useTheme();
+  const { S, theme } = useTheme();
   const [kidId, setKidId] = useState("k1");
   const [view, setView] = useState("season");
   const [statsConfirmed, setStatsConfirmed] = useState(null); // null=probing, true=available, false=not available
@@ -435,7 +437,7 @@ export default function StatsTab({ kids = [], k1Matches, k2Matches = [], k3Match
       ) : (
         <>
           {/* Sub-tab toggle — box/log appear only once stats confirmed via API */}
-          <div style={{ display: "flex", gap: 4, marginBottom: 16, background: "#111827", borderRadius: 10, padding: 4 }}>
+          <div style={{ display: "flex", gap: 4, marginBottom: 16, background: theme.cardBg, borderRadius: 10, padding: 4 }}>
             {subTabs.map(([id, label]) => (
               <button key={id} onClick={() => setView(id)} style={{
                 flex: 1, background: view === id ? "#FF6B2B" : "transparent",

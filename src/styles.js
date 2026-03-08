@@ -14,6 +14,10 @@ export const darkTheme = {
   inputBorder:  "rgba(255,255,255,0.1)",
   heroGradient: "linear-gradient(135deg, #111827 0%, #1a2035 100%)",
   roadGradient: "linear-gradient(135deg, #111827, #1a160a)",
+  textBright:   "#f1f5f9",
+  cardAlt:      "#0f172a",
+  rowBg:        "rgba(255,255,255,0.03)",
+  rowBorder:    "rgba(255,255,255,0.04)",
 };
 
 export const lightTheme = {
@@ -32,6 +36,10 @@ export const lightTheme = {
   inputBorder:  "rgba(0,0,0,0.12)",
   heroGradient: "linear-gradient(135deg, #ffffff 0%, #f0f4ff 100%)",
   roadGradient: "linear-gradient(135deg, #ffffff, #fffbf5)",
+  textBright:   "#0f172a",
+  cardAlt:      "#ffffff",
+  rowBg:        "rgba(0,0,0,0.025)",
+  rowBorder:    "rgba(0,0,0,0.06)",
 };
 
 export function makeStyles(theme) {
