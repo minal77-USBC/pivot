@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { S } from "../styles";
 import { CHECKLIST_STD, CHECKLIST_ROAD, CHECKLIST_NIGHT_BEFORE } from "../data";
 import { upcoming, tier, fmtDate, leaveByFromMins, travelMins, getOverrideMins, mapsUrl, latestMeal, daysOut } from "../utils";
 import { useLang } from "../LangContext";
+import { useTheme } from "../ThemeContext";
 
 export default function ChecklistTab({ kids = [], k1Matches, k2Matches, k3Matches = [] }) {
   const { t } = useLang();
+  const { S } = useTheme();
   const [kidId, setKidId] = useState("k1");
   const [selIdx, setSelIdx] = useState(0);
   const [checked, setChecked] = useState({});

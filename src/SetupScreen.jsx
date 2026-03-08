@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
-import { S } from "./styles";
 import { useLang } from "./LangContext";
+import { useTheme } from "./ThemeContext";
 
 const CATEGORIES = ["Premini", "Mini", "Infantil", "Cadet", "Junior", "Sènior"];
 export const COLORS = ["#FF6B2B", "#A855F7", "#22d3a0", "#3B82F6", "#F59E0B", "#EF4444"];
@@ -12,6 +12,7 @@ function positiveInt(val) {
 
 export function KidForm({ kid, index, onChange, onRemove, canRemove }) {
   const { t } = useLang();
+  const { S } = useTheme();
   const set = (field, val) => onChange({ ...kid, [field]: val });
 
   const [clubSearch, setClubSearch] = useState(kid.clubName || "");
@@ -216,6 +217,7 @@ export const inputStyle = {
 
 export default function SetupScreen({ user, onSave }) {
   const { t } = useLang();
+  const { S, theme } = useTheme();
   const [kids, setKids] = useState([{ ...EMPTY_KID }]);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
@@ -256,8 +258,8 @@ export default function SetupScreen({ user, onSave }) {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap');
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background: #070912; }
-        select option { background: #111827; }
+        body { background: ${theme.bg}; }
+        select option { background: ${theme.cardBg}; }
       `}</style>
 
       <div style={{ marginBottom: 24 }}>

@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { S } from "./styles";
 import { useLang } from "./LangContext";
+import { useTheme } from "./ThemeContext";
 import { KidForm, EMPTY_KID, COLORS } from "./SetupScreen";
 
 const LANG_PILLS = [
@@ -27,6 +27,7 @@ function toEditShape(kid) {
 
 export default function SettingsScreen({ user, kids: initialKids, onSave, onClose }) {
   const { lang, setLanguage, t } = useLang();
+  const { S, theme, themeName, setTheme } = useTheme();
   const [editKids, setEditKids] = useState(() => initialKids.map(toEditShape));
   const [expandedIndex, setExpandedIndex] = useState(-1);
   const [deleteConfirm, setDeleteConfirm] = useState(-1);
@@ -90,8 +91,8 @@ export default function SettingsScreen({ user, kids: initialKids, onSave, onClos
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap');
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background: #070912; }
-        select option { background: #111827; }
+        body { background: ${theme.bg}; }
+        select option { background: ${theme.cardBg}; }
       `}</style>
 
       {/* Header */}
@@ -104,12 +105,23 @@ export default function SettingsScreen({ user, kids: initialKids, onSave, onClos
         </button>
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <div style={{ display: "flex", gap: 3 }}>
+            {[{ id: "dark", label: "Dark" }, { id: "light", label: "Light" }].map(({ id, label }) => (
+              <button key={id} onClick={() => setTheme(id)} style={{
+                background: themeName === id ? "rgba(255,107,43,0.15)" : "transparent",
+                border: `1px solid ${themeName === id ? "rgba(255,107,43,0.4)" : "rgba(255,255,255,0.08)"}`,
+                borderRadius: 4, padding: "2px 6px", cursor: "pointer",
+                color: themeName === id ? "#FF6B2B" : theme.textMuted, fontSize: 9, fontWeight: 600,
+                letterSpacing: "0.05em",
+              }}>{label}</button>
+            ))}
+          </div>
+          <div style={{ display: "flex", gap: 3 }}>
             {LANG_PILLS.map(({ id, label }) => (
               <button key={id} onClick={() => setLanguage(id)} style={{
                 background: lang === id ? "rgba(255,107,43,0.15)" : "transparent",
                 border: `1px solid ${lang === id ? "rgba(255,107,43,0.4)" : "rgba(255,255,255,0.08)"}`,
                 borderRadius: 4, padding: "2px 6px", cursor: "pointer",
-                color: lang === id ? "#FF6B2B" : "#334155", fontSize: 9, fontWeight: 600,
+                color: lang === id ? "#FF6B2B" : theme.textMuted, fontSize: 9, fontWeight: 600,
                 letterSpacing: "0.05em",
               }}>{label}</button>
             ))}

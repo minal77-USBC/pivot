@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import { S } from "../styles";
 import { fmtDate } from "../utils";
 import { useLang } from "../LangContext";
+import { useTheme } from "../ThemeContext";
 
 const MSSTATS_BASE = "https://msstats.optimalwayconsulting.com/v1/fcbq";
 // Season: basketball year starts in September (month >= 8)
@@ -75,6 +75,7 @@ function BoxScoreRow({ p, isHighlighted, border }) {
 
 function SeasonStats({ teamId, kidName, onResult }) {
   const { t } = useLang();
+  const { S } = useTheme();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -153,6 +154,7 @@ function SeasonStats({ teamId, kidName, onResult }) {
 
 function PlayerGameLog({ kidMatches, kidName }) {
   const { t } = useLang();
+  const { S } = useTheme();
   const [log, setLog] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -279,6 +281,7 @@ function PlayerGameLog({ kidMatches, kidName }) {
 
 function MatchBoxScores({ kidMatches, kidName }) {
   const { t } = useLang();
+  const { S } = useTheme();
   const [selectedMatch, setSelectedMatch] = useState(null);
   const [boxScore, setBoxScore] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -389,6 +392,7 @@ function MatchBoxScores({ kidMatches, kidName }) {
 
 export default function StatsTab({ kids = [], k1Matches, k2Matches = [], k3Matches = [] }) {
   const { t } = useLang();
+  const { S } = useTheme();
   const [kidId, setKidId] = useState("k1");
   const [view, setView] = useState("season");
   const [statsConfirmed, setStatsConfirmed] = useState(null); // null=probing, true=available, false=not available

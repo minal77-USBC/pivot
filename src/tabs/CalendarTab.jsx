@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { S } from "../styles";
 import { upcoming, tier, fmtDate, daysLabel, daysOut, leaveByFromMins, travelMins, getOverrideMins } from "../utils";
 import { useLang } from "../LangContext";
+import { useTheme } from "../ThemeContext";
 
 export default function CalendarTab({ kids = [], k1Matches, k2Matches, k3Matches = [] }) {
   const { t } = useLang();
+  const { S } = useTheme();
   const [filter, setFilter] = useState("all");
 
   // Merge upcoming matches from all kids, tagged with kidId
@@ -142,6 +143,7 @@ export default function CalendarTab({ kids = [], k1Matches, k2Matches, k3Matches
 
 function MatchRow({ m, kids, past = false }) {
   const { t } = useLang();
+  const { S } = useTheme();
   const kid = kids.find(k => k.id === m.kidId);
   const overrideMins = m.km > 0 ? getOverrideMins(m.venue, m.city) : null;
   const leave = m.km > 0

@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { S } from "./styles";
 import { useSchedule } from "./useSchedule";
 import { useFamily } from "./useFamily";
 import { LangProvider, useLang } from "./LangContext";
+import { ThemeProvider, useTheme } from "./ThemeContext";
 import DashboardTab from "./tabs/DashboardTab";
 import CalendarTab from "./tabs/CalendarTab";
 import ChecklistTab from "./tabs/ChecklistTab";
@@ -14,6 +14,7 @@ import SettingsScreen from "./SettingsScreen";
 
 function AppInner() {
   const { lang, setLanguage, t } = useLang();
+  const { S, theme } = useTheme();
 
   const TABS = [
     { id: "dash",     label: t.tabDash,     icon: "⚡" },
@@ -75,11 +76,11 @@ function AppInner() {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap');
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background: #070912; }
+        body { background: ${theme.bg}; }
         a { color: inherit; }
         button { font-family: inherit; }
         ::-webkit-scrollbar { height: 4px; width: 4px; background: transparent; }
-        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+        ::-webkit-scrollbar-thumb { background: ${theme.cardBorder}; border-radius: 2px; }
       `}</style>
 
       {/* Header */}
@@ -206,7 +207,9 @@ const shareToken = resolveShareToken();
 export default function App() {
   return (
     <LangProvider>
-      <AppInner />
+      <ThemeProvider>
+        <AppInner />
+      </ThemeProvider>
     </LangProvider>
   );
 }

@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { S } from "../styles";
 import { tier, travelMins, leaveByFromMins, fmtDate, daysLabel, daysOut, mapsUrl, getOverrideMins, saveOverride } from "../utils";
 import { useLang } from "../LangContext";
+import { useTheme } from "../ThemeContext";
 
 export default function MatchCard({ m, kidColor = "#FF6B2B", compact = false, arrivalBuffer = 20 }) {
   const { t } = useLang();
+  const { S } = useTheme();
   const tierLevel = tier(m.km);
   const isRoad = tierLevel === "road";
   const n = daysOut(m.date);

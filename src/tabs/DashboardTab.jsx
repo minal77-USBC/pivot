@@ -1,9 +1,9 @@
 import { useState } from "react";
 import MatchCard from "../components/MatchCard";
 import ScoutCard from "../components/ScoutCard";
-import { S } from "../styles";
 import { upcoming, daysOut, fmtDate, leaveByFromMins, travelMins, getOverrideMins } from "../utils";
 import { useLang } from "../LangContext";
+import { useTheme } from "../ThemeContext";
 
 function getLeave(m, arrivalBuffer = 20) {
   if (m.km === 0) return null;
@@ -13,6 +13,7 @@ function getLeave(m, arrivalBuffer = 20) {
 
 export default function DashboardTab({ kids = [], k1Matches, k2Matches, k3Matches = [] }) {
   const { t } = useLang();
+  const { S } = useTheme();
   const [briefing, setBriefing] = useState(null);
   const [briefLoading, setBriefLoading] = useState(false);
   const [briefError, setBriefError] = useState(null);

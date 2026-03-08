@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { S } from "../styles";
 import { fmtDate } from "../utils";
 import { useLang } from "../LangContext";
+import { useTheme } from "../ThemeContext";
 
 export default function SeasonTab({ kids = [], k1Matches, k2Matches, k3Matches }) {
   const [kidId, setKidId] = useState("k1");
+  const { S } = useTheme();
 
   return (
     <div>
@@ -34,6 +35,7 @@ export default function SeasonTab({ kids = [], k1Matches, k2Matches, k3Matches }
 
 function KidSeason({ matches, kid }) {
   const { t } = useLang();
+  const { S } = useTheme();
   const played = matches.filter(m => m.played);
   const wins = played.filter(m => m.win).length;
   const losses = played.length - wins;

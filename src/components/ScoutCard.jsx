@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
-import { S } from "../styles";
 import { fmtDate } from "../utils";
 import { useLang } from "../LangContext";
+import { useTheme } from "../ThemeContext";
 
 export default function ScoutCard({ match, kid }) {
   const { t } = useLang();
+  const { S } = useTheme();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
