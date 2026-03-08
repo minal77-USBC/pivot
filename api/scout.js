@@ -1,5 +1,4 @@
-const MSSTATS_BASE = "https://msstats.optimalwayconsulting.com/v1/fcbq";
-const ESB = "https://esb.optimalwayconsulting.com/fcbq/1/jR4rgA5K6Chhh5vyfrxo9wTScdg2NT7K";
+import { ESB, MSSTATS_BASE } from "./constants.js";
 const SEASON = String(
   new Date().getMonth() >= 8 ? new Date().getFullYear() : new Date().getFullYear() - 1
 );

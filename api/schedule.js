@@ -1,4 +1,4 @@
-const ESB = "https://esb.optimalwayconsulting.com/fcbq/1/jR4rgA5K6Chhh5vyfrxo9wTScdg2NT7K";
+import { ESB } from "./constants.js";
 const BARNA = ["GRUP BARNA", "BARNA VERMELL", "GRUP ESP"];
 
 // Nau Parc Clot (home venue) coordinates
