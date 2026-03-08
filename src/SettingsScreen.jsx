@@ -108,7 +108,7 @@ export default function SettingsScreen({ user, kids: initialKids, onSave, onClos
             {[{ id: "dark", label: "Dark" }, { id: "light", label: "Light" }].map(({ id, label }) => (
               <button key={id} onClick={() => setTheme(id)} style={{
                 background: themeName === id ? "rgba(255,107,43,0.15)" : "transparent",
-                border: `1px solid ${themeName === id ? "rgba(255,107,43,0.4)" : "rgba(255,255,255,0.08)"}`,
+                border: `1px solid ${themeName === id ? "rgba(255,107,43,0.4)" : theme.cardBorder}`,
                 borderRadius: 4, padding: "2px 6px", cursor: "pointer",
                 color: themeName === id ? "#FF6B2B" : theme.textMuted, fontSize: 9, fontWeight: 600,
                 letterSpacing: "0.05em",
@@ -119,7 +119,7 @@ export default function SettingsScreen({ user, kids: initialKids, onSave, onClos
             {LANG_PILLS.map(({ id, label }) => (
               <button key={id} onClick={() => setLanguage(id)} style={{
                 background: lang === id ? "rgba(255,107,43,0.15)" : "transparent",
-                border: `1px solid ${lang === id ? "rgba(255,107,43,0.4)" : "rgba(255,255,255,0.08)"}`,
+                border: `1px solid ${lang === id ? "rgba(255,107,43,0.4)" : theme.cardBorder}`,
                 borderRadius: 4, padding: "2px 6px", cursor: "pointer",
                 color: lang === id ? "#FF6B2B" : theme.textMuted, fontSize: 9, fontWeight: 600,
                 letterSpacing: "0.05em",

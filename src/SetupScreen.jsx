@@ -12,8 +12,14 @@ function positiveInt(val) {
 
 export function KidForm({ kid, index, onChange, onRemove, canRemove }) {
   const { t } = useLang();
-  const { S } = useTheme();
+  const { S, theme } = useTheme();
   const set = (field, val) => onChange({ ...kid, [field]: val });
+
+  const inputStyle = {
+    width: "100%", background: theme.inputBg, border: `1px solid ${theme.inputBorder}`,
+    borderRadius: 6, padding: "7px 10px", color: theme.textPrimary, fontSize: 13,
+    fontFamily: "inherit", outline: "none", boxSizing: "border-box",
+  };
 
   const [clubSearch, setClubSearch] = useState(kid.clubName || "");
   const [clubResults, setClubResults] = useState([]);
@@ -71,11 +77,11 @@ export function KidForm({ kid, index, onChange, onRemove, canRemove }) {
   };
 
   return (
-    <div style={{ background: "#111827", border: `1px solid ${kid.color}44`, borderRadius: 12, padding: 16, marginBottom: 12 }}>
+    <div style={{ background: theme.cardBg, border: `1px solid ${kid.color}44`, borderRadius: 12, padding: 16, marginBottom: 12 }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
         <div style={{ fontSize: 13, fontWeight: 600, color: kid.color }}>{t.kidN(index + 1)}</div>
         {canRemove && (
-          <button onClick={onRemove} style={{ background: "none", border: "none", color: "#475569", cursor: "pointer", fontSize: 12 }}>{t.remove}</button>
+          <button onClick={onRemove} style={{ background: "none", border: "none", color: theme.textDim, cursor: "pointer", fontSize: 12 }}>{t.remove}</button>
         )}
       </div>
 
@@ -115,9 +121,9 @@ export function KidForm({ kid, index, onChange, onRemove, canRemove }) {
           <div style={{ display: "flex", gap: 6, marginTop: 2 }}>
             {["M", "F"].map(g => (
               <button key={g} onClick={() => set("gender", g)} style={{
-                flex: 1, background: kid.gender === g ? kid.color : "#0f172a",
-                border: `1px solid ${kid.gender === g ? kid.color : "rgba(255,255,255,0.1)"}`,
-                borderRadius: 6, padding: "6px 0", color: kid.gender === g ? "white" : "#64748b",
+                flex: 1, background: kid.gender === g ? kid.color : theme.inputBg,
+                border: `1px solid ${kid.gender === g ? kid.color : theme.inputBorder}`,
+                borderRadius: 6, padding: "6px 0", color: kid.gender === g ? "white" : theme.textDim,
                 fontSize: 12, fontWeight: 600, cursor: "pointer",
               }}>{g === "M" ? t.boy : t.girl}</button>
             ))}
@@ -139,16 +145,16 @@ export function KidForm({ kid, index, onChange, onRemove, canRemove }) {
           {showClubDrop && (
             <div style={{
               position: "absolute", top: "100%", left: 0, right: 0, zIndex: 10,
-              background: "#1e293b", border: "1px solid rgba(255,255,255,0.1)",
+              background: theme.cardBg, border: `1px solid ${theme.cardBorder}`,
               borderRadius: 8, marginTop: 2, overflow: "hidden",
             }}>
               {clubResults.map(club => (
                 <div key={club.id} onMouseDown={() => selectClub(club)} style={{
                   padding: "9px 12px", cursor: "pointer", fontSize: 13,
-                  borderBottom: "1px solid rgba(255,255,255,0.05)",
+                  borderBottom: `1px solid ${theme.rowBorder}`,
                 }}>
-                  <span style={{ color: "#e2e8f0", fontWeight: 500 }}>{club.name}</span>
-                  <span style={{ color: "#475569", fontSize: 11, marginLeft: 6 }}>{club.town}</span>
+                  <span style={{ color: theme.textBright, fontWeight: 500 }}>{club.name}</span>
+                  <span style={{ color: theme.textDim, fontSize: 11, marginLeft: 6 }}>{club.town}</span>
                 </div>
               ))}
             </div>
@@ -161,7 +167,7 @@ export function KidForm({ kid, index, onChange, onRemove, canRemove }) {
         <div style={{ marginBottom: 10 }}>
           <div style={S.label}>{t.selectTeam}</div>
           {teamsLoading ? (
-            <div style={{ fontSize: 12, color: "#475569", padding: "8px 0" }}>{t.loadingTeams}</div>
+            <div style={{ fontSize: 12, color: theme.textDim, padding: "8px 0" }}>{t.loadingTeams}</div>
           ) : (
             <select
               defaultValue=""
@@ -179,7 +185,7 @@ export function KidForm({ kid, index, onChange, onRemove, canRemove }) {
               ))}
             </select>
           )}
-          {grupLoading && <div style={{ fontSize: 11, color: "#22d3a0", marginTop: 4 }}>{t.fetchingIds}</div>}
+          {grupLoading && <div style={{ fontSize: 11, color: "#22d3a0", marginTop: 4 }}>{t.fetchingIds}</div>}  {/* accent colour — intentional */}
         </div>
       )}
 
@@ -202,18 +208,12 @@ export function KidForm({ kid, index, onChange, onRemove, canRemove }) {
             placeholder="e.g. 21202" style={inputStyle} inputMode="numeric" />
         </div>
       </div>
-      <div style={{ fontSize: 10, color: "#334155", marginTop: 6 }}>
+      <div style={{ fontSize: 10, color: theme.textMuted, marginTop: 6 }}>
         {t.idsHint}
       </div>
     </div>
   );
 }
-
-export const inputStyle = {
-  width: "100%", background: "#0f172a", border: "1px solid rgba(255,255,255,0.1)",
-  borderRadius: 6, padding: "7px 10px", color: "#e2e8f0", fontSize: 13,
-  fontFamily: "inherit", outline: "none", boxSizing: "border-box",
-};
 
 export default function SetupScreen({ user, onSave }) {
   const { t } = useLang();
@@ -252,7 +252,7 @@ export default function SetupScreen({ user, onSave }) {
   return (
     <div style={{
       fontFamily: "'DM Sans', system-ui, sans-serif",
-      backgroundColor: "#070912", color: "#e2e8f0",
+      backgroundColor: theme.bg, color: theme.textPrimary,
       minHeight: "100vh", maxWidth: 520, margin: "0 auto", padding: 20,
     }}>
       <style>{`
@@ -264,8 +264,8 @@ export default function SetupScreen({ user, onSave }) {
 
       <div style={{ marginBottom: 24 }}>
         <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 28, fontWeight: 800, color: "#FF6B2B" }}>PIVOT</div>
-        <div style={{ fontSize: 15, fontWeight: 600, color: "#f1f5f9", marginTop: 8 }}>{t.setupTitle}</div>
-        <div style={{ fontSize: 13, color: "#475569", marginTop: 4 }}>
+        <div style={{ fontSize: 15, fontWeight: 600, color: theme.textBright, marginTop: 8 }}>{t.setupTitle}</div>
+        <div style={{ fontSize: 13, color: theme.textDim, marginTop: 4 }}>
           {t.setupSubtitle(user.name?.split(" ")[0])}
         </div>
       </div>
@@ -277,8 +277,8 @@ export default function SetupScreen({ user, onSave }) {
 
       {kids.length < 3 && (
         <button onClick={addKid} style={{
-          width: "100%", background: "transparent", border: "1px dashed rgba(255,255,255,0.15)",
-          borderRadius: 10, padding: "10px 0", color: "#475569", fontSize: 13, cursor: "pointer", marginBottom: 16,
+          width: "100%", background: "transparent", border: `1px dashed ${theme.cardBorder}`,
+          borderRadius: 10, padding: "10px 0", color: theme.textDim, fontSize: 13, cursor: "pointer", marginBottom: 16,
         }}>
           {t.addKid}
         </button>
@@ -291,7 +291,7 @@ export default function SetupScreen({ user, onSave }) {
       )}
 
       {!isValid && (
-        <div style={{ fontSize: 11, color: "#475569", marginBottom: 10 }}>
+        <div style={{ fontSize: 11, color: theme.textDim, marginBottom: 10 }}>
           {t.setupRequired}
         </div>
       )}
