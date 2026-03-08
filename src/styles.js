@@ -141,6 +141,7 @@ export function makeStyles(theme) {
         canvis: { bg: "rgba(250,204,21,0.12)",  color: "#facc15", border: "rgba(250,204,21,0.3)" },
         k1:     { bg: "rgba(255,107,43,0.12)",  color: "#FF6B2B", border: "rgba(255,107,43,0.25)" },
         k2:     { bg: "rgba(168,85,247,0.12)",  color: "#a855f7", border: "rgba(168,85,247,0.25)" },
+        k3:     { bg: "rgba(20,184,166,0.12)",  color: "#14b8a6", border: "rgba(20,184,166,0.25)" },
       };
       const c = map[type] || map.home;
       return {

@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { useLang } from "./LangContext";
+import { useTheme } from "./ThemeContext";
 
 const CLIENT_ID = "110062790266-epf1sbr8in0vmcj6403p05e3hagpq215.apps.googleusercontent.com";
 
 export default function LoginScreen({ onAuth }) {
   const { t } = useLang();
+  const { theme } = useTheme();
   const btnRef = useRef(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -59,8 +61,8 @@ export default function LoginScreen({ onAuth }) {
   return (
     <div style={{
       fontFamily: "'DM Sans', system-ui, sans-serif",
-      backgroundColor: "#070912",
-      color: "#e2e8f0",
+      backgroundColor: theme.bg,
+      color: theme.textPrimary,
       minHeight: "100vh",
       display: "flex",
       flexDirection: "column",
@@ -71,7 +73,6 @@ export default function LoginScreen({ onAuth }) {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap');
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background: #070912; }
       `}</style>
 
       <div style={{ textAlign: "center", marginBottom: 40 }}>
@@ -81,14 +82,14 @@ export default function LoginScreen({ onAuth }) {
           color: "#FF6B2B", lineHeight: 1,
         }}>PIVOT</div>
         <div style={{
-          fontSize: 12, color: "#475569",
+          fontSize: 12, color: theme.textSecondary,
           letterSpacing: "0.14em", textTransform: "uppercase", marginTop: 6,
         }}>Basketball · BCN</div>
       </div>
 
       <div style={{
-        background: "#111827",
-        border: "1px solid rgba(255,255,255,0.07)",
+        background: theme.cardBg,
+        border: `1px solid ${theme.cardBorder}`,
         borderRadius: 16,
         padding: "32px 28px",
         textAlign: "center",
@@ -96,15 +97,15 @@ export default function LoginScreen({ onAuth }) {
         maxWidth: 320,
       }}>
         <div style={{ fontSize: 32, marginBottom: 12 }}>🏀</div>
-        <div style={{ fontSize: 15, fontWeight: 600, color: "#f1f5f9", marginBottom: 6 }}>
+        <div style={{ fontSize: 15, fontWeight: 600, color: theme.textBright, marginBottom: 6 }}>
           {t.familyOnly}
         </div>
-        <div style={{ fontSize: 13, color: "#475569", marginBottom: 24, lineHeight: 1.5 }}>
+        <div style={{ fontSize: 13, color: theme.textSecondary, marginBottom: 24, lineHeight: 1.5 }}>
           {t.signInPrompt}
         </div>
 
         {loading ? (
-          <div style={{ fontSize: 13, color: "#475569", padding: "12px 0" }}>{t.signingIn}</div>
+          <div style={{ fontSize: 13, color: theme.textSecondary, padding: "12px 0" }}>{t.signingIn}</div>
         ) : (
           <div ref={btnRef} style={{ display: "flex", justifyContent: "center" }} />
         )}
@@ -120,7 +121,7 @@ export default function LoginScreen({ onAuth }) {
         )}
       </div>
 
-      <div style={{ marginTop: 24, fontSize: 11, color: "#1e293b" }}>
+      <div style={{ marginTop: 24, fontSize: 11, color: theme.textMuted }}>
         Rohan & Sara · 2025–26
       </div>
     </div>
