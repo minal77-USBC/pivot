@@ -33,11 +33,11 @@ function StatRow({ p, isHighlighted, border }) {
       </span>
       <span style={{ fontSize: 11, color: theme.textSubtle, textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{p.matchesPlayed}</span>
       <span style={{ fontSize: 11, color: theme.textDim, textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{p.timePlayed ?? "—"}</span>
-      <span style={{ fontSize: 12, color: theme.textBright, textAlign: "right", fontWeight: 600, fontFamily: "'DM Mono', monospace" }}>{p.totalScoreAvgByMatch.toFixed(1)}</span>
+      <span style={{ fontSize: 12, color: theme.textBright, textAlign: "right", fontWeight: 600, fontFamily: "'DM Mono', monospace" }}>{(p.totalScoreAvgByMatch ?? 0).toFixed(1)}</span>
       <span style={{ fontSize: 11, color: "#64748b", textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{p.totalScore}</span>
       <span style={{ fontSize: 11, color: "#64748b", textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{p.sumShotsOfOneSuccessful}</span>
       <span style={{ fontSize: 11, color: "#64748b", textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{p.sumShotsOfThreeSuccessful}</span>
-      <span style={{ fontSize: 11, color: theme.textSubtle, textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{p.sumValorationAvgByMatch.toFixed(1)}</span>
+      <span style={{ fontSize: 11, color: theme.textSubtle, textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{(p.sumValorationAvgByMatch ?? 0).toFixed(1)}</span>
     </div>
   );
 }
@@ -87,7 +87,10 @@ function SeasonStats({ teamId, kidName, onResult }) {
     const url = `${MSSTATS_BASE}/team-stats/team/${teamId}/season/${SEASON}`;
     fetch(`/api/fcbq?url=${encodeURIComponent(url)}`)
       .then(r => { if (!r.ok) throw new Error(`${r.status}`); return r.json(); })
-      .then(d => { setData(d); setLoading(false); onResult?.(true); })
+      .then(d => {
+        if (!d?.team) { setError("no data"); setLoading(false); onResult?.(false); return; }
+        setData(d); setLoading(false); onResult?.(true);
+      })
       .catch(e => { setError(e.message); setLoading(false); onResult?.(false); });
   }, [teamId]);
 
