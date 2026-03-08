@@ -5,7 +5,7 @@ import { useTheme } from "../ThemeContext";
 
 export default function CalendarTab({ kids = [], k1Matches, k2Matches, k3Matches = [] }) {
   const { t } = useLang();
-  const { S } = useTheme();
+  const { S, theme } = useTheme();
   const [filter, setFilter] = useState("all");
 
   // Merge upcoming matches from all kids, tagged with kidId
