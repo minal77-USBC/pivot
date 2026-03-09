@@ -1,6 +1,6 @@
 # PIVOT — Technical Overview
 
-**Last updated:** 2026-03-07
+**Last updated:** 2026-03-09
 **Stack:** React 18 + Vite · Vercel (serverless) · Supabase · Google OAuth
 
 ---
@@ -53,20 +53,35 @@ Browser (React SPA)
 | `head-to-head/full-prematch/{teamA}/{teamB}/{year}` | api/scout.js (≤14 days only) | Edge 1h |
 
 - **SEASON derivation:** `new Date().getMonth() >= 8 ? currentYear : currentYear - 1` — auto-rolls each September
-- **Availability:** Stats only available for Cadet Preferent category (`statsAvailable: category === "Cadet"`)
-- **`statsUuid`:** Populated from ESB `m.universallyid` 24–48h after match is entered. Null for future or recent unprocessed matches.
+- **Availability:** `statsAvailable = !!fcbq_team_id` — any kid with a team ID gets stats. Behaviour is tiered by category:
+  - **Preferent (Cadet/Infantil Preferent):** `team-stats` season endpoint returns full team roster → `SeasonStats` + Box Scores + Game Log all available
+  - **Non-Preferent (Promoció, 1r Any, etc.):** `team-stats` returns `{}` → `SeasonStatsFromLog` computes player averages from box scores; Box Scores + Game Log still fully available
+  - Season aggregate stats (full team table) are only available for Preferent. Non-Preferent shows single-player computed totals (GP, W/L, PPG, VAL, FT%, PF).
+- **`statsUuid`:** Populated from ESB `m.universallyid` 24–48h after match is entered. Null for future or recent unprocessed matches. Present for both Preferent and non-Preferent categories.
 
 ### 3. Supabase — Family / Kids Config
 - **Tables:** `families` (user → family mapping, share_token), `kids` (one row per child)
 - **Key kids columns:** `name`, `label`, `category`, `gender`, `color`, `fcbq_team_id`, `grup_id_phase1`, `grup_id_phase2`
-- **`fcbq_team_id`:** Required for stats features. Flows into `kid.statsTeamId` via `familyUtils.buildKid()`. `statsAvailable` gated on `category === "Cadet"`.
+- **`fcbq_team_id`:** Required for stats features. Flows into `kid.statsTeamId` via `familyUtils.buildKid()`. `statsAvailable = !!fcbq_team_id` — not category-gated.
 - **Kid shape built by:** `src/familyUtils.js:buildKid()` — converts DB row to app kid object
 - **Share flow:** `share_token` → `/s/TOKEN` redirect → `/?share_token=TOKEN` → `resolveShareToken()` reads URL param → `useFamily(shareToken)` → read-only view
 - **PWA share persistence:** `share-manifest.js` sets `start_url: /?share_token=TOKEN` so iOS always launches the PWA with the token in the URL — no storage dependency. `resolveShareToken()` reads `window.location.search` first, seeds `localStorage` as fallback for in-session SPA navigations, then falls back to `localStorage`. **Prior attempts** (sessionStorage, localStorage-only) failed because iOS standalone mode can clear sessionStorage on path navigation and may skip the redirect on fast resume. URL param in `start_url` is the only approach iOS must honour on every launch.
 - **Reinstall required** when share manifest `start_url` changes — iOS caches the old manifest. User must delete home screen icon and re-add.
-- **Planned:** `match_box_scores` table — cache box score JSON by `stats_uuid` to avoid re-fetching on every Game Log load. See spike: `box-score-caching.md`.
+- **`match_box_scores` table:** Caches box score JSON by `stats_uuid`. Read-before-fetch in `api/player-log.js` — avoids re-hitting msstats for historical matches. See spike: `box-score-caching.md`.
 
-### 4. FCBQ Team Page (HTML scrape)
+### 4. basquet.top — Non-Preferent Game Index
+- **Base URL:** `https://www.basquet.top/json/` and `https://basquettop-json.pages.dev/json/`
+- **What it is:** Community-maintained Vue SPA on Cloudflare Pages. Acts as a navigation layer mapping non-Preferent FCBQ competition categories → groups → game IDs. The actual stats come from the same msstats API.
+- **Coverage:** 47 enabled categories — Cadet Promoció, Infantil Promoció, Pre-infantil, Mini, Pre-mini (both genders, all 4 circumscriptions). Júnior/Senior disabled.
+- **Endpoints:**
+  - `basquet.top/json/competitions.json` — full taxonomy (gender → circumscription → category → `fileId`)
+  - `basquet.top/json/{fileId}.json` — competition phases and groups for a category
+  - `basquettop-json.pages.dev/json/{fileId}/{groupFileId}.json` — game list with msstats game IDs
+- **Auth:** None. CORS open. No rate limiting observed.
+- **Status:** Spiked 2026-03-09. **Not yet integrated** — non-Preferent game IDs are sourced directly from ESB `universallyid` (which is populated for Promoció categories). basquet.top would be the fallback for teams where ESB doesn't return `universallyid`.
+- **Risk:** Community-maintained, no SLA. msstats itself (Optimal Way Consulting, contracted by FCBQ) is stable.
+
+### 5. FCBQ Team Page (HTML scrape)
 - Used by `api/scout.js` and `api/team-grups.js` to derive grup IDs for a given team
 - `GET https://www.basquetcatala.cat/equip/{teamId}` — parses `<h4 id="news-sidebar">` competition labels + `/competicions/resultats/{grupId}` links
 - Used in scout card to fetch opponent's recent form via ESB (not msstats)
@@ -114,7 +129,7 @@ Browser (React SPA)
 | Calendar | `src/tabs/CalendarTab.jsx` | kids, k1Matches, k2Matches |
 | Match Day (Checklist) | `src/tabs/ChecklistTab.jsx` | kids, k1Matches, k2Matches |
 | Season | `src/tabs/SeasonTab.jsx` | kids, k1Matches, k2Matches, k3Matches |
-| Stats | `src/tabs/StatsTab.jsx` | kids, k1Matches, k2Matches (Cadet only) |
+| Stats | `src/tabs/StatsTab.jsx` | kids, k1Matches, k2Matches, k3Matches |
 
 **Shared components:**
 - `src/components/MatchCard.jsx` — full match card (used in Dashboard/Checklist)
@@ -126,11 +141,14 @@ Browser (React SPA)
 - `src/SettingsScreen.jsx` — edit/delete/add kids post-setup. Accessed via ⚙ gear icon in App header. Renders as full-page replacement (not modal). Includes language selector. Saves via POST `/api/family` (same full-replace endpoint as setup). `onSave` increments `setupKey` in App to trigger `useFamily` re-fetch.
 
 ### Stats Tab — Sub-tabs
-| Sub-tab | Component | Data source |
-|---------|-----------|-------------|
-| Season Totals | `SeasonStats` | msstats `team-stats` via `/api/fcbq` proxy |
-| Box Scores | `MatchBoxScores` | msstats `getJsonWithMatchStats` via `/api/fcbq` proxy |
-| Game Log | `PlayerGameLog` | `/api/player-log` — extracts kid's row from each box score |
+| Sub-tab | Component | Data source | Condition |
+|---------|-----------|-------------|-----------|
+| Season Totals | `SeasonStats` | msstats `team-stats` via `/api/fcbq` proxy | `statsConfirmed === true` (Preferent) |
+| Season Totals | `SeasonStatsFromLog` | `/api/player-log` aggregated — GP, W/L, PPG, VAL, FT%, PF | `statsConfirmed === false` (non-Preferent) |
+| Box Scores | `MatchBoxScores` | msstats `getJsonWithMatchStats` via `/api/fcbq` proxy | `statsConfirmed !== null` |
+| Game Log | `PlayerGameLog` | `/api/player-log` — extracts kid's row from each box score | `statsConfirmed !== null` |
+
+**`statsConfirmed` flow:** `null` (probing) → `SeasonStats` fires and calls `onResult()`. `true` = full team table from msstats. `false` = msstats returned `{}` → `SeasonStatsFromLog` renders computed player averages. Box Scores and Game Log unlock once either resolves.
 
 ### Dashboard — Scout Card
 - Renders below each kid's MatchCard when `kid.statsAvailable && match.oppTeamId`
@@ -153,9 +171,9 @@ Browser (React SPA)
 - **Inputs:** `kidName`, `matches` (JSON array of `{statsUuid, date, opp, ha, win, score}`)
 - **Calls:** msstats `getJsonWithMatchStats` in parallel for all matches with a `statsUuid`
 - **Player match:** `p.name.toUpperCase().includes(kidName.toUpperCase())`
-- **Returns:** `{ log: [{ date, opp, ha, win, matchScore, min, pts, twoM, twoA, ftM, ftA, reb, ast, stl, pf, plusMinus, starting }] }`
-- **Cache:** `s-maxage=300` (short — new matches enter msstats 24–48h after game)
-- **Known issue:** Re-fetches all box scores on every load. Supabase caching planned — see spike `box-score-caching.md`.
+- **Returns:** `{ log: [{ date, opp, ha, win, matchScore, min, pts, val, twoM, twoA, ftM, ftA, reb, ast, stl, pf, plusMinus, starting }] }` (`val` = PIR/valoration, added 2026-03-09)
+- **Cache:** `s-maxage=300` (short — new matches enter msstats 24–48h after game); Supabase `match_box_scores` read-before-fetch for historical games
+- **Also used by:** `SeasonStatsFromLog` — same endpoint, aggregated into season averages for non-Preferent kids
 
 ### `api/schedule.js`
 - Normalised match fields include `oppTeamId` (added 2026-03-07) for scout card
@@ -195,6 +213,8 @@ Browser (React SPA)
 | Grup IDs | Teams in mid-season tournaments had wrong Phase 2 ID assigned | Fixed 2026-03-07 via label-based filtering in `api/team-grups.js`. Existing DB records set up before fix may need manual correction. |
 | Checklist | `canvis` flag only shows ⚠ label | No push notification or alert mechanism |
 | Stats | `statsUuid` may be null for recent matches | ESB populates `universallyid` 24–48h post-game. Empty state handled. |
+| Stats | Season Totals for non-Preferent shows only 1 player row | `SeasonStatsFromLog` aggregates only the matched kid's rows — no full team table. Getting the full team table requires aggregating all players across all box scores server-side (effort ~45 min). |
+| Stats | Data quality for non-Preferent (U13/Promoció) | `rebounds`, `assists`, `steals`, `blocks` all 0 — not tracked by federation at this tier. `shotsOfTwoFailed` also 0 (same as Cadet) so FG% would show 100% — not displayed. FT% and PIR are reliable. |
 
 ---
 
@@ -216,3 +236,4 @@ Browser (React SPA)
 | `msstats-implementation-fixes.md` | Implemented | 6 hardcoded issues fixed in StatsTab + App |
 | `box-score-caching.md` | Implemented | Cache box scores in Supabase — read-before-fetch in `api/player-log.js`; fire-and-forget fixed to await |
 | `dark-light-mode.md` | Spike only | ThemeContext approach recommended (~L effort); light palette defined; no implementation yet |
+| `basquet-top-non-preferent-stats.md` | Implemented | basquet.top as non-Preferent game index; ESB `universallyid` confirmed for Promoció categories; `SeasonStatsFromLog` built; full team table is follow-on work |
