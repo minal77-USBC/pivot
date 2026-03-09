@@ -407,9 +407,16 @@ export default function StatsTab({ kids = [], k1Matches, k2Matches = [], k3Match
 
   const switchKid = (id) => { setKidId(id); setStatsConfirmed(null); setView("season"); };
 
-  const notAvailable = !selectedKid?.statsAvailable || statsConfirmed === false;
+  // When season stats aren't available for this category, drop to box scores automatically
+  useEffect(() => {
+    if (statsConfirmed === false && view === "season") setView("box");
+  }, [statsConfirmed]);
+
+  const notAvailable = !selectedKid?.statsAvailable;
   const subTabs = statsConfirmed === true
     ? [["season", t.seasonTotals], ["box", t.boxScores], ["log", t.gameLog]]
+    : statsConfirmed === false
+    ? [["box", t.boxScores], ["log", t.gameLog]]
     : [["season", t.seasonTotals]];
 
   return (
