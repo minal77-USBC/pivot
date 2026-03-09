@@ -123,6 +123,7 @@ export default async function handler(req, res) {
       matchScore: m.score,
       min: player.timePlayed ?? "—",
       pts: d.score ?? 0,
+      val: d.valoration ?? 0,
       twoM: d.shotsOfTwoSuccessful ?? 0,
       twoA: d.shotsOfTwoAttempted ?? 0,
       ftM: d.shotsOfOneSuccessful ?? 0,

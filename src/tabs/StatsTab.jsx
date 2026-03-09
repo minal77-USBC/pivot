@@ -395,6 +395,96 @@ function MatchBoxScores({ kidMatches, kidName }) {
   );
 }
 
+function SeasonStatsFromLog({ kidMatches, kidName }) {
+  const { t } = useLang();
+  const { S, theme } = useTheme();
+  const [log, setLog] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const played = kidMatches
+      .filter(m => m.played)
+      .map(({ statsUuid, date, opp, ha, win, score }) => ({ statsUuid, date, opp, ha, win, score }));
+    const params = new URLSearchParams({ kidName, matches: JSON.stringify(played) });
+    fetch(`/api/player-log?${params}`)
+      .then(r => { if (!r.ok) throw new Error(`${r.status}`); return r.json(); })
+      .then(d => { setLog(d.log); setLoading(false); })
+      .catch(e => { setError(e.message); setLoading(false); });
+  }, [kidName]);
+
+  if (loading) return (
+    <div style={{ textAlign: "center", padding: 32, color: "#64748b" }}>
+      <div style={{ fontSize: 24, marginBottom: 8 }}>⏳</div>
+      {t.loadingStats}
+    </div>
+  );
+
+  if (error || !log?.length) return (
+    <div style={{ ...S.card(), color: "#64748b", fontSize: 12, textAlign: "center", padding: 28, lineHeight: 1.6 }}>
+      {t.gameLogEmpty}
+    </div>
+  );
+
+  const gp = log.length;
+  const wins = log.filter(r => r.win).length;
+  const losses = gp - wins;
+  const sum = (key) => log.reduce((s, r) => s + (r[key] ?? 0), 0);
+  const avg = (key) => (sum(key) / gp).toFixed(1);
+  const totalFtA = sum("ftA");
+  const ftPct = totalFtA > 0 ? `${Math.round(sum("ftM") / totalFtA * 100)}%` : "—";
+
+  return (
+    <>
+      <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
+        <div style={S.statBox}>
+          <div style={{ ...S.statNum, color: "#22d3a0", fontSize: 24 }}>{wins}{t.wLabel}</div>
+          <div style={S.statLbl}>{gp} {t.playedLabel}</div>
+        </div>
+        <div style={S.statBox}>
+          <div style={{ ...S.statNum, color: "#ff4757", fontSize: 24 }}>{losses}{t.lLabel}</div>
+          <div style={S.statLbl}>{t.lossesLabel}</div>
+        </div>
+        <div style={S.statBox}>
+          <div style={{ ...S.statNum, color: "#FF6B2B", fontSize: 24 }}>{avg("pts")}</div>
+          <div style={S.statLbl}>PPG</div>
+        </div>
+      </div>
+
+      <div style={{ ...S.card({ padding: "0" }) }}>
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: "28px 40px 40px 44px 40px",
+          gap: 4, padding: "6px 12px",
+          borderBottom: `1px solid ${theme.cardBorder}`,
+          background: theme.rowBg,
+        }}>
+          {["GP", "PPG", "VAL", "FT%", "PF"].map((h, i) => (
+            <span key={i} style={{ fontSize: 9, color: theme.textSecondary, textTransform: "uppercase", letterSpacing: "0.1em", textAlign: "right" }}>{h}</span>
+          ))}
+        </div>
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: "28px 40px 40px 44px 40px",
+          gap: 4, padding: "10px 12px",
+          background: "rgba(255,107,43,0.07)",
+          borderLeft: "2px solid #FF6B2B",
+        }}>
+          <span style={{ fontSize: 13, color: "#FF6B2B", fontWeight: 700, textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{gp}</span>
+          <span style={{ fontSize: 13, color: theme.textBright, fontWeight: 700, textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{avg("pts")}</span>
+          <span style={{ fontSize: 13, color: theme.textBright, fontWeight: 600, textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{avg("val")}</span>
+          <span style={{ fontSize: 13, color: theme.textBright, fontWeight: 600, textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{ftPct}</span>
+          <span style={{ fontSize: 13, color: "#64748b", textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{avg("pf")}</span>
+        </div>
+      </div>
+
+      <div style={{ fontSize: 10, color: "#334155", textAlign: "center", marginTop: 8 }}>
+        VAL = valoration (efficiency) · Computed from {gp} box scores · Source: FCBQ / msstats
+      </div>
+    </>
+  );
+}
+
 export default function StatsTab({ kids = [], k1Matches, k2Matches = [], k3Matches = [] }) {
   const { t } = useLang();
   const { S, theme } = useTheme();
@@ -407,16 +497,9 @@ export default function StatsTab({ kids = [], k1Matches, k2Matches = [], k3Match
 
   const switchKid = (id) => { setKidId(id); setStatsConfirmed(null); setView("season"); };
 
-  // When season stats aren't available for this category, drop to box scores automatically
-  useEffect(() => {
-    if (statsConfirmed === false && view === "season") setView("box");
-  }, [statsConfirmed]);
-
   const notAvailable = !selectedKid?.statsAvailable;
-  const subTabs = statsConfirmed === true
+  const subTabs = statsConfirmed !== null
     ? [["season", t.seasonTotals], ["box", t.boxScores], ["log", t.gameLog]]
-    : statsConfirmed === false
-    ? [["box", t.boxScores], ["log", t.gameLog]]
     : [["season", t.seasonTotals]];
 
   return (
@@ -458,7 +541,8 @@ export default function StatsTab({ kids = [], k1Matches, k2Matches = [], k3Match
             ))}
           </div>
 
-          {view === "season" && <SeasonStats teamId={selectedKid.statsTeamId} kidName={selectedKid.name} onResult={setStatsConfirmed} />}
+          {view === "season" && statsConfirmed !== false && <SeasonStats teamId={selectedKid.statsTeamId} kidName={selectedKid.name} onResult={setStatsConfirmed} />}
+          {view === "season" && statsConfirmed === false && <SeasonStatsFromLog kidMatches={selectedMatches} kidName={selectedKid.name} />}
           {view === "box"    && <MatchBoxScores kidMatches={selectedMatches} kidName={selectedKid.name} />}
           {view === "log"    && <PlayerGameLog kidMatches={selectedMatches} kidName={selectedKid.name} />}
         </>
