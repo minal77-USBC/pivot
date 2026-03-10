@@ -41,9 +41,12 @@ function extractPlayerRow(data, nameUpper) {
 
 function parseTimeSecs(timeStr) {
   if (!timeStr || timeStr === "—") return 0;
-  const parts = String(timeStr).split(":");
+  const s = String(timeStr).trim();
+  const parts = s.split(":");
   if (parts.length === 2) return parseInt(parts[0]) * 60 + (parseInt(parts[1]) || 0);
-  return parseInt(timeStr) || 0;
+  // Plain number — msstats returns timePlayed as integer minutes
+  const mins = parseFloat(s);
+  return isNaN(mins) ? 0 : Math.round(mins * 60);
 }
 
 function formatTimeSecs(totalSecs) {
