@@ -38,7 +38,7 @@ function StatRow({ p, isHighlighted, border }) {
       <span style={{ fontSize: 11, color: "#64748b",        textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{pct(p.sumShotsOfOneSuccessful, p.sumShotsOfOneAttempted)}</span>
       <span style={{ fontSize: 11, color: "#64748b",        textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{p.sumShotsOfThreeSuccessful}</span>
       <span style={{ fontSize: 11, color: theme.textSubtle, textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{(p.sumValorationAvgByMatch ?? 0).toFixed(1)}</span>
-      <span style={{ fontSize: 11, color: "#64748b",        textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{p.matchesPlayed && p.sumFaults != null ? (p.sumFaults / p.matchesPlayed).toFixed(1) : "—"}</span>
+      <span style={{ fontSize: 11, color: "#64748b",        textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{p.sumFoulsAvgByMatch != null ? p.sumFoulsAvgByMatch.toFixed(1) : "—"}</span>
     </div>
   );
 }

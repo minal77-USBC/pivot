@@ -50,9 +50,7 @@ function parseTimeSecs(timeStr) {
 }
 
 function formatTimeSecs(totalSecs) {
-  const m = Math.floor(totalSecs / 60);
-  const s = totalSecs % 60;
-  return `${m}:${String(s).padStart(2, "0")}`;
+  return String(Math.round(totalSecs / 60));
 }
 
 function findTeam(data, teamIdStr) {
