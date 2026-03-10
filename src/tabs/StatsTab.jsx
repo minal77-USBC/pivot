@@ -29,7 +29,7 @@ function StatRow({ p, isHighlighted, border }) {
     }}>
       <span style={{ fontSize: 10, color: theme.textSecondary, fontFamily: "'DM Mono', monospace" }}>{p.dorsal || "—"}</span>
       <span style={{ fontSize: 12, color: isHighlighted ? "#FF6B2B" : theme.textPrimary, fontWeight: isHighlighted ? 600 : 400, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-        {p.name.split(" ")[0]}
+        {p.name.split(" ").slice(0, 2).join(" ")}
       </span>
       <span style={{ fontSize: 11, color: theme.textSubtle, textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{p.matchesPlayed}</span>
       <span style={{ fontSize: 11, color: theme.textDim,    textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{p.timePlayed ?? "—"}</span>
@@ -59,7 +59,7 @@ function BoxScoreRow({ p, isHighlighted, border }) {
     }}>
       <span style={{ fontSize: 9, color: theme.textSecondary, fontFamily: "'DM Mono', monospace" }}>{p.dorsal}</span>
       <span style={{ fontSize: 11, color: isHighlighted ? "#FF6B2B" : theme.textPrimary, fontWeight: isHighlighted ? 600 : 400, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-        {p.starting ? "★ " : ""}{p.name.split(" ")[0]}
+        {p.starting ? "★ " : ""}{p.name.split(" ").slice(0, 2).join(" ")}
       </span>
       <span style={{ fontSize: 10, color: "#64748b", textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{p.timePlayed}</span>
       <span style={{ fontSize: 12, color: theme.textBright, textAlign: "right", fontWeight: 600, fontFamily: "'DM Mono', monospace" }}>{d.score ?? 0}</span>
@@ -483,7 +483,7 @@ function SeasonStatsFromLog({ kidMatches, kidName, statsTeamId }) {
                 }}>
                   <span style={{ fontSize: 10, color: theme.textSecondary, fontFamily: "'DM Mono', monospace" }}>{p.dorsal || "—"}</span>
                   <span style={{ fontSize: 12, color: isHighlighted ? "#FF6B2B" : theme.textPrimary, fontWeight: isHighlighted ? 600 : 400, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                    {p.name?.split(" ")[0]}
+                    {p.name?.split(" ").slice(0, 2).join(" ")}
                   </span>
                   <span style={{ fontSize: 11, color: theme.textSubtle,  textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{p.gp}</span>
                   <span style={{ fontSize: 11, color: theme.textDim,     textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{p.min}</span>
