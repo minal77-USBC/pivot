@@ -19,7 +19,7 @@ function StatRow({ p, isHighlighted, border }) {
   return (
     <div style={{
       display: "grid",
-      gridTemplateColumns: "24px minmax(70px,1fr) 30px 40px 40px 44px 36px 36px 40px",
+      gridTemplateColumns: "24px minmax(70px,1fr) 30px 40px 40px 44px 36px 36px 40px 36px",
       gap: 4,
       alignItems: "center",
       padding: "8px 12px",
@@ -29,15 +29,16 @@ function StatRow({ p, isHighlighted, border }) {
     }}>
       <span style={{ fontSize: 10, color: theme.textSecondary, fontFamily: "'DM Mono', monospace" }}>{p.dorsal || "—"}</span>
       <span style={{ fontSize: 12, color: isHighlighted ? "#FF6B2B" : theme.textPrimary, fontWeight: isHighlighted ? 600 : 400, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-        {p.name.split(" ")[0]}
+        {p.name.split(" ").slice(0, 2).join(" ")}
       </span>
       <span style={{ fontSize: 11, color: theme.textSubtle, textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{p.matchesPlayed}</span>
-      <span style={{ fontSize: 11, color: theme.textDim, textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{p.timePlayed ?? "—"}</span>
+      <span style={{ fontSize: 11, color: theme.textDim,    textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{p.timePlayed ?? "—"}</span>
       <span style={{ fontSize: 12, color: theme.textBright, textAlign: "right", fontWeight: 600, fontFamily: "'DM Mono', monospace" }}>{(p.totalScoreAvgByMatch ?? 0).toFixed(1)}</span>
-      <span style={{ fontSize: 11, color: "#64748b", textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{p.totalScore}</span>
-      <span style={{ fontSize: 11, color: "#64748b", textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{p.sumShotsOfOneSuccessful}</span>
-      <span style={{ fontSize: 11, color: "#64748b", textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{p.sumShotsOfThreeSuccessful}</span>
+      <span style={{ fontSize: 11, color: "#64748b",        textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{p.totalScore}</span>
+      <span style={{ fontSize: 11, color: "#64748b",        textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{pct(p.sumShotsOfOneSuccessful, p.sumShotsOfOneAttempted)}</span>
+      <span style={{ fontSize: 11, color: "#64748b",        textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{p.sumShotsOfThreeSuccessful}</span>
       <span style={{ fontSize: 11, color: theme.textSubtle, textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{(p.sumValorationAvgByMatch ?? 0).toFixed(1)}</span>
+      <span style={{ fontSize: 11, color: "#64748b",        textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{p.sumFoulsAvgByMatch != null ? p.sumFoulsAvgByMatch.toFixed(1) : "—"}</span>
     </div>
   );
 }
@@ -58,7 +59,7 @@ function BoxScoreRow({ p, isHighlighted, border }) {
     }}>
       <span style={{ fontSize: 9, color: theme.textSecondary, fontFamily: "'DM Mono', monospace" }}>{p.dorsal}</span>
       <span style={{ fontSize: 11, color: isHighlighted ? "#FF6B2B" : theme.textPrimary, fontWeight: isHighlighted ? 600 : 400, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-        {p.starting ? "★ " : ""}{p.name.split(" ")[0]}
+        {p.starting ? "★ " : ""}{p.name.split(" ").slice(0, 2).join(" ")}
       </span>
       <span style={{ fontSize: 10, color: "#64748b", textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{p.timePlayed}</span>
       <span style={{ fontSize: 12, color: theme.textBright, textAlign: "right", fontWeight: 600, fontFamily: "'DM Mono', monospace" }}>{d.score ?? 0}</span>
@@ -130,13 +131,13 @@ function SeasonStats({ teamId, kidName, onResult }) {
         <div style={{ minWidth: 460 }}>
           <div style={{
             display: "grid",
-            gridTemplateColumns: "24px minmax(70px,1fr) 30px 40px 40px 44px 36px 36px 40px",
+            gridTemplateColumns: "24px minmax(70px,1fr) 30px 40px 40px 44px 36px 36px 40px 36px",
             gap: 4,
             padding: "6px 12px",
             borderBottom: `1px solid ${theme.cardBorder}`,
             background: theme.rowBg,
           }}>
-            {["#", "Player", "GP", "MIN", "PPG", "PTS", "FT", "3P", "VAL"].map((h, i) => (
+            {["#", t.colPlayer, "GP", "MIN", "PPG", "PTS", "FT%", "3P", "VAL", "PF"].map((h, i) => (
               <span key={i} style={{ fontSize: 9, color: theme.textSecondary, textTransform: "uppercase", letterSpacing: "0.1em", textAlign: i > 1 ? "right" : "left" }}>{h}</span>
             ))}
           </div>
@@ -151,7 +152,7 @@ function SeasonStats({ teamId, kidName, onResult }) {
         </div>
       </div>
       <div style={{ fontSize: 10, color: "#334155", textAlign: "center", marginTop: 8 }}>
-        VAL = valoration (efficiency). FT/3P = made. Source: FCBQ / msstats
+        VAL = valoration (efficiency) · FT% = free throw % · 3P = made · PF = avg fouls · Source: FCBQ / msstats
       </div>
     </>
   );
@@ -395,10 +396,11 @@ function MatchBoxScores({ kidMatches, kidName }) {
   );
 }
 
-function SeasonStatsFromLog({ kidMatches, kidName }) {
+function SeasonStatsFromLog({ kidMatches, kidName, statsTeamId }) {
   const { t } = useLang();
   const { S, theme } = useTheme();
   const [log, setLog] = useState(null);
+  const [teamLog, setTeamLog] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -407,9 +409,10 @@ function SeasonStatsFromLog({ kidMatches, kidName }) {
       .filter(m => m.played)
       .map(({ statsUuid, date, opp, ha, win, score }) => ({ statsUuid, date, opp, ha, win, score }));
     const params = new URLSearchParams({ kidName, matches: JSON.stringify(played) });
+    if (statsTeamId) params.set("teamId", statsTeamId);
     fetch(`/api/player-log?${params}`)
       .then(r => { if (!r.ok) throw new Error(`${r.status}`); return r.json(); })
-      .then(d => { setLog(d.log); setLoading(false); })
+      .then(d => { setLog(d.log); setTeamLog(d.teamLog || []); setLoading(false); })
       .catch(e => { setError(e.message); setLoading(false); });
   }, [kidName]);
 
@@ -431,11 +434,12 @@ function SeasonStatsFromLog({ kidMatches, kidName }) {
   const losses = gp - wins;
   const sum = (key) => log.reduce((s, r) => s + (r[key] ?? 0), 0);
   const avg = (key) => (sum(key) / gp).toFixed(1);
-  const totalFtA = sum("ftA");
-  const ftPct = totalFtA > 0 ? `${Math.round(sum("ftM") / totalFtA * 100)}%` : "—";
+
+  const COLS = "24px minmax(70px,1fr) 30px 40px 40px 44px 36px 36px 40px 36px";
 
   return (
     <>
+      {/* Team summary */}
       <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
         <div style={S.statBox}>
           <div style={{ ...S.statNum, color: "#22d3a0", fontSize: 24 }}>{wins}{t.wLabel}</div>
@@ -451,35 +455,74 @@ function SeasonStatsFromLog({ kidMatches, kidName }) {
         </div>
       </div>
 
-      <div style={{ ...S.card({ padding: "0" }) }}>
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "28px 40px 40px 44px 40px",
-          gap: 4, padding: "6px 12px",
-          borderBottom: `1px solid ${theme.cardBorder}`,
-          background: theme.rowBg,
-        }}>
-          {["GP", "PPG", "VAL", "FT%", "PF"].map((h, i) => (
-            <span key={i} style={{ fontSize: 9, color: theme.textSecondary, textTransform: "uppercase", letterSpacing: "0.1em", textAlign: "right" }}>{h}</span>
-          ))}
-        </div>
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "28px 40px 40px 44px 40px",
-          gap: 4, padding: "10px 12px",
-          background: "rgba(255,107,43,0.07)",
-          borderLeft: "2px solid #FF6B2B",
-        }}>
-          <span style={{ fontSize: 13, color: "#FF6B2B", fontWeight: 700, textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{gp}</span>
-          <span style={{ fontSize: 13, color: theme.textBright, fontWeight: 700, textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{avg("pts")}</span>
-          <span style={{ fontSize: 13, color: theme.textBright, fontWeight: 600, textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{avg("val")}</span>
-          <span style={{ fontSize: 13, color: theme.textBright, fontWeight: 600, textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{ftPct}</span>
-          <span style={{ fontSize: 13, color: "#64748b", textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{avg("pf")}</span>
+      {/* Full team roster table — or single-row fallback if team aggregation unavailable */}
+      <div style={{ ...S.card({ padding: "0" }), overflowX: "auto" }}>
+        <div style={{ minWidth: 460 }}>
+          {/* Header */}
+          <div style={{
+            display: "grid", gridTemplateColumns: COLS,
+            gap: 4, padding: "6px 12px",
+            borderBottom: `1px solid ${theme.cardBorder}`,
+            background: theme.rowBg,
+          }}>
+            {["#", t.colPlayer, "GP", "MIN", "PPG", "PTS", "FT%", "3P", "VAL", "PF"].map((h, i) => (
+              <span key={i} style={{ fontSize: 9, color: theme.textSecondary, textTransform: "uppercase", letterSpacing: "0.1em", textAlign: i > 1 ? "right" : "left" }}>{h}</span>
+            ))}
+          </div>
+
+          {teamLog.length > 0 ? (
+            teamLog.map((p, i) => {
+              const isHighlighted = p.name?.toUpperCase().includes(kidName.toUpperCase());
+              return (
+                <div key={i} style={{
+                  display: "grid", gridTemplateColumns: COLS,
+                  gap: 4, alignItems: "center", padding: "8px 12px",
+                  borderBottom: i < teamLog.length - 1 ? `1px solid ${theme.rowBorder}` : "none",
+                  background: isHighlighted ? "rgba(255,107,43,0.07)" : "transparent",
+                  borderLeft: isHighlighted ? "2px solid #FF6B2B" : "2px solid transparent",
+                }}>
+                  <span style={{ fontSize: 10, color: theme.textSecondary, fontFamily: "'DM Mono', monospace" }}>{p.dorsal || "—"}</span>
+                  <span style={{ fontSize: 12, color: isHighlighted ? "#FF6B2B" : theme.textPrimary, fontWeight: isHighlighted ? 600 : 400, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                    {p.name?.split(" ").slice(0, 2).join(" ")}
+                  </span>
+                  <span style={{ fontSize: 11, color: theme.textSubtle,  textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{p.gp}</span>
+                  <span style={{ fontSize: 11, color: theme.textDim,     textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{p.min}</span>
+                  <span style={{ fontSize: 12, color: theme.textBright,  textAlign: "right", fontWeight: 600, fontFamily: "'DM Mono', monospace" }}>{p.ppg.toFixed(1)}</span>
+                  <span style={{ fontSize: 11, color: "#64748b",         textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{p.totalPts}</span>
+                  <span style={{ fontSize: 11, color: "#64748b",         textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{p.ftPct !== null ? `${p.ftPct}%` : "—"}</span>
+                  <span style={{ fontSize: 11, color: "#64748b",         textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{p.threeM}</span>
+                  <span style={{ fontSize: 11, color: theme.textSubtle,  textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{p.val.toFixed(1)}</span>
+                  <span style={{ fontSize: 11, color: "#64748b",         textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{p.pf.toFixed(1)}</span>
+                </div>
+              );
+            })
+          ) : (
+            /* Fallback: single-row for this player only */
+            <div style={{
+              display: "grid", gridTemplateColumns: COLS,
+              gap: 4, padding: "10px 12px",
+              background: "rgba(255,107,43,0.07)",
+              borderLeft: "2px solid #FF6B2B",
+            }}>
+              <span style={{ fontSize: 10, color: theme.textSecondary, fontFamily: "'DM Mono', monospace" }}>—</span>
+              <span style={{ fontSize: 12, color: "#FF6B2B", fontWeight: 600, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{kidName.split(" ")[0]}</span>
+              <span style={{ fontSize: 13, color: "#FF6B2B",        textAlign: "right", fontWeight: 700, fontFamily: "'DM Mono', monospace" }}>{gp}</span>
+              <span style={{ fontSize: 11, color: theme.textDim,    textAlign: "right", fontFamily: "'DM Mono', monospace" }}>—</span>
+              <span style={{ fontSize: 13, color: theme.textBright, textAlign: "right", fontWeight: 700, fontFamily: "'DM Mono', monospace" }}>{avg("pts")}</span>
+              <span style={{ fontSize: 11, color: "#64748b",        textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{sum("pts")}</span>
+              <span style={{ fontSize: 13, color: theme.textBright, textAlign: "right", fontWeight: 600, fontFamily: "'DM Mono', monospace" }}>
+                {(() => { const a = sum("ftA"); return a > 0 ? `${Math.round(sum("ftM") / a * 100)}%` : "—"; })()}
+              </span>
+              <span style={{ fontSize: 11, color: "#64748b",        textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{sum("twoM")}</span>
+              <span style={{ fontSize: 13, color: theme.textBright, textAlign: "right", fontWeight: 600, fontFamily: "'DM Mono', monospace" }}>{avg("val")}</span>
+              <span style={{ fontSize: 13, color: "#64748b",        textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{avg("pf")}</span>
+            </div>
+          )}
         </div>
       </div>
 
       <div style={{ fontSize: 10, color: "#334155", textAlign: "center", marginTop: 8 }}>
-        VAL = valoration (efficiency) · Computed from {gp} box scores · Source: FCBQ / msstats
+        VAL = valoration (efficiency) · FT% = free throw % · 3P = made · PF = avg fouls · Computed from {gp} box scores · Source: FCBQ / msstats
       </div>
     </>
   );
@@ -542,7 +585,7 @@ export default function StatsTab({ kids = [], k1Matches, k2Matches = [], k3Match
           </div>
 
           {view === "season" && statsConfirmed !== false && <SeasonStats teamId={selectedKid.statsTeamId} kidName={selectedKid.name} onResult={setStatsConfirmed} />}
-          {view === "season" && statsConfirmed === false && <SeasonStatsFromLog kidMatches={selectedMatches} kidName={selectedKid.name} />}
+          {view === "season" && statsConfirmed === false && <SeasonStatsFromLog kidMatches={selectedMatches} kidName={selectedKid.name} statsTeamId={selectedKid.statsTeamId} />}
           {view === "box"    && <MatchBoxScores kidMatches={selectedMatches} kidName={selectedKid.name} />}
           {view === "log"    && <PlayerGameLog kidMatches={selectedMatches} kidName={selectedKid.name} />}
         </>
