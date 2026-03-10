@@ -137,7 +137,7 @@ function SeasonStats({ teamId, kidName, onResult }) {
             borderBottom: `1px solid ${theme.cardBorder}`,
             background: theme.rowBg,
           }}>
-            {["#", "Player", "GP", "MIN", "PPG", "PTS", "FT%", "3P", "VAL", "PF"].map((h, i) => (
+            {["#", t.colPlayer, "GP", "MIN", "PPG", "PTS", "FT%", "3P", "VAL", "PF"].map((h, i) => (
               <span key={i} style={{ fontSize: 9, color: theme.textSecondary, textTransform: "uppercase", letterSpacing: "0.1em", textAlign: i > 1 ? "right" : "left" }}>{h}</span>
             ))}
           </div>
@@ -465,7 +465,7 @@ function SeasonStatsFromLog({ kidMatches, kidName, statsTeamId }) {
             borderBottom: `1px solid ${theme.cardBorder}`,
             background: theme.rowBg,
           }}>
-            {["#", "Player", "GP", "MIN", "PPG", "PTS", "FT%", "3P", "VAL", "PF"].map((h, i) => (
+            {["#", t.colPlayer, "GP", "MIN", "PPG", "PTS", "FT%", "3P", "VAL", "PF"].map((h, i) => (
               <span key={i} style={{ fontSize: 9, color: theme.textSecondary, textTransform: "uppercase", letterSpacing: "0.1em", textAlign: i > 1 ? "right" : "left" }}>{h}</span>
             ))}
           </div>
