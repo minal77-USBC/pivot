@@ -39,12 +39,35 @@ function extractPlayerRow(data, nameUpper) {
   return null;
 }
 
+function findTeam(data, teamIdStr) {
+  return (data.teams || []).find(t =>
+    String(t.teamId) === teamIdStr || String(t.teamIdExtern) === teamIdStr
+  ) || null;
+}
+
+function accumulateTeamPlayers(playerMap, team) {
+  for (const p of team.players || []) {
+    const key = String(p.actorId || p.name);
+    if (!playerMap[key]) {
+      playerMap[key] = { name: p.name, dorsal: p.dorsal, gp: 0, pts: 0, val: 0, ftM: 0, ftA: 0, pf: 0 };
+    }
+    const acc = playerMap[key];
+    const d = p.data || {};
+    acc.gp++;
+    acc.pts  += d.score               ?? 0;
+    acc.val  += d.valoration          ?? 0;
+    acc.ftM  += d.shotsOfOneSuccessful ?? 0;
+    acc.ftA  += d.shotsOfOneAttempted  ?? 0;
+    acc.pf   += d.faults              ?? 0;
+  }
+}
+
 export default async function handler(req, res) {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "GET,OPTIONS");
   if (req.method === "OPTIONS") return res.status(200).end();
 
-  const { kidName, matches: matchesParam } = req.query;
+  const { kidName, matches: matchesParam, teamId } = req.query;
   if (!kidName || !matchesParam) {
     return res.status(400).json({ error: "kidName and matches required" });
   }
@@ -106,10 +129,19 @@ export default async function handler(req, res) {
     }
   }
 
-  // 4. Combine cache + fresh, extract player rows
+  // 4. Combine cache + fresh, extract player rows + optionally aggregate team
+  const playerMap = {};
+  const teamIdStr = teamId ? String(teamId) : null;
+
   const results = withUuid.map((m) => {
     const data = cached[m.statsUuid] || freshData[m.statsUuid];
     if (!data) return null;
+
+    // Aggregate all team players if teamId supplied
+    if (teamIdStr) {
+      const team = findTeam(data, teamIdStr);
+      if (team) accumulateTeamPlayers(playerMap, team);
+    }
 
     const player = extractPlayerRow(data, nameUpper);
     if (!player) return null;
@@ -141,7 +173,22 @@ export default async function handler(req, res) {
     .filter(Boolean)
     .sort((a, b) => b.date.localeCompare(a.date));
 
+  // Build team roster sorted by PPG desc
+  const teamLog = teamIdStr
+    ? Object.values(playerMap)
+        .map(p => ({
+          name: p.name,
+          dorsal: p.dorsal,
+          gp: p.gp,
+          ppg: p.gp ? parseFloat((p.pts  / p.gp).toFixed(1)) : 0,
+          val: p.gp ? parseFloat((p.val  / p.gp).toFixed(1)) : 0,
+          ftPct: p.ftA > 0 ? Math.round(p.ftM / p.ftA * 100) : null,
+          pf:  p.gp ? parseFloat((p.pf   / p.gp).toFixed(1)) : 0,
+        }))
+        .sort((a, b) => b.ppg - a.ppg)
+    : [];
+
   res.setHeader("Cache-Control", "s-maxage=300, stale-while-revalidate=60");
   res.setHeader("X-Cache-Stats", `cached:${cachedUuids.size} fetched:${missing.length}`);
-  return res.status(200).json({ log });
+  return res.status(200).json({ log, teamLog });
 }
