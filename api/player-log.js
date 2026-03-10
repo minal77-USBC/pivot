@@ -39,6 +39,19 @@ function extractPlayerRow(data, nameUpper) {
   return null;
 }
 
+function parseTimeSecs(timeStr) {
+  if (!timeStr || timeStr === "—") return 0;
+  const parts = String(timeStr).split(":");
+  if (parts.length === 2) return parseInt(parts[0]) * 60 + (parseInt(parts[1]) || 0);
+  return parseInt(timeStr) || 0;
+}
+
+function formatTimeSecs(totalSecs) {
+  const m = Math.floor(totalSecs / 60);
+  const s = totalSecs % 60;
+  return `${m}:${String(s).padStart(2, "0")}`;
+}
+
 function findTeam(data, teamIdStr) {
   return (data.teams || []).find(t =>
     String(t.teamId) === teamIdStr || String(t.teamIdExtern) === teamIdStr
@@ -49,7 +62,7 @@ function accumulateTeamPlayers(playerMap, team) {
   for (const p of team.players || []) {
     const key = (p.name || "").trim().toUpperCase();
     if (!playerMap[key]) {
-      playerMap[key] = { name: p.name, dorsal: p.dorsal, gp: 0, pts: 0, val: 0, ftM: 0, ftA: 0, pf: 0 };
+      playerMap[key] = { name: p.name, dorsal: p.dorsal, gp: 0, pts: 0, val: 0, ftM: 0, ftA: 0, pf: 0, threeM: 0, timeSecs: 0 };
     }
     const acc = playerMap[key];
     const d = p.data || {};
@@ -58,7 +71,9 @@ function accumulateTeamPlayers(playerMap, team) {
     acc.val  += d.valoration          ?? 0;
     acc.ftM  += d.shotsOfOneSuccessful ?? 0;
     acc.ftA  += d.shotsOfOneAttempted  ?? 0;
-    acc.pf   += d.faults              ?? 0;
+    acc.pf      += d.faults                 ?? 0;
+    acc.threeM  += d.shotsOfThreeSuccessful ?? 0;
+    acc.timeSecs += parseTimeSecs(p.timePlayed);
   }
 }
 
@@ -180,10 +195,13 @@ export default async function handler(req, res) {
           name: p.name,
           dorsal: p.dorsal,
           gp: p.gp,
-          ppg: p.gp ? parseFloat((p.pts  / p.gp).toFixed(1)) : 0,
-          val: p.gp ? parseFloat((p.val  / p.gp).toFixed(1)) : 0,
+          totalPts: p.pts,
+          ppg:   p.gp ? parseFloat((p.pts / p.gp).toFixed(1)) : 0,
+          min:   formatTimeSecs(p.timeSecs),
+          val:   p.gp ? parseFloat((p.val / p.gp).toFixed(1)) : 0,
           ftPct: p.ftA > 0 ? Math.round(p.ftM / p.ftA * 100) : null,
-          pf:  p.gp ? parseFloat((p.pf   / p.gp).toFixed(1)) : 0,
+          threeM: p.threeM,
+          pf:    p.gp ? parseFloat((p.pf  / p.gp).toFixed(1)) : 0,
         }))
         .sort((a, b) => b.ppg - a.ppg)
     : [];
