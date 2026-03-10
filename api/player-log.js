@@ -47,7 +47,7 @@ function findTeam(data, teamIdStr) {
 
 function accumulateTeamPlayers(playerMap, team) {
   for (const p of team.players || []) {
-    const key = String(p.actorId || p.name);
+    const key = (p.name || "").trim().toUpperCase();
     if (!playerMap[key]) {
       playerMap[key] = { name: p.name, dorsal: p.dorsal, gp: 0, pts: 0, val: 0, ftM: 0, ftA: 0, pf: 0 };
     }
