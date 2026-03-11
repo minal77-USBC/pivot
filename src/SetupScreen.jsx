@@ -24,9 +24,11 @@ export function KidForm({ kid, index, onChange, onRemove, canRemove }) {
   const [clubSearch, setClubSearch] = useState(kid.clubName || "");
   const [clubResults, setClubResults] = useState([]);
   const [showClubDrop, setShowClubDrop] = useState(false);
+  const [clubLocked, setClubLocked] = useState(!!kid.fcbqTeamId);
   const [teams, setTeams] = useState([]);
   const [teamsLoading, setTeamsLoading] = useState(false);
   const [grupLoading, setGrupLoading] = useState(false);
+  const [selectedTeam, setSelectedTeam] = useState(null);
   const [autoFilled, setAutoFilled] = useState(!!kid.fcbqTeamId);
   const clubRef = useRef(null);
 
@@ -53,13 +55,24 @@ export function KidForm({ kid, index, onChange, onRemove, canRemove }) {
     set("clubName", club.name);
     setClubSearch(club.name);
     setShowClubDrop(false);
+    setClubLocked(true);
     setTeams([]);
     setAutoFilled(false);
+    setSelectedTeam(null);
     setTeamsLoading(true);
     fetch(`/api/club-teams?clubId=${club.id}`)
       .then(r => r.json())
       .then(t => { setTeams(t); setTeamsLoading(false); })
       .catch(() => setTeamsLoading(false));
+  };
+
+  const changeClub = () => {
+    setClubLocked(false);
+    setClubSearch("");
+    setTeams([]);
+    setAutoFilled(false);
+    setSelectedTeam(null);
+    onChange({ ...kid, clubName: "", fcbqTeamId: "", grupIdPhase1: "", grupIdPhase2: "" });
   };
 
   const selectTeam = (team) => {
@@ -72,11 +85,19 @@ export function KidForm({ kid, index, onChange, onRemove, canRemove }) {
           fcbqTeamId: data.fcbqTeamId || "",
           grupIdPhase1: data.grupIdPhase1 || "",
           grupIdPhase2: data.grupIdPhase2 || "",
+          category: team.category || kid.category,
         });
+        setSelectedTeam(team);
         setAutoFilled(true);
         setGrupLoading(false);
       })
       .catch(() => setGrupLoading(false));
+  };
+
+  const changeTeam = () => {
+    setSelectedTeam(null);
+    setAutoFilled(false);
+    onChange({ ...kid, fcbqTeamId: "", grupIdPhase1: "", grupIdPhase2: "" });
   };
 
   return (
@@ -115,7 +136,9 @@ export function KidForm({ kid, index, onChange, onRemove, canRemove }) {
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginBottom: 10 }}>
         <div>
           <div style={S.label}>{t.category}</div>
-          <select value={kid.category} onChange={e => set("category", e.target.value)} style={inputStyle}>
+          <select value={kid.category} onChange={e => set("category", e.target.value)}
+            disabled={autoFilled}
+            style={{ ...inputStyle, ...(autoFilled ? { opacity: 0.45, cursor: "not-allowed" } : {}) }}>
             {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
           </select>
         </div>
@@ -137,40 +160,60 @@ export function KidForm({ kid, index, onChange, onRemove, canRemove }) {
       {/* Club search with autocomplete */}
       <div style={{ marginBottom: 10 }} ref={clubRef}>
         <div style={S.label}>{t.clubName}</div>
-        <div style={{ position: "relative" }}>
-          <input
-            value={clubSearch}
-            onChange={e => { setClubSearch(e.target.value); set("clubName", e.target.value); }}
-            onFocus={() => clubResults.length > 0 && setShowClubDrop(true)}
-            placeholder={t.clubPlaceholder}
-            style={inputStyle}
-          />
-          {showClubDrop && (
-            <div style={{
-              position: "absolute", top: "100%", left: 0, right: 0, zIndex: 10,
-              background: theme.cardBg, border: `1px solid ${theme.cardBorder}`,
-              borderRadius: 8, marginTop: 2, overflow: "hidden",
-            }}>
-              {clubResults.map(club => (
-                <div key={club.id} onMouseDown={() => selectClub(club)} style={{
-                  padding: "9px 12px", cursor: "pointer", fontSize: 13,
-                  borderBottom: `1px solid ${theme.rowBorder}`,
-                }}>
-                  <span style={{ color: theme.textBright, fontWeight: 500 }}>{club.name}</span>
-                  <span style={{ color: theme.textDim, fontSize: 11, marginLeft: 6 }}>{club.town}</span>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
+        {clubLocked ? (
+          <div style={{ ...inputStyle, display: "flex", justifyContent: "space-between", alignItems: "center", cursor: "default" }}>
+            <span style={{ color: theme.textBright, fontWeight: 500 }}>{kid.clubName}</span>
+            <button type="button" onClick={changeClub}
+              style={{ background: "none", border: "none", color: theme.textDim, fontSize: 11, cursor: "pointer", padding: 0, textDecoration: "underline" }}>
+              {t.change}
+            </button>
+          </div>
+        ) : (
+          <div style={{ position: "relative" }}>
+            <input
+              value={clubSearch}
+              onChange={e => { setClubSearch(e.target.value); set("clubName", e.target.value); }}
+              onFocus={() => clubResults.length > 0 && setShowClubDrop(true)}
+              placeholder={t.clubPlaceholder}
+              style={inputStyle}
+            />
+            {showClubDrop && (
+              <div style={{
+                position: "absolute", top: "100%", left: 0, right: 0, zIndex: 10,
+                background: theme.cardBg, border: `1px solid ${theme.cardBorder}`,
+                borderRadius: 8, marginTop: 2, overflow: "hidden",
+              }}>
+                {clubResults.map(club => (
+                  <div key={club.id} onMouseDown={() => selectClub(club)} style={{
+                    padding: "9px 12px", cursor: "pointer", fontSize: 13,
+                    borderBottom: `1px solid ${theme.rowBorder}`,
+                  }}>
+                    <span style={{ color: theme.textBright, fontWeight: 500 }}>{club.name}</span>
+                    <span style={{ color: theme.textDim, fontSize: 11, marginLeft: 6 }}>{club.town}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
-      {/* Team picker — appears after club selected */}
+      {/* Team picker — appears after club selected, locks after team selected */}
       {(teams.length > 0 || teamsLoading) && (
         <div style={{ marginBottom: 10 }}>
           <div style={S.label}>{t.selectTeam}</div>
           {teamsLoading ? (
             <div style={{ fontSize: 12, color: theme.textDim, padding: "8px 0" }}>{t.loadingTeams}</div>
+          ) : autoFilled && selectedTeam ? (
+            <div style={{ ...inputStyle, display: "flex", justifyContent: "space-between", alignItems: "center", cursor: "default" }}>
+              <span style={{ color: theme.textBright, fontWeight: 500 }}>
+                {selectedTeam.name}{selectedTeam.category ? ` — ${selectedTeam.category}` : ""}
+              </span>
+              <button type="button" onClick={changeTeam}
+                style={{ background: "none", border: "none", color: theme.textDim, fontSize: 11, cursor: "pointer", padding: 0, textDecoration: "underline" }}>
+                {t.change}
+              </button>
+            </div>
           ) : (
             <select
               defaultValue=""
