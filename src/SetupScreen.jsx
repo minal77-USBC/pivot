@@ -30,6 +30,7 @@ export function KidForm({ kid, index, onChange, onRemove, canRemove }) {
   const [grupLoading, setGrupLoading] = useState(false);
   const [selectedTeam, setSelectedTeam] = useState(null);
   const [autoFilled, setAutoFilled] = useState(!!kid.fcbqTeamId);
+  const [categoryLocked, setCategoryLocked] = useState(!!kid.fcbqTeamId);
   const clubRef = useRef(null);
 
   // Debounced club search
@@ -72,6 +73,7 @@ export function KidForm({ kid, index, onChange, onRemove, canRemove }) {
     setTeams([]);
     setAutoFilled(false);
     setSelectedTeam(null);
+    setCategoryLocked(false);
     onChange({ ...kid, clubName: "", fcbqTeamId: "", grupIdPhase1: "", grupIdPhase2: "" });
   };
 
@@ -85,10 +87,10 @@ export function KidForm({ kid, index, onChange, onRemove, canRemove }) {
           fcbqTeamId: data.fcbqTeamId || "",
           grupIdPhase1: data.grupIdPhase1 || "",
           grupIdPhase2: data.grupIdPhase2 || "",
-          category: team.category || kid.category,
         });
         setSelectedTeam(team);
         setAutoFilled(true);
+        setCategoryLocked(true);
         setGrupLoading(false);
       })
       .catch(() => setGrupLoading(false));
@@ -97,6 +99,7 @@ export function KidForm({ kid, index, onChange, onRemove, canRemove }) {
   const changeTeam = () => {
     setSelectedTeam(null);
     setAutoFilled(false);
+    setCategoryLocked(false);
     onChange({ ...kid, fcbqTeamId: "", grupIdPhase1: "", grupIdPhase2: "" });
   };
 
@@ -136,11 +139,19 @@ export function KidForm({ kid, index, onChange, onRemove, canRemove }) {
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginBottom: 10 }}>
         <div>
           <div style={S.label}>{t.category}</div>
-          <select value={kid.category} onChange={e => set("category", e.target.value)}
-            disabled={autoFilled}
-            style={{ ...inputStyle, ...(autoFilled ? { opacity: 0.45, cursor: "not-allowed" } : {}) }}>
-            {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
-          </select>
+          {categoryLocked ? (
+            <div style={{ ...inputStyle, display: "flex", justifyContent: "space-between", alignItems: "center", cursor: "default" }}>
+              <span style={{ color: theme.textBright, fontWeight: 500 }}>{kid.category}</span>
+              <button type="button" onClick={() => setCategoryLocked(false)}
+                style={{ background: "none", border: "none", color: theme.textDim, fontSize: 11, cursor: "pointer", padding: 0, textDecoration: "underline" }}>
+                {t.change}
+              </button>
+            </div>
+          ) : (
+            <select value={kid.category} onChange={e => set("category", e.target.value)} style={inputStyle}>
+              {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
+            </select>
+          )}
         </div>
         <div>
           <div style={S.label}>{t.gender}</div>
