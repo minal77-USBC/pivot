@@ -27,6 +27,7 @@ export function KidForm({ kid, index, onChange, onRemove, canRemove }) {
   const [teams, setTeams] = useState([]);
   const [teamsLoading, setTeamsLoading] = useState(false);
   const [grupLoading, setGrupLoading] = useState(false);
+  const [autoFilled, setAutoFilled] = useState(!!kid.fcbqTeamId);
   const clubRef = useRef(null);
 
   // Debounced club search
@@ -53,6 +54,7 @@ export function KidForm({ kid, index, onChange, onRemove, canRemove }) {
     setClubSearch(club.name);
     setShowClubDrop(false);
     setTeams([]);
+    setAutoFilled(false);
     setTeamsLoading(true);
     fetch(`/api/club-teams?clubId=${club.id}`)
       .then(r => r.json())
@@ -71,6 +73,7 @@ export function KidForm({ kid, index, onChange, onRemove, canRemove }) {
           grupIdPhase1: data.grupIdPhase1 || "",
           grupIdPhase2: data.grupIdPhase2 || "",
         });
+        setAutoFilled(true);
         setGrupLoading(false);
       })
       .catch(() => setGrupLoading(false));
@@ -189,27 +192,39 @@ export function KidForm({ kid, index, onChange, onRemove, canRemove }) {
         </div>
       )}
 
-      {/* FCBQ Team ID + Grup IDs — auto-filled or manual */}
+      {/* FCBQ Team ID + Grup IDs — auto-filled via team picker, locked until then */}
       <div style={{ marginBottom: 10 }}>
         <div style={S.label}>{t.fcbqTeamId}</div>
         <input value={kid.fcbqTeamId} onChange={e => set("fcbqTeamId", positiveInt(e.target.value))}
-          placeholder="e.g. 80316" style={inputStyle} inputMode="numeric" />
+          placeholder="e.g. 80316"
+          style={{ ...inputStyle, ...(autoFilled ? {} : { opacity: 0.45, cursor: "not-allowed" }) }}
+          inputMode="numeric" readOnly={!autoFilled} />
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
         <div>
           <div style={S.label}>{t.grupPhase1}</div>
           <input value={kid.grupIdPhase1} onChange={e => set("grupIdPhase1", positiveInt(e.target.value))}
-            placeholder="e.g. 19848" style={inputStyle} inputMode="numeric" />
+            placeholder="e.g. 19848"
+            style={{ ...inputStyle, ...(autoFilled ? {} : { opacity: 0.45, cursor: "not-allowed" }) }}
+            inputMode="numeric" readOnly={!autoFilled} />
         </div>
         <div>
           <div style={S.label}>{t.grupPhase2}</div>
           <input value={kid.grupIdPhase2} onChange={e => set("grupIdPhase2", positiveInt(e.target.value))}
-            placeholder="e.g. 21202" style={inputStyle} inputMode="numeric" />
+            placeholder="e.g. 21202"
+            style={{ ...inputStyle, ...(autoFilled ? {} : { opacity: 0.45, cursor: "not-allowed" }) }}
+            inputMode="numeric" readOnly={!autoFilled} />
         </div>
       </div>
-      <div style={{ fontSize: 10, color: theme.textMuted, marginTop: 6 }}>
-        {t.idsHint}
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 6 }}>
+        <div style={{ fontSize: 10, color: theme.textMuted }}>{t.idsHint}</div>
+        {!autoFilled && (
+          <button type="button" onClick={() => setAutoFilled(true)}
+            style={{ background: "none", border: "none", color: theme.textDim, fontSize: 10, cursor: "pointer", padding: 0, textDecoration: "underline" }}>
+            {t.enterManually}
+          </button>
+        )}
       </div>
     </div>
   );
