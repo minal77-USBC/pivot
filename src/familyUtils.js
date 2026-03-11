@@ -31,6 +31,7 @@ export function buildKid(dbKid, index) {
     teamId: dbKid.fcbq_team_id || null,
     name: dbKid.name,
     label: dbKid.label,
+    clubName: dbKid.club_name || null,
     category: dbKid.category,
     gender: dbKid.gender,
     shortName: `${dbKid.category} ${GENDER_SYMBOL[dbKid.gender] || ""}`,
