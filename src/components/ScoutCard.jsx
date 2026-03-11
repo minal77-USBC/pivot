@@ -44,6 +44,7 @@ export default function ScoutCard({ match, kid }) {
 
   const { record, topPlayers, h2h, recentForm } = data;
   const c = kid.color;
+  const showRpgApg = topPlayers.length > 0 && topPlayers.some(p => p.rpg !== 0 || p.apg !== 0);
 
   return (
     <div style={{
@@ -68,42 +69,44 @@ export default function ScoutCard({ match, kid }) {
       </div>
 
       {/* Record bar */}
-      <div style={{ display: "flex", gap: 6, marginBottom: 10 }}>
-        <div style={{ ...S.statBox, flex: 1, padding: "8px 10px" }}>
-          <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 20, fontWeight: 700, color: "#22d3a0", lineHeight: 1 }}>
-            {record.wins}{t.wLabel}
-          </div>
-          <div style={{ fontSize: 9, color: "#475569", textTransform: "uppercase", letterSpacing: "0.1em", marginTop: 2 }}>
-            {record.gp} {t.scoutPlayed}
-          </div>
-        </div>
-        <div style={{ ...S.statBox, flex: 1, padding: "8px 10px" }}>
-          <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 20, fontWeight: 700, color: "#ff4757", lineHeight: 1 }}>
-            {record.losses}{t.lLabel}
-          </div>
-          <div style={{ fontSize: 9, color: "#475569", textTransform: "uppercase", letterSpacing: "0.1em", marginTop: 2 }}>
-            {t.scoutLosses}
-          </div>
-        </div>
-        <div style={{ ...S.statBox, flex: 1, padding: "8px 10px" }}>
-          <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 20, fontWeight: 700, color: theme.textBright, lineHeight: 1 }}>
-            {record.ppf?.toFixed(1)}
-          </div>
-          <div style={{ fontSize: 9, color: "#475569", textTransform: "uppercase", letterSpacing: "0.1em", marginTop: 2 }}>
-            {t.scoutPpgFor}
-          </div>
-        </div>
-        {record.ppa != null && (
+      {record && (
+        <div style={{ display: "flex", gap: 6, marginBottom: 10 }}>
           <div style={{ ...S.statBox, flex: 1, padding: "8px 10px" }}>
-            <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 20, fontWeight: 700, color: theme.textSubtle, lineHeight: 1 }}>
-              {record.ppa?.toFixed(1)}
+            <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 20, fontWeight: 700, color: "#22d3a0", lineHeight: 1 }}>
+              {record.wins}{t.wLabel}
             </div>
             <div style={{ fontSize: 9, color: "#475569", textTransform: "uppercase", letterSpacing: "0.1em", marginTop: 2 }}>
-              {t.scoutPpgAg}
+              {record.gp} {t.scoutPlayed}
             </div>
           </div>
-        )}
-      </div>
+          <div style={{ ...S.statBox, flex: 1, padding: "8px 10px" }}>
+            <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 20, fontWeight: 700, color: "#ff4757", lineHeight: 1 }}>
+              {record.losses}{t.lLabel}
+            </div>
+            <div style={{ fontSize: 9, color: "#475569", textTransform: "uppercase", letterSpacing: "0.1em", marginTop: 2 }}>
+              {t.scoutLosses}
+            </div>
+          </div>
+          <div style={{ ...S.statBox, flex: 1, padding: "8px 10px" }}>
+            <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 20, fontWeight: 700, color: theme.textBright, lineHeight: 1 }}>
+              {record.ppf?.toFixed(1)}
+            </div>
+            <div style={{ fontSize: 9, color: "#475569", textTransform: "uppercase", letterSpacing: "0.1em", marginTop: 2 }}>
+              {t.scoutPpgFor}
+            </div>
+          </div>
+          {record.ppa != null && (
+            <div style={{ ...S.statBox, flex: 1, padding: "8px 10px" }}>
+              <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 20, fontWeight: 700, color: theme.textSubtle, lineHeight: 1 }}>
+                {record.ppa?.toFixed(1)}
+              </div>
+              <div style={{ fontSize: 9, color: "#475569", textTransform: "uppercase", letterSpacing: "0.1em", marginTop: 2 }}>
+                {t.scoutPpgAg}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* H2H pill */}
       {h2h && h2h.playedTimes > 0 && (
@@ -181,19 +184,19 @@ export default function ScoutCard({ match, kid }) {
           </div>
           <div style={{
             display: "grid",
-            gridTemplateColumns: "18px minmax(60px,1fr) 36px 36px 36px 32px 36px",
+            gridTemplateColumns: showRpgApg ? "18px minmax(60px,1fr) 36px 36px 36px 32px 36px" : "18px minmax(60px,1fr) 36px 36px 36px",
             gap: 4, padding: "0 4px 4px",
             borderBottom: `1px solid ${theme.rowBorder}`,
             marginBottom: 4,
           }}>
-            {["#", "Name", "GP", "PPG", "RPG", "APG", "FT%"].map((h, i) => (
+            {(showRpgApg ? ["#", "Name", "GP", "PPG", "RPG", "APG", "FT%"] : ["#", "Name", "GP", "PPG", "FT%"]).map((h, i) => (
               <span key={i} style={{ fontSize: 9, color: theme.textSecondary, textTransform: "uppercase", letterSpacing: "0.08em", textAlign: i > 1 ? "right" : "left" }}>{h}</span>
             ))}
           </div>
           {topPlayers.map((p, i) => (
             <div key={i} style={{
               display: "grid",
-              gridTemplateColumns: "18px minmax(60px,1fr) 36px 36px 36px 32px 36px",
+              gridTemplateColumns: showRpgApg ? "18px minmax(60px,1fr) 36px 36px 36px 32px 36px" : "18px minmax(60px,1fr) 36px 36px 36px",
               gap: 4, padding: "6px 4px",
               borderBottom: i < topPlayers.length - 1 ? `1px solid ${theme.rowBorder}` : "none",
             }}>
@@ -201,8 +204,8 @@ export default function ScoutCard({ match, kid }) {
               <span style={{ fontSize: 12, color: theme.textPrimary, fontWeight: 500, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{p.name}</span>
               <span style={{ fontSize: 10, color: "#475569", textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{p.gp}</span>
               <span style={{ fontSize: 12, color: theme.textBright, fontWeight: 700, textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{p.ppg.toFixed(1)}</span>
-              <span style={{ fontSize: 10, color: "#64748b", textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{p.rpg.toFixed(1)}</span>
-              <span style={{ fontSize: 10, color: "#64748b", textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{p.apg.toFixed(1)}</span>
+              {showRpgApg && <span style={{ fontSize: 10, color: "#64748b", textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{p.rpg.toFixed(1)}</span>}
+              {showRpgApg && <span style={{ fontSize: 10, color: "#64748b", textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{p.apg.toFixed(1)}</span>}
               <span style={{ fontSize: 10, color: "#64748b", textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{p.ft}</span>
             </div>
           ))}
