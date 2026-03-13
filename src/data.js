@@ -45,6 +45,7 @@ export const CHECKLIST_STD = [
   { id:"water",   emoji:"💧", label:"Water Bottle (full)" },
   { id:"snack",   emoji:"🍌", label:"Pre-match Snack" },
   { id:"towel",   emoji:"🧺", label:"Towel" },
+  { id:"foam",    emoji:"🪵", label:"Foam Roller" },
   { id:"bag",     emoji:"🎒", label:"Kit Bag" },
 ];
 
@@ -55,6 +56,7 @@ export const CHECKLIST_ROAD = [
   { id:"water",   emoji:"💧", label:"Large Water Bottle" },
   { id:"snack",   emoji:"🍱", label:"Road Snacks (2h trip)" },
   { id:"towel",   emoji:"🧺", label:"Towel" },
+  { id:"foam",    emoji:"🪵", label:"Foam Roller" },
   { id:"layer",   emoji:"🧥", label:"Extra Layer / Hoodie" },
   { id:"cash",    emoji:"💶", label:"Cash — Food Stop" },
   { id:"charger", emoji:"🔋", label:"Phone Charger" },

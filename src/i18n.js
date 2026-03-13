@@ -185,6 +185,7 @@ export const LOCALES = {
       water:  "Water Bottle (full)",
       snack:  "Pre-match Snack",
       towel:  "Towel",
+      foam:   "Foam Roller",
       bag:    "Kit Bag",
     },
     roadItems: {
@@ -375,6 +376,7 @@ export const LOCALES = {
       water:  "Botella de agua (llena)",
       snack:  "Aperitivo pre-partido",
       towel:  "Toalla",
+      foam:   "Rodillo de espuma",
       bag:    "Bolsa de equipación",
     },
     roadItems: {
@@ -384,6 +386,7 @@ export const LOCALES = {
       water:   "Botella de agua grande",
       snack:   "Tentempiés para el viaje (2h)",
       towel:   "Toalla",
+      foam:    "Rodillo de espuma",
       layer:   "Capa extra / Sudadera",
       cash:    "Efectivo — parada para comer",
       charger: "Cargador de móvil",
@@ -565,6 +568,7 @@ export const LOCALES = {
       water:  "Ampolla d'aigua (plena)",
       snack:  "Piscolabis pre-partit",
       towel:  "Tovallola",
+      foam:   "Corró de foam",
       bag:    "Bossa d'equipació",
     },
     roadItems: {
@@ -574,6 +578,7 @@ export const LOCALES = {
       water:   "Ampolla d'aigua gran",
       snack:   "Berenar per al viatge (2h)",
       towel:   "Tovallola",
+      foam:    "Corró de foam",
       layer:   "Capa extra / Dessuadora",
       cash:    "Efectiu — parada per menjar",
       charger: "Carregador del mòbil",
