@@ -100,6 +100,7 @@ export function makeStyles(theme) {
       borderRadius: 12,
       padding: 16,
       marginBottom: 12,
+      ...(theme.bg === "#f8fafc" ? { boxShadow: "0 1px 3px rgba(0,0,0,0.06)" } : {}),
       ...extra,
     }),
     heroCard: {
@@ -189,7 +190,8 @@ export function makeStyles(theme) {
       cursor: "pointer", textDecoration: "none",
     },
     primaryBtn: {
-      background: "linear-gradient(135deg, #FF6B2B, #e55c20)",
+      background: "#FF6B2B",
+      boxShadow: "0 1px 4px rgba(255,107,43,0.35)",
       color: "white", border: "none", borderRadius: 8,
       padding: "10px 16px", fontSize: 13, fontWeight: 600,
       cursor: "pointer", width: "100%",

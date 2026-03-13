@@ -329,6 +329,7 @@ export default function SetupScreen({ user, onSave }) {
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { background: ${theme.bg}; }
         select option { background: ${theme.cardBg}; }
+        input:focus, select:focus { outline: 2px solid rgba(255,107,43,0.4) !important; outline-offset: 1px; }
       `}</style>
 
       <div style={{ marginBottom: 24 }}>

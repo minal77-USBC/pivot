@@ -2,6 +2,7 @@ import { useState } from "react";
 import { tier, travelMins, leaveByFromMins, fmtDate, daysLabel, daysOut, mapsUrl, getOverrideMins, saveOverride } from "../utils";
 import { useLang } from "../LangContext";
 import { useTheme } from "../ThemeContext";
+import { Pencil } from "lucide-react";
 
 export default function MatchCard({ m, kidColor = "#FF6B2B", compact = false, arrivalBuffer = 20 }) {
   const { t } = useLang();
@@ -111,9 +112,9 @@ export default function MatchCard({ m, kidColor = "#FF6B2B", compact = false, ar
                     {overrideMins && <span style={{ fontSize: 9, color: "#22d3a0", letterSpacing: "0.08em" }}>{t.yours}</span>}
                     <button
                       onClick={() => { setDraftMins(String(overrideMins ?? travelMins(m.km))); setEditing(true); }}
-                      style={{ background: "none", border: "none", color: "#475569", cursor: "pointer", fontSize: 12, padding: "0 2px" }}
+                      style={{ background: "none", border: "none", color: "#475569", cursor: "pointer", padding: "0 2px", display: "flex", alignItems: "center" }}
                       title={t.editTravelTime}
-                    >✏️</button>
+                    ><Pencil size={12} /></button>
                   </div>
                 )}
               </div>

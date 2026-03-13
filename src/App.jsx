@@ -11,17 +11,18 @@ import StatsTab from "./tabs/StatsTab";
 import LoginScreen from "./LoginScreen";
 import SetupScreen from "./SetupScreen";
 import SettingsScreen from "./SettingsScreen";
+import { Zap, Calendar, ClipboardList, TrendingUp, Activity, Settings, Loader2 } from "lucide-react";
 
 function AppInner() {
   const { lang, setLanguage, t } = useLang();
   const { S, theme } = useTheme();
 
   const TABS = [
-    { id: "dash",     label: t.tabDash,     icon: "⚡" },
-    { id: "calendar", label: t.tabCalendar,  icon: "📅" },
-    { id: "matchday", label: t.tabMatchDay,  icon: "🎒" },
-    { id: "season",   label: t.tabSeason,    icon: "📊" },
-    { id: "stats",    label: t.tabStats,     icon: "🏀" },
+    { id: "dash",     label: t.tabDash,     Icon: Zap },
+    { id: "calendar", label: t.tabCalendar,  Icon: Calendar },
+    { id: "matchday", label: t.tabMatchDay,  Icon: ClipboardList },
+    { id: "season",   label: t.tabSeason,    Icon: TrendingUp },
+    { id: "stats",    label: t.tabStats,     Icon: Activity },
   ];
 
   const LANG_PILLS = [
@@ -81,6 +82,7 @@ function AppInner() {
         button { font-family: inherit; }
         ::-webkit-scrollbar { height: 4px; width: 4px; background: transparent; }
         ::-webkit-scrollbar-thumb { background: ${theme.cardBorder}; border-radius: 2px; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
       `}</style>
 
       {/* Header */}
@@ -119,8 +121,8 @@ function AppInner() {
                   type="button"
                   onClick={() => setShowSettings(true)}
                   title={t.settings}
-                  style={{ background: "none", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 6, cursor: "pointer", padding: "3px 6px", fontSize: 14, lineHeight: 1, color: "#64748b" }}
-                >⚙</button>
+                  style={{ background: "none", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 6, cursor: "pointer", padding: "3px 6px", lineHeight: 1, color: "#64748b", display: "flex", alignItems: "center" }}
+                ><Settings size={14} /></button>
                 <button
                   onClick={() => { sessionStorage.removeItem("pivot_auth"); setUser(null); }}
                   title={`Signed in as ${user?.email}`}
@@ -142,7 +144,7 @@ function AppInner() {
       <div style={S.tabBar}>
         {TABS.map(tb => (
           <button key={tb.id} style={S.tab(tab === tb.id)} onClick={() => setTab(tb.id)}>
-            {tb.icon} {tb.label}
+            <tb.Icon size={13} style={{ verticalAlign: "middle", marginRight: 4 }} />{tb.label}
           </button>
         ))}
       </div>
@@ -151,7 +153,9 @@ function AppInner() {
       <div style={S.body}>
         {loading && (
           <div style={{ textAlign: "center", padding: 48, color: "#475569" }}>
-            <div style={{ fontSize: 28, marginBottom: 10 }}>⏳</div>
+            <div style={{ marginBottom: 10, display: "flex", justifyContent: "center" }}>
+              <Loader2 size={28} style={{ animation: "spin 1s linear infinite" }} />
+            </div>
             <div style={{ fontSize: 13 }}>{t.loading}</div>
           </div>
         )}

@@ -4,6 +4,7 @@ import ScoutCard from "../components/ScoutCard";
 import { upcoming, daysOut, fmtDate, leaveByFromMins, travelMins, getOverrideMins } from "../utils";
 import { useLang } from "../LangContext";
 import { useTheme } from "../ThemeContext";
+import { Zap, Car, Loader2 } from "lucide-react";
 
 function getLeave(m, arrivalBuffer = 20) {
   if (m.km === 0) return null;
@@ -71,7 +72,7 @@ export default function DashboardTab({ kids = [], k1Matches, k2Matches, k3Matche
       {/* Weekend alert — based on first kid's next match */}
       {nextK1 && daysOut(nextK1.date) <= 3 && (
         <div style={{ background: "rgba(255,107,43,0.08)", border: "1px solid rgba(255,107,43,0.2)", borderRadius: 12, padding: "10px 14px", marginBottom: 14, display: "flex", gap: 10, alignItems: "center" }}>
-          <span style={{ fontSize: 18 }}>⚡</span>
+          <Zap size={18} color="#FF6B2B" strokeWidth={2} />
           <div>
             <div style={{ fontSize: 12, fontWeight: 600, color: "#FF6B2B" }}>{t.matchThisWeekend}</div>
             <div style={{ fontSize: 11, color: "#64748b" }}>{fmtDate(nextK1.date)} · {nextK1.time} · {nextK1.ha === "home" ? nextK1.venue : nextK1.city}</div>
@@ -142,7 +143,7 @@ export default function DashboardTab({ kids = [], k1Matches, k2Matches, k3Matche
               <div key={i} style={{ ...S.roadCard, padding: "12px 14px" }}>
                 <div style={S.spaceBetween}>
                   <div>
-                    <div style={{ fontSize: 12, color: "#ffb347", fontWeight: 600 }}>🚗 {m.city} · {m.km}km</div>
+                    <div style={{ fontSize: 12, color: "#ffb347", fontWeight: 600, display: "flex", alignItems: "center", gap: 4 }}><Car size={12} color="#ffb347" />{m.city} · {m.km}km</div>
                     <div style={{ fontSize: 14, color: theme.textBright, marginTop: 2 }}>vs {m.opp}</div>
                   </div>
                   <div style={{ textAlign: "right" }}>
@@ -168,7 +169,9 @@ export default function DashboardTab({ kids = [], k1Matches, k2Matches, k3Matche
           )}
           {briefLoading && (
             <div style={{ ...S.card(), textAlign: "center", color: "#64748b", padding: 20 }}>
-              <div style={{ fontSize: 20, marginBottom: 8 }}>⏳</div>
+              <div style={{ marginBottom: 8, display: "flex", justifyContent: "center" }}>
+                <Loader2 size={20} style={{ animation: "spin 1s linear infinite" }} />
+              </div>
               {t.generating}
             </div>
           )}
