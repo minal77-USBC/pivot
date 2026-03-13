@@ -193,7 +193,12 @@ export default function ChecklistTab({ kids = [], k1Matches, k2Matches, k3Matche
                 <div style={S.checkBox(isChecked)}>{isChecked && "✓"}</div>
                 <span style={{ fontSize: 16 }}>{item.emoji}</span>
                 <span style={{ fontSize: 14, color: isChecked ? "#64748b" : theme.textPrimary, textDecoration: isChecked ? "line-through" : "none" }}>
-                  {dayLabels?.[item.id] ?? item.label}
+                  {(() => {
+                    const base = dayLabels?.[item.id] ?? item.label;
+                    if (item.id === "jersey") return `${base} (${kid.kit.home.jersey} / ${kid.kit.away.jersey})`;
+                    if (item.id === "shorts") return `${base} (${kid.kit.home.shorts} / ${kid.kit.away.shorts})`;
+                    return base;
+                  })()}
                 </span>
               </div>
             </div>

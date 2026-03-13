@@ -188,8 +188,8 @@ export const LOCALES = {
       bag:    "Kit Bag",
     },
     roadItems: {
-      jersey:  "Away Jersey (BLANCA)",
-      shorts:  "Match Shorts (VERMELL)",
+      jersey:  "Away Jersey",
+      shorts:  "Match Shorts",
       shoes:   "Basketball Shoes",
       water:   "Large Water Bottle",
       snack:   "Road Snacks (2h trip)",
@@ -378,8 +378,8 @@ export const LOCALES = {
       bag:    "Bolsa de equipación",
     },
     roadItems: {
-      jersey:  "Camiseta visitante (BLANCA)",
-      shorts:  "Pantalón de partido (VERMELL)",
+      jersey:  "Camiseta visitante",
+      shorts:  "Pantalón de partido",
       shoes:   "Zapatillas de baloncesto",
       water:   "Botella de agua grande",
       snack:   "Tentempiés para el viaje (2h)",
@@ -568,8 +568,8 @@ export const LOCALES = {
       bag:    "Bossa d'equipació",
     },
     roadItems: {
-      jersey:  "Samarreta de visitant (BLANCA)",
-      shorts:  "Pantalons de partit (VERMELL)",
+      jersey:  "Samarreta de visitant",
+      shorts:  "Pantalons de partit",
       shoes:   "Zapatilles de bàsquet",
       water:   "Ampolla d'aigua gran",
       snack:   "Berenar per al viatge (2h)",
