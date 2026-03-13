@@ -12,7 +12,7 @@ function getLeave(m, arrivalBuffer = 20) {
 }
 
 export default function DashboardTab({ kids = [], k1Matches, k2Matches, k3Matches = [] }) {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const { S, theme } = useTheme();
   const [briefing, setBriefing] = useState(null);
   const [briefLoading, setBriefLoading] = useState(false);
@@ -48,7 +48,7 @@ export default function DashboardTab({ kids = [], k1Matches, k2Matches, k3Matche
       const res = await fetch("/api/brief", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ matches: matchLines.join("\n") }),
+        body: JSON.stringify({ matches: matchLines.join("\n"), lang }),
       });
       if (!res.ok) throw new Error(`API error ${res.status}`);
       const data = await res.json();

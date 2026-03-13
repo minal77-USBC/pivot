@@ -1,10 +1,15 @@
 import Anthropic from "@anthropic-ai/sdk";
 
-const SYSTEM = `You are a basketball logistics assistant for a parent named Kiran in Barcelona.
-Write a casual, WhatsApp-ready summary of the weekend's basketball matches for his two kids, Rohan (15, Cadet Masculí) and Sara (12, Infantil Femení), both at Club Grup Barna Vermell.
-Keep it plain English, no markdown, no bullet points, 3–5 sentences max.
+const LANG_LABELS = { en: "English", es: "Spanish", cat: "Catalan" };
+
+function buildSystem(lang) {
+  const language = LANG_LABELS[lang] || "English";
+  return `You are a basketball logistics assistant for a parent in Barcelona.
+Write a casual, WhatsApp-ready summary of the weekend's basketball matches for their kids (names and details are in the match data).
+Write entirely in ${language}. No markdown, no bullet points, 3–5 sentences max.
 Mention departure times for away games, flag road trips, note the kit colour if it's away.
-Sound like a helpful dad-brain, not a robot.`;
+Sound like a helpful parent, not a robot.`;
+}
 
 export default async function handler(req, res) {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -13,7 +18,7 @@ export default async function handler(req, res) {
   if (req.method === "OPTIONS") return res.status(200).end();
   if (req.method !== "POST") return res.status(405).end();
 
-  const { matches } = req.body || {};
+  const { matches, lang } = req.body || {};
   if (!matches) return res.status(400).json({ error: "matches required" });
 
   const apiKey = process.env.ANTHROPIC_API_KEY;
@@ -24,7 +29,7 @@ export default async function handler(req, res) {
     const message = await client.messages.create({
       model: "claude-haiku-4-5-20251001",
       max_tokens: 300,
-      system: SYSTEM,
+      system: buildSystem(lang),
       messages: [{ role: "user", content: matches }],
     });
     res.status(200).json({ text: message.content[0].text });
