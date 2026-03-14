@@ -23,9 +23,23 @@ export function useFamily(user, refreshKey = 0, shareToken = null) {
     if (!user?.email) { setLoading(false); return; }
     setLoading(true);
     setError(null);
-    fetch(`/api/family?email=${encodeURIComponent(user.email)}`)
-      .then(r => { if (!r.ok) throw new Error(`${r.status}`); return r.json(); })
-      .then(({ family }) => {
+    const credential = sessionStorage.getItem("pivot_credential");
+    fetch(`/api/family?email=${encodeURIComponent(user.email)}`, {
+      headers: credential ? { Authorization: `Bearer ${credential}` } : {},
+    })
+      .then(r => {
+        if (r.status === 403) {
+          sessionStorage.removeItem("pivot_auth");
+          sessionStorage.removeItem("pivot_credential");
+          window.location.reload();
+          return;
+        }
+        if (!r.ok) throw new Error(`${r.status}`);
+        return r.json();
+      })
+      .then(data => {
+        if (!data) return;
+        const { family } = data;
         setKids(family ? buildKids(family.kids || []) : []);
         if (family?.share_token) {
           setShareUrl(`${window.location.origin}/s/${family.share_token}`);

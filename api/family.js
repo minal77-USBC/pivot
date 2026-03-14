@@ -1,6 +1,23 @@
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_KEY = process.env.SUPABASE_ANON_KEY;
 
+async function verifyToken(authHeader, expectedEmail) {
+  if (!authHeader?.startsWith("Bearer ")) return false;
+  const token = authHeader.slice(7);
+  try {
+    const res = await fetch(
+      `https://oauth2.googleapis.com/tokeninfo?id_token=${encodeURIComponent(token)}`
+    );
+    const info = await res.json();
+    if (info.error || !info.email) return false;
+    const clientId = process.env.GOOGLE_CLIENT_ID;
+    if (clientId && info.aud !== clientId) return false;
+    return info.email.toLowerCase() === expectedEmail.toLowerCase();
+  } catch {
+    return false;
+  }
+}
+
 const sbHeaders = {
   apikey: SUPABASE_KEY,
   Authorization: `Bearer ${SUPABASE_KEY}`,
@@ -34,6 +51,10 @@ export default async function handler(req, res) {
   const { email } = req.method === "GET" ? req.query : req.body || {};
 
   if (!email) return res.status(400).json({ error: "Missing email" });
+
+  // Verify the caller owns this email before any email-scoped operation
+  const verified = await verifyToken(req.headers.authorization, email);
+  if (!verified) return res.status(403).json({ error: "Forbidden" });
 
   // GET — load family config by email
   if (req.method === "GET") {

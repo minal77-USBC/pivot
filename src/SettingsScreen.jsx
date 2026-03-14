@@ -69,11 +69,21 @@ export default function SettingsScreen({ user, kids: initialKids, onSave, onClos
     setSaving(true);
     setError(null);
     try {
+      const credential = sessionStorage.getItem("pivot_credential");
       const res = await fetch("/api/family", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          ...(credential ? { Authorization: `Bearer ${credential}` } : {}),
+        },
         body: JSON.stringify({ email: user.email, kids: editKids }),
       });
+      if (res.status === 403) {
+        sessionStorage.removeItem("pivot_auth");
+        sessionStorage.removeItem("pivot_credential");
+        window.location.reload();
+        return;
+      }
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
         throw new Error(data.error || "Save failed");

@@ -27,6 +27,7 @@ export default function LoginScreen({ onAuth }) {
             const data = await res.json();
             if (data.ok) {
               sessionStorage.setItem("pivot_auth", JSON.stringify(data));
+              sessionStorage.setItem("pivot_credential", credential);
               onAuth(data);
             } else {
               setError(data.reason || "Access denied.");
