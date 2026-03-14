@@ -51,8 +51,8 @@ function AppInner() {
 
   const copyShare = () => {
     if (!shareUrl) return;
+    track("share_copied");
     navigator.clipboard.writeText(shareUrl).then(() => {
-      track("share_copied");
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     });
