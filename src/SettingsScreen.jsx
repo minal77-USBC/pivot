@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { track } from "@vercel/analytics";
 import { useLang } from "./LangContext";
 import { useTheme } from "./ThemeContext";
 import { KidForm, EMPTY_KID, COLORS } from "./SetupScreen";
@@ -116,7 +117,7 @@ export default function SettingsScreen({ user, kids: initialKids, onSave, onClos
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <div style={{ display: "flex", gap: 3 }}>
             {[{ id: "dark", label: "Dark" }, { id: "light", label: "Light" }].map(({ id, label }) => (
-              <button key={id} onClick={() => setTheme(id)} style={{
+              <button key={id} onClick={() => { setTheme(id); track("theme_changed", { theme: id }); }} style={{
                 background: themeName === id ? "rgba(255,107,43,0.15)" : "transparent",
                 border: `1px solid ${themeName === id ? "rgba(255,107,43,0.4)" : theme.cardBorder}`,
                 borderRadius: 4, padding: "2px 6px", cursor: "pointer",
