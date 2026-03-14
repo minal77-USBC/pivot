@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { track } from "@vercel/analytics";
 import { fmtDate } from "../utils";
 import { useLang } from "../LangContext";
 import { useTheme } from "../ThemeContext";
@@ -92,7 +93,7 @@ function SeasonStats({ teamId, kidName, onResult }) {
         if (!d?.team) { setError("no data"); setLoading(false); onResult?.(false); return; }
         setData(d); setLoading(false); onResult?.(true);
       })
-      .catch(e => { setError(e.message); setLoading(false); onResult?.(false); });
+      .catch(e => { track("stats_load_failed", { error: e.message }); setError(e.message); setLoading(false); onResult?.(false); });
   }, [teamId]);
 
   if (loading) return (
@@ -296,6 +297,8 @@ function MatchBoxScores({ kidMatches, kidName }) {
   const playedMatches = kidMatches.filter(m => m.played).slice().reverse();
 
   const loadBoxScore = async (match) => {
+    const daysAgo = Math.floor((Date.now() - new Date(match.date)) / 86400000);
+    track("box_score_opened", { result: match.win ? "W" : "L", city: match.city || "", daysAgo });
     if (!match.statsUuid) {
       setSelectedMatch(match);
       setBoxScore(null);
@@ -538,7 +541,11 @@ export default function StatsTab({ kids = [], k1Matches, k2Matches = [], k3Match
   const kidMatchesMap = { k1: k1Matches, k2: k2Matches, k3: k3Matches };
   const selectedMatches = kidMatchesMap[selectedKid?.id] || k1Matches;
 
-  const switchKid = (id) => { setKidId(id); setStatsConfirmed(null); setView("season"); };
+  const switchKid = (id) => {
+    const kid = kids.find(k => k.id === id);
+    track("stats_kid_switched", { kidLabel: kid?.label || id });
+    setKidId(id); setStatsConfirmed(null); setView("season");
+  };
 
   const notAvailable = !selectedKid?.statsAvailable;
   const subTabs = statsConfirmed !== null
@@ -575,7 +582,7 @@ export default function StatsTab({ kids = [], k1Matches, k2Matches = [], k3Match
           {/* Sub-tab toggle — box/log appear only once stats confirmed via API */}
           <div style={{ display: "flex", gap: 4, marginBottom: 16, background: theme.cardBg, borderRadius: 10, padding: 4 }}>
             {subTabs.map(([id, label]) => (
-              <button key={id} onClick={() => setView(id)} style={{
+              <button key={id} onClick={() => { setView(id); track("stats_view_switched", { view: id, kidLabel: selectedKid?.label }); }} style={{
                 flex: 1, background: view === id ? "#FF6B2B" : "transparent",
                 border: "none", borderRadius: 7, padding: "7px 0",
                 color: view === id ? "white" : "#475569", fontSize: 12, fontWeight: 500, cursor: "pointer",

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { track } from "@vercel/analytics";
 import { useLang } from "./LangContext";
 import { useTheme } from "./ThemeContext";
 
@@ -28,6 +29,7 @@ export default function LoginScreen({ onAuth }) {
             if (data.ok) {
               sessionStorage.setItem("pivot_auth", JSON.stringify(data));
               sessionStorage.setItem("pivot_credential", credential);
+              track("user_signed_in", { via: localStorage.getItem("pivot_share_token") ? "share_referral" : "direct" });
               onAuth(data);
             } else {
               setError(data.reason || "Access denied.");

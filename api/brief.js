@@ -1,4 +1,5 @@
 import Anthropic from "@anthropic-ai/sdk";
+import { track } from "@vercel/analytics/server";
 
 const LANG_LABELS = { en: "English", es: "Spanish", cat: "Catalan" };
 
@@ -25,6 +26,7 @@ export default async function handler(req, res) {
   if (!apiKey) return res.status(500).json({ error: "API key not configured" });
 
   try {
+    const start = Date.now();
     const client = new Anthropic({ apiKey });
     const message = await client.messages.create({
       model: "claude-haiku-4-5-20251001",
@@ -32,6 +34,8 @@ export default async function handler(req, res) {
       system: buildSystem(lang),
       messages: [{ role: "user", content: matches }],
     });
+    const latencyMs = Date.now() - start;
+    await track("brief_generated", { lang: lang || "en", latencyMs }, { request: req });
     res.status(200).json({ text: message.content[0].text });
   } catch (e) {
     res.status(500).json({ error: e.message });

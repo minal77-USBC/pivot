@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Analytics } from "@vercel/analytics/react";
+import { track } from "@vercel/analytics";
 import { useSchedule } from "./useSchedule";
 import { useFamily } from "./useFamily";
 import { LangProvider, useLang } from "./LangContext";
@@ -51,10 +52,24 @@ function AppInner() {
   const copyShare = () => {
     if (!shareUrl) return;
     navigator.clipboard.writeText(shareUrl).then(() => {
+      track("share_copied");
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     });
   };
+
+  useEffect(() => {
+    if (error) track("schedule_load_failed", { error: String(error).slice(0, 255) });
+  }, [error]);
+
+  const loadStartRef = useRef(Date.now());
+  const trackedLoadRef = useRef(false);
+  useEffect(() => {
+    if (!loading && !error && kids?.length > 0 && !trackedLoadRef.current) {
+      trackedLoadRef.current = true;
+      track("schedule_rendered", { latencyMs: Date.now() - loadStartRef.current, kidCount: kids.length });
+    }
+  }, [loading, error, kids]);
 
   if (!shareToken && !user) return <LoginScreen onAuth={setUser} />;
 
@@ -96,7 +111,7 @@ function AppInner() {
           {/* Language selector */}
           <div style={{ display: "flex", gap: 3 }}>
             {LANG_PILLS.map(({ id, label }) => (
-              <button key={id} onClick={() => setLanguage(id)} style={{
+              <button key={id} onClick={() => { setLanguage(id); track("language_changed", { lang: id }); }} style={{
                 background: lang === id ? "rgba(255,107,43,0.15)" : "transparent",
                 border: `1px solid ${lang === id ? "rgba(255,107,43,0.4)" : "rgba(255,255,255,0.08)"}`,
                 borderRadius: 4, padding: "2px 6px", cursor: "pointer",
@@ -120,12 +135,12 @@ function AppInner() {
               <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                 <button
                   type="button"
-                  onClick={() => setShowSettings(true)}
+                  onClick={() => { setShowSettings(true); track("settings_opened"); }}
                   title={t.settings}
                   style={{ background: "none", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 6, cursor: "pointer", padding: "3px 6px", lineHeight: 1, color: "#64748b", display: "flex", alignItems: "center" }}
                 ><Settings size={14} /></button>
                 <button
-                  onClick={() => { sessionStorage.removeItem("pivot_auth"); setUser(null); }}
+                  onClick={() => { sessionStorage.removeItem("pivot_auth"); setUser(null); track("user_signed_out"); }}
                   title={`Signed in as ${user?.email}`}
                   style={{ background: "none", border: "none", cursor: "pointer", padding: 0, display: "flex", alignItems: "center", gap: 6 }}
                 >
@@ -144,7 +159,7 @@ function AppInner() {
       {/* Tab bar */}
       <div style={S.tabBar}>
         {TABS.map(tb => (
-          <button key={tb.id} style={S.tab(tab === tb.id)} onClick={() => setTab(tb.id)}>
+          <button key={tb.id} style={S.tab(tab === tb.id)} onClick={() => { setTab(tb.id); track("tab_viewed", { tab: tb.id }); }}>
             <tb.Icon size={13} style={{ verticalAlign: "middle", marginRight: 4 }} />{tb.label}
           </button>
         ))}
@@ -164,7 +179,7 @@ function AppInner() {
         {!loading && error && (
           <div style={{ ...S.card({ borderColor: "rgba(255,71,87,0.3)" }), color: "#ff4757", fontSize: 13 }}>
             <div style={{ marginBottom: 8 }}>{t.failedToLoad} {error}</div>
-            <button onClick={refresh} style={{ background: "#FF6B2B", border: "none", borderRadius: 6, color: "white", fontSize: 12, padding: "6px 14px", cursor: "pointer" }}>
+            <button onClick={() => { refresh(); track("schedule_retry"); }} style={{ background: "#FF6B2B", border: "none", borderRadius: 6, color: "white", fontSize: 12, padding: "6px 14px", cursor: "pointer" }}>
               {t.retry}
             </button>
           </div>

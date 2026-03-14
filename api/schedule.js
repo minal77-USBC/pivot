@@ -1,5 +1,6 @@
 import { ESB } from "./constants.js";
 import { Sentry } from "./_sentry.js";
+import { track } from "@vercel/analytics/server";
 const BARNA = ["GRUP BARNA", "BARNA VERMELL", "GRUP ESP"];
 
 // Nau Parc Clot (home venue) coordinates
@@ -114,6 +115,7 @@ export default async function handler(req, res) {
   if (req.method === "OPTIONS") return res.status(200).end();
 
   try {
+    const start = Date.now();
     // Accept dynamic kids config: ?kids=[{"id":"k1","grupIds":["19848","21202"]},...]
     // Falls back to empty if not provided
     let kids = [];
@@ -140,6 +142,9 @@ export default async function handler(req, res) {
       result[kid.id] = kidMatches;
     }
 
+    const latencyMs = Date.now() - start;
+    const grupCount = kids.reduce((n, k) => n + (k.grupIds || []).filter(Boolean).length, 0);
+    await track("schedule_fetched", { kidCount: kids.length, grupCount, latencyMs }, { request: req });
     res.setHeader("Cache-Control", "s-maxage=300, stale-while-revalidate=60");
     return res.status(200).json(result);
   } catch (e) {

@@ -1,3 +1,4 @@
+import { track } from "@vercel/analytics/server";
 const MSSTATS_BASE = "https://msstats.optimalwayconsulting.com/v1/fcbq";
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_KEY = process.env.SUPABASE_ANON_KEY;
@@ -99,6 +100,7 @@ export default async function handler(req, res) {
   if (!withUuid.length) {
     return res.status(200).json({ log: [] });
   }
+  const start = Date.now();
 
   const nameUpper = kidName.toUpperCase();
   const allUuids = withUuid.map(m => m.statsUuid);
@@ -207,6 +209,8 @@ export default async function handler(req, res) {
         .sort((a, b) => b.ppg - a.ppg)
     : [];
 
+  const latencyMs = Date.now() - start;
+  await track("player_log_fetched", { matchCount: withUuid.length, cacheHit: missing.length === 0, latencyMs }, { request: req });
   res.setHeader("Cache-Control", "s-maxage=300, stale-while-revalidate=60");
   res.setHeader("X-Cache-Stats", `cached:${cachedUuids.size} fetched:${missing.length}`);
   return res.status(200).json({ log, teamLog });

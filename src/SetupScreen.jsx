@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { track } from "@vercel/analytics";
 import { useLang } from "./LangContext";
 import { useTheme } from "./ThemeContext";
 
@@ -53,6 +54,7 @@ export function KidForm({ kid, index, onChange, onRemove, canRemove }) {
   }, []);
 
   const selectClub = (club) => {
+    track("club_selected", { clubName: club.name });
     set("clubName", club.name);
     setClubSearch(club.name);
     setShowClubDrop(false);
@@ -78,6 +80,7 @@ export function KidForm({ kid, index, onChange, onRemove, canRemove }) {
   };
 
   const selectTeam = (team) => {
+    track("team_selected", { category: kid.category, gender: kid.gender });
     setGrupLoading(true);
     fetch(`/api/team-grups?teamId=${team.teamId}`)
       .then(r => r.json())
@@ -291,6 +294,25 @@ export default function SetupScreen({ user, onSave }) {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
 
+  const completedRef = useRef(false);
+  const kidsRef = useRef(kids);
+  useEffect(() => { kidsRef.current = kids; }, [kids]);
+
+  useEffect(() => { track("setup_started"); }, []);
+
+  useEffect(() => {
+    return () => {
+      if (!completedRef.current) {
+        const current = kidsRef.current;
+        track("setup_abandoned", {
+          kidCount: current.length,
+          hasClub: !!current[0]?.clubName,
+          hasTeam: !!current[0]?.grupIdPhase1,
+        });
+      }
+    };
+  }, []);
+
   const updateKid = (i, kid) => setKids(ks => ks.map((k, idx) => idx === i ? kid : k));
   const addKid = () => { if (kids.length < 3) setKids(ks => [...ks, { ...EMPTY_KID, color: COLORS[ks.length] }]); };
   const removeKid = (i) => setKids(ks => ks.filter((_, idx) => idx !== i));
@@ -321,6 +343,8 @@ export default function SetupScreen({ user, onSave }) {
         const data = await res.json().catch(() => ({}));
         throw new Error(data.error || "Save failed");
       }
+      completedRef.current = true;
+      track("setup_completed", { kidCount: kids.length, categories: kids.map(k => k.category).join(",") });
       onSave();
     } catch (e) {
       setError(e.message);

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { track } from "@vercel/analytics";
 import MatchCard from "../components/MatchCard";
 import ScoutCard from "../components/ScoutCard";
 import { upcoming, daysOut, fmtDate, leaveByFromMins, travelMins, getOverrideMins } from "../utils";
@@ -34,6 +35,7 @@ export default function DashboardTab({ kids = [], k1Matches, k2Matches, k3Matche
   const showBriefBtn = nextPerKid.some(m => m && daysOut(m.date) <= 4);
 
   const generateBriefing = async () => {
+    track("briefing_requested", { kidCount: kids.length, lang });
     setBriefLoading(true);
     setBriefError(null);
     setBriefing(null);
@@ -55,6 +57,7 @@ export default function DashboardTab({ kids = [], k1Matches, k2Matches, k3Matche
       const data = await res.json();
       setBriefing(data.text);
     } catch (e) {
+      track("briefing_failed", { error: e.message });
       setBriefError(e.message);
     } finally {
       setBriefLoading(false);
@@ -63,6 +66,7 @@ export default function DashboardTab({ kids = [], k1Matches, k2Matches, k3Matche
 
   const copyBriefing = () => {
     navigator.clipboard.writeText(briefing);
+    track("briefing_copied");
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };

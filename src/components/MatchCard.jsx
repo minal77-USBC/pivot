@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { track } from "@vercel/analytics";
 import { tier, travelMins, leaveByFromMins, fmtDate, daysLabel, daysOut, mapsUrl, getOverrideMins, saveOverride } from "../utils";
 import { useLang } from "../LangContext";
 import { useTheme } from "../ThemeContext";
@@ -125,6 +126,7 @@ export default function MatchCard({ m, kidColor = "#FF6B2B", compact = false, ar
               href={mapsUrl(m.venue, m.city)}
               target="_blank"
               rel="noreferrer"
+              onClick={() => track("map_opened", { venue: m.venue, city: m.city, km: m.km })}
               style={{
                 display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
                 marginTop: 12, padding: "10px 0", borderRadius: 8, textDecoration: "none",
