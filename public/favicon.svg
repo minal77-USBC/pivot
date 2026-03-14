@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <clipPath id="ball">
+      <circle cx="50" cy="50" r="45"/>
+    </clipPath>
+    <filter id="glow" x="-25%" y="-25%" width="150%" height="150%">
+      <feGaussianBlur stdDeviation="1.5" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Dark background -->
+  <circle cx="50" cy="50" r="47" fill="#0d0d0d"/>
+
+  <!-- Outer ring -->
+  <circle cx="50" cy="50" r="46" fill="none" stroke="#FF6600" stroke-width="2.5" filter="url(#glow)"/>
+
+  <!-- All seam lines with glow -->
+  <g fill="none" stroke="#FF6600" clip-path="url(#ball)" filter="url(#glow)">
+
+    <!-- Left S-seam: top pole → left hemisphere → bottom pole -->
+    <polyline points="50,4 28,10 8,32 4,50 8,68 28,90 50,96" stroke-width="2"/>
+
+    <!-- Right S-seam (mirror) -->
+    <polyline points="50,4 72,10 92,32 96,50 92,68 72,90 50,96" stroke-width="2"/>
+
+    <!-- Equator seam – upper arc -->
+    <polyline points="4,50 20,37 50,34 80,37 96,50" stroke-width="2"/>
+
+    <!-- Equator seam – lower arc -->
+    <polyline points="4,50 20,63 50,66 80,63 96,50" stroke-width="2"/>
+
+    <!-- Triangulation: seam vertices → equator nodes -->
+    <line x1="28" y1="10" x2="20" y2="37" stroke-width="1.2" opacity="0.8"/>
+    <line x1="72" y1="10" x2="80" y2="37" stroke-width="1.2" opacity="0.8"/>
+    <line x1="28" y1="90" x2="20" y2="63" stroke-width="1.2" opacity="0.8"/>
+    <line x1="72" y1="90" x2="80" y2="63" stroke-width="1.2" opacity="0.8"/>
+    <line x1="8"  y1="32" x2="20" y2="37" stroke-width="1.2" opacity="0.8"/>
+    <line x1="92" y1="32" x2="80" y2="37" stroke-width="1.2" opacity="0.8"/>
+    <line x1="8"  y1="68" x2="20" y2="63" stroke-width="1.2" opacity="0.8"/>
+    <line x1="92" y1="68" x2="80" y2="63" stroke-width="1.2" opacity="0.8"/>
+
+    <!-- Triangulation: top seam nodes → equator center -->
+    <line x1="28" y1="10" x2="50" y2="34" stroke-width="1" opacity="0.6"/>
+    <line x1="72" y1="10" x2="50" y2="34" stroke-width="1" opacity="0.6"/>
+    <line x1="28" y1="90" x2="50" y2="66" stroke-width="1" opacity="0.6"/>
+    <line x1="72" y1="90" x2="50" y2="66" stroke-width="1" opacity="0.6"/>
+
+    <!-- Triangulation: west/east → equator nodes -->
+    <line x1="4"  y1="50" x2="20" y2="37" stroke-width="1" opacity="0.6"/>
+    <line x1="4"  y1="50" x2="20" y2="63" stroke-width="1" opacity="0.6"/>
+    <line x1="96" y1="50" x2="80" y2="37" stroke-width="1" opacity="0.6"/>
+    <line x1="96" y1="50" x2="80" y2="63" stroke-width="1" opacity="0.6"/>
+
+    <!-- Center cross-triangulation for denser poly feel -->
+    <line x1="20" y1="37" x2="50" y2="66" stroke-width="0.8" opacity="0.45"/>
+    <line x1="80" y1="37" x2="50" y2="66" stroke-width="0.8" opacity="0.45"/>
+    <line x1="20" y1="63" x2="50" y2="34" stroke-width="0.8" opacity="0.45"/>
+    <line x1="80" y1="63" x2="50" y2="34" stroke-width="0.8" opacity="0.45"/>
+  </g>
+</svg>
