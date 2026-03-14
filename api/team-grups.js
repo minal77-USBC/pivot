@@ -1,3 +1,5 @@
+import { Sentry } from "./_sentry.js";
+
 // Fetches grup IDs for a given FCBQ team ID by scraping the team page HTML
 export default async function handler(req, res) {
   const { teamId } = req.query;
@@ -9,7 +11,7 @@ export default async function handler(req, res) {
     headers: { "User-Agent": "Mozilla/5.0" },
   })
     .then((r) => r.text())
-    .catch(() => "");
+    .catch((e) => { Sentry.captureException(e); return ""; });
 
   // Extract (label, grupId) pairs using the FCBQ page structure:
   //   <h4 id="news-sidebar">COMPETITION NAME:</h4>

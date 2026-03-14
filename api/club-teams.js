@@ -1,3 +1,5 @@
+import { Sentry } from "./_sentry.js";
+
 // Fetches teams for a given FCBQ club ID by scraping the club page HTML
 export default async function handler(req, res) {
   const { clubId } = req.query;
@@ -9,7 +11,7 @@ export default async function handler(req, res) {
     headers: { "User-Agent": "Mozilla/5.0" },
   })
     .then((r) => r.text())
-    .catch(() => "");
+    .catch((e) => { Sentry.captureException(e); return ""; });
 
   // Each team row looks like:
   //   CATEGORY TEXT   | <a class="c-0" href="/equip/12345">  TEAM NAME</a>

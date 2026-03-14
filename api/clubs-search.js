@@ -1,3 +1,5 @@
+import { Sentry } from "./_sentry.js";
+
 // Search FCBQ clubs by name — fetches the clubs AJAX endpoint and filters client-side
 export default async function handler(req, res) {
   const { q } = req.query;
@@ -7,7 +9,7 @@ export default async function handler(req, res) {
     headers: { "User-Agent": "Mozilla/5.0" },
   })
     .then((r) => r.json())
-    .catch(() => []);
+    .catch((e) => { Sentry.captureException(e); return []; });
 
   const lower = q.toLowerCase();
   const matches = data

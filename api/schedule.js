@@ -1,4 +1,5 @@
 import { ESB } from "./constants.js";
+import { Sentry } from "./_sentry.js";
 const BARNA = ["GRUP BARNA", "BARNA VERMELL", "GRUP ESP"];
 
 // Nau Parc Clot (home venue) coordinates
@@ -142,6 +143,7 @@ export default async function handler(req, res) {
     res.setHeader("Cache-Control", "s-maxage=300, stale-while-revalidate=60");
     return res.status(200).json(result);
   } catch (e) {
+    Sentry.captureException(e);
     return res.status(502).json({ error: e.message });
   }
 }
