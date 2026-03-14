@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Analytics } from "@vercel/analytics/react";
 import { useSchedule } from "./useSchedule";
 import { useFamily } from "./useFamily";
 import { LangProvider, useLang } from "./LangContext";
@@ -213,6 +214,7 @@ export default function App() {
     <LangProvider>
       <ThemeProvider>
         <AppInner />
+        <Analytics />
       </ThemeProvider>
     </LangProvider>
   );
