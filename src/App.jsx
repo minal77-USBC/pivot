@@ -59,7 +59,7 @@ function AppInner() {
   };
 
   useEffect(() => {
-    if (error) track("schedule_load_failed", { error: String(error).slice(0, 255) });
+    if (error) try { track("schedule_load_failed", { error: String(error).slice(0, 255) }); } catch { /* ignore */ }
   }, [error]);
 
   const loadStartRef = useRef(Date.now());

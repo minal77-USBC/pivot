@@ -65,7 +65,7 @@ export function KidForm({ kid, index, onChange, onRemove, canRemove }) {
     setTeamsLoading(true);
     fetch(`/api/club-teams?clubId=${club.id}`)
       .then(r => r.json())
-      .then(t => { setTeams(t); setTeamsLoading(false); })
+      .then(t => { setTeams(Array.isArray(t) ? t : []); setTeamsLoading(false); })
       .catch(() => setTeamsLoading(false));
   };
 
