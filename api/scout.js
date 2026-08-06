@@ -1,7 +1,8 @@
 import { ESB, MSSTATS_BASE } from "./constants.js";
 
+// Rolls in July — see currentSeason() in _fcbq.js for why not September
 const SEASON = String(
-  new Date().getMonth() >= 8 ? new Date().getFullYear() : new Date().getFullYear() - 1
+  new Date().getMonth() >= 6 ? new Date().getFullYear() : new Date().getFullYear() - 1
 );
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_KEY = process.env.SUPABASE_ANON_KEY;

@@ -62,5 +62,27 @@ export function useSchedule(kids) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cacheKey]);
 
+  // Re-check when the app comes back to the foreground.
+  //
+  // Mount is the only other trigger, so a session left open never refreshes on
+  // its own — a parent who has had the app open in a pocket for two hours would
+  // miss a same-day kick-off or venue change. doFetch() is not forced, so a
+  // cache entry still inside its 5-minute TTL short-circuits and costs nothing.
+  const doFetchRef = useRef(doFetch);
+  doFetchRef.current = doFetch;
+
+  useEffect(() => {
+    if (!cacheKey) return;
+    const onVisible = () => {
+      if (document.visibilityState === "visible") doFetchRef.current();
+    };
+    document.addEventListener("visibilitychange", onVisible);
+    window.addEventListener("focus", onVisible);
+    return () => {
+      document.removeEventListener("visibilitychange", onVisible);
+      window.removeEventListener("focus", onVisible);
+    };
+  }, [cacheKey]);
+
   return { kidMatches, loading, error, refresh: () => doFetch(true) };
 }
