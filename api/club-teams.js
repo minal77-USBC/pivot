@@ -1,31 +1,37 @@
 import { Sentry } from "./_sentry.js";
+import { sbSelect } from "./_supabase.js";
 
-// Fetches teams for a given FCBQ club ID by scraping the club page HTML
+// Lists the teams belonging to an FCBQ club.
+//
+// Previously scraped basquetcatala.cat/club/{id}, which now returns a bot
+// challenge. Reads the fcbq_teams index built by api/sync-index.js. Response
+// shape is unchanged: [{ teamId, name, category }].
 export default async function handler(req, res) {
   const { clubId } = req.query;
   if (!clubId || !/^\d+$/.test(clubId)) {
     return res.status(400).json({ error: "Invalid clubId" });
   }
 
-  const html = await fetch(`https://www.basquetcatala.cat/club/${clubId}`, {
-    headers: { "User-Agent": "Mozilla/5.0" },
-  })
-    .then((r) => r.text())
-    .catch((e) => { Sentry.captureException(e); return ""; });
+  try {
+    const rows = await sbSelect(
+      `fcbq_teams?select=team_id,name,category,tier,sex` +
+        `&club_id=eq.${clubId}&order=category.asc,name.asc`
+    );
 
-  // Each team row looks like:
-  //   CATEGORY TEXT   | <a class="c-0" href="/equip/12345">  TEAM NAME</a>
-  // Capture category (before |), teamId, and team name on the same line.
-  const teams = [];
-  const rowRe = /([^\n|]+)\|\s*<a[^>]+href="\/equip\/(\d+)"[^>]*>\s*([^<]+?)\s*<\/a>/g;
-  let m;
-  while ((m = rowRe.exec(html)) !== null) {
-    const category = m[1].trim();
-    const teamId = m[2];
-    const name = m[3].trim();
-    if (name) teams.push({ teamId, name, category });
+    res.setHeader("Cache-Control", "public, s-maxage=3600");
+    res.json(
+      rows.map((t) => ({
+        teamId: t.team_id,
+        name: t.name,
+        category: t.category,
+        // Additive — the Setup screen ignores unknown fields, but tier lets a
+        // parent tell an A side from a 1r Any side when names are identical.
+        tier: t.tier,
+        sex: t.sex,
+      }))
+    );
+  } catch (e) {
+    Sentry.captureException(e);
+    res.status(500).json({ error: "Index unavailable" });
   }
-
-  res.setHeader("Cache-Control", "public, s-maxage=3600");
-  res.json(teams);
 }

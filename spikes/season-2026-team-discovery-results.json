@@ -1,0 +1,3544 @@
+{
+  "barna": [
+    {
+      "teamId": "89411",
+      "teamName": "C,B GRUP BARNA A",
+      "grupId": "23349",
+      "grupName": " 08",
+      "category": "C.C. JÚNIOR MASCULÍ INTERTERRITORIAL",
+      "sex": "M"
+    },
+    {
+      "teamId": "89410",
+      "teamName": "C.B GRUP BARNA A",
+      "grupId": "23354",
+      "grupName": " 05",
+      "category": "C.C. CADET MASCULÍ INTERTERRITORIAL",
+      "sex": "M"
+    },
+    {
+      "teamId": "90449",
+      "teamName": "C.B GRUP BARNA B",
+      "grupId": "23309",
+      "grupName": " 02",
+      "category": "C.C. CADET MASCULÍ PREFERENT 1R. ANY",
+      "sex": "M"
+    },
+    {
+      "teamId": "89409",
+      "teamName": "C.B GRUP BARNA A",
+      "grupId": "23361",
+      "grupName": " 04",
+      "category": "C.C. INFANTIL MASCULÍ INTERTERRITORIAL",
+      "sex": "M"
+    },
+    {
+      "teamId": "90454",
+      "teamName": "C.B GRUP BARNA B",
+      "grupId": "23318",
+      "grupName": " 03",
+      "category": "C.C. INFANTIL MASCULÍ PREFERENT 1R. ANY",
+      "sex": "M"
+    },
+    {
+      "teamId": "90460",
+      "teamName": "C.B GRUP BARNA A",
+      "grupId": "23287",
+      "grupName": " 02",
+      "category": "C. C. JÚNIOR FEMENÍ PREFERENT",
+      "sex": "F"
+    },
+    {
+      "teamId": "90450",
+      "teamName": "C.B GRUP BARNA B",
+      "grupId": "23301",
+      "grupName": " 02",
+      "category": "C.C. JÚNIOR FEMENÍ PREFERENT 1R. ANY",
+      "sex": "F"
+    },
+    {
+      "teamId": "90457",
+      "teamName": "C.B GRUP BARNA A",
+      "grupId": "23291",
+      "grupName": " 02",
+      "category": "C.C. CADET FEMENÍ PREFERENT",
+      "sex": "F"
+    },
+    {
+      "teamId": "90468",
+      "teamName": "C.B GRUP BARNA B",
+      "grupId": "23305",
+      "grupName": " 02",
+      "category": "C.C. CADET FEMENí PREFERENT 1R. ANY",
+      "sex": "F"
+    },
+    {
+      "teamId": "90465",
+      "teamName": "C.B GRUP BARNA A",
+      "grupId": "23462",
+      "grupName": " 02",
+      "category": "C.C. INFANTIL FEMENÍ INTERTERRITORIAL",
+      "sex": "F"
+    },
+    {
+      "teamId": "90453",
+      "teamName": "C.B GRUP BARNA B",
+      "grupId": "23313",
+      "grupName": " 02",
+      "category": "C.C. INFANTIL FEMENÍ PREFERENT 1R. ANY",
+      "sex": "F"
+    }
+  ],
+  "allTeams": [
+    {
+      "teamId": "90660",
+      "teamName": "SANDÁ  C.B. L'HOSPITALET A",
+      "grupId": "23284",
+      "category": "C.C. JÚNIOR MASCULÍ PREFERENT"
+    },
+    {
+      "teamId": "88782",
+      "teamName": "KIDS&US MANRESA U18",
+      "grupId": "23284",
+      "category": "C.C. JÚNIOR MASCULÍ PREFERENT"
+    },
+    {
+      "teamId": "91411",
+      "teamName": "CB. CORNELLÀ A 2009",
+      "grupId": "23284",
+      "category": "C.C. JÚNIOR MASCULÍ PREFERENT"
+    },
+    {
+      "teamId": "89653",
+      "teamName": "JOVENTUT BADALONA A",
+      "grupId": "23284",
+      "category": "C.C. JÚNIOR MASCULÍ PREFERENT"
+    },
+    {
+      "teamId": "88949",
+      "teamName": "BÀSQUET GIRONA U18",
+      "grupId": "23284",
+      "category": "C.C. JÚNIOR MASCULÍ PREFERENT"
+    },
+    {
+      "teamId": "88645",
+      "teamName": "BARÇA",
+      "grupId": "23284",
+      "category": "C.C. JÚNIOR MASCULÍ PREFERENT"
+    },
+    {
+      "teamId": "88629",
+      "teamName": "FLORANGE U.E.MATARÓ",
+      "grupId": "23284",
+      "category": "C.C. JÚNIOR MASCULÍ PREFERENT"
+    },
+    {
+      "teamId": "90434",
+      "teamName": "JAC SANTS BARCELONA U18 1",
+      "grupId": "23284",
+      "category": "C.C. JÚNIOR MASCULÍ PREFERENT"
+    },
+    {
+      "teamId": "88566",
+      "teamName": "FIKA CE SANT NICOLAU",
+      "grupId": "23285",
+      "category": "C.C. JÚNIOR MASCULÍ PREFERENT"
+    },
+    {
+      "teamId": "90412",
+      "teamName": "IGMESA CBS U18 2009 BLAU",
+      "grupId": "23285",
+      "category": "C.C. JÚNIOR MASCULÍ PREFERENT"
+    },
+    {
+      "teamId": "90914",
+      "teamName": "NAYOX FORÇA LLEIDA A",
+      "grupId": "23285",
+      "category": "C.C. JÚNIOR MASCULÍ PREFERENT"
+    },
+    {
+      "teamId": "89581",
+      "teamName": "MANTISE CB SANT JOSEP BADALONA - JAM",
+      "grupId": "23285",
+      "category": "C.C. JÚNIOR MASCULÍ PREFERENT"
+    },
+    {
+      "teamId": "91022",
+      "teamName": "CB TARRAGONA",
+      "grupId": "23285",
+      "category": "C.C. JÚNIOR MASCULÍ PREFERENT"
+    },
+    {
+      "teamId": "90317",
+      "teamName": "CB BOET MATARÓ 2009",
+      "grupId": "23285",
+      "category": "C.C. JÚNIOR MASCULÍ PREFERENT"
+    },
+    {
+      "teamId": "88630",
+      "teamName": "CB MOLLET A",
+      "grupId": "23285",
+      "category": "C.C. JÚNIOR MASCULÍ PREFERENT"
+    },
+    {
+      "teamId": "89094",
+      "teamName": "BASKET ALMEDA 1",
+      "grupId": "23285",
+      "category": "C.C. JÚNIOR MASCULÍ PREFERENT"
+    },
+    {
+      "teamId": "88661",
+      "teamName": "BASQUETPIASABADELL BLAU",
+      "grupId": "23342",
+      "category": "C.C. JÚNIOR MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "91407",
+      "teamName": "CB. CORNELLÀ",
+      "grupId": "23342",
+      "category": "C.C. JÚNIOR MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "88992",
+      "teamName": "BASQUET SANT PERE A",
+      "grupId": "23342",
+      "category": "C.C. JÚNIOR MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90403",
+      "teamName": "CEB SANT JORDI BLAU",
+      "grupId": "23342",
+      "category": "C.C. JÚNIOR MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89748",
+      "teamName": "CB SANT JUST",
+      "grupId": "23342",
+      "category": "C.C. JÚNIOR MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90344",
+      "teamName": "CN TERRASSA A",
+      "grupId": "23342",
+      "category": "C.C. JÚNIOR MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90040",
+      "teamName": "CLUB NATACIÓ SABADELL A",
+      "grupId": "23342",
+      "category": "C.C. JÚNIOR MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "88843",
+      "teamName": "C.B. PRAT - AIGÜES DEL PRAT A",
+      "grupId": "23342",
+      "category": "C.C. JÚNIOR MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89267",
+      "teamName": "C.B.VIC 1 - UNIVERSITAT DE VIC",
+      "grupId": "23343",
+      "category": "C.C. JÚNIOR MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "88554",
+      "teamName": "CB OLOT",
+      "grupId": "23343",
+      "category": "C.C. JÚNIOR MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90161",
+      "teamName": "CB VILANOVA DEL VALLÈS NEGRE-BANCO MEDIOLANUM",
+      "grupId": "23343",
+      "category": "C.C. JÚNIOR MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90256",
+      "teamName": "C.B. LLINARS",
+      "grupId": "23343",
+      "category": "C.C. JÚNIOR MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "88634",
+      "teamName": "CB MOLLET B",
+      "grupId": "23343",
+      "category": "C.C. JÚNIOR MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "88508",
+      "teamName": "CN CALDES BLAU",
+      "grupId": "23343",
+      "category": "C.C. JÚNIOR MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90179",
+      "teamName": "U18 CE PALAMOS INTER",
+      "grupId": "23343",
+      "category": "C.C. JÚNIOR MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90155",
+      "teamName": "CB GUÍXOLS U18",
+      "grupId": "23343",
+      "category": "C.C. JÚNIOR MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90822",
+      "teamName": "CLUB BÀSQUET SANT CELONI U18M",
+      "grupId": "23344",
+      "category": "C.C. JÚNIOR MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89957",
+      "teamName": "SOL GIRONÈS BISBAL BÀSQUET",
+      "grupId": "23344",
+      "category": "C.C. JÚNIOR MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90191",
+      "teamName": "CB BLANES A",
+      "grupId": "23344",
+      "category": "C.C. JÚNIOR MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90333",
+      "teamName": "CB BOET MATARÓ",
+      "grupId": "23344",
+      "category": "C.C. JÚNIOR MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89439",
+      "teamName": "CB FARNERS A",
+      "grupId": "23344",
+      "category": "C.C. JÚNIOR MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89528",
+      "teamName": "AB PREMIÀ BLAU",
+      "grupId": "23344",
+      "category": "C.C. JÚNIOR MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "91282",
+      "teamName": "CB SALT U18 VERD",
+      "grupId": "23344",
+      "category": "C.C. JÚNIOR MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "88517",
+      "teamName": "CB CALELLA",
+      "grupId": "23344",
+      "category": "C.C. JÚNIOR MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "91160",
+      "teamName": "CONTENIDORS PENEDÈS - SE CASAL VILAFRANCA A",
+      "grupId": "23345",
+      "category": "C.C. JÚNIOR MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "88964",
+      "teamName": "AB VENDRELL 1",
+      "grupId": "23345",
+      "category": "C.C. JÚNIOR MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89849",
+      "teamName": "TGN BÀSQUET M09A",
+      "grupId": "23345",
+      "category": "C.C. JÚNIOR MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "88485",
+      "teamName": "CB VALLS IN OUT",
+      "grupId": "23345",
+      "category": "C.C. JÚNIOR MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90625",
+      "teamName": "VILABÀSQUET VILADECANS JM",
+      "grupId": "23345",
+      "category": "C.C. JÚNIOR MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90838",
+      "teamName": "U18 BQ MANYANET MOLINS",
+      "grupId": "23345",
+      "category": "C.C. JÚNIOR MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89775",
+      "teamName": "CNB VILANOVA AKO JM1",
+      "grupId": "23345",
+      "category": "C.C. JÚNIOR MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89001",
+      "teamName": "LA PARRÒQUIA - BÀSQUET SAMÀ U18M",
+      "grupId": "23345",
+      "category": "C.C. JÚNIOR MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "88781",
+      "teamName": "KIDS&US MANRESA VERMELL",
+      "grupId": "23346",
+      "category": "C.C. JÚNIOR MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "91046",
+      "teamName": "CN TÀRREGA",
+      "grupId": "23346",
+      "category": "C.C. JÚNIOR MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "88675",
+      "teamName": "CLUB BASUET SERÒS",
+      "grupId": "23346",
+      "category": "C.C. JÚNIOR MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89799",
+      "teamName": "CB IGUALADA JMA",
+      "grupId": "23346",
+      "category": "C.C. JÚNIOR MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90175",
+      "teamName": "LA SALLE UMANRESA A",
+      "grupId": "23346",
+      "category": "C.C. JÚNIOR MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "91051",
+      "teamName": "CB ARTÉS VERMELL",
+      "grupId": "23346",
+      "category": "C.C. JÚNIOR MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89726",
+      "teamName": "PUJOL MOLLERUSSA A",
+      "grupId": "23346",
+      "category": "C.C. JÚNIOR MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90802",
+      "teamName": "CLUB BASQUET PARDINYES - LLEIDA",
+      "grupId": "23346",
+      "category": "C.C. JÚNIOR MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90859",
+      "teamName": "CB IPSI",
+      "grupId": "23347",
+      "category": "C.C. JÚNIOR MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89296",
+      "teamName": "U.E. GAUDI-FORUS SARDENYA A",
+      "grupId": "23347",
+      "category": "C.C. JÚNIOR MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89235",
+      "teamName": "BÀSQUET SAFA CLAROR A",
+      "grupId": "23347",
+      "category": "C.C. JÚNIOR MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90025",
+      "teamName": "UE SANT CUGAT - OCCIDENT 2009",
+      "grupId": "23347",
+      "category": "C.C. JÚNIOR MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89281",
+      "teamName": "UE HORTA A",
+      "grupId": "23347",
+      "category": "C.C. JÚNIOR MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "88738",
+      "teamName": "VIROLAI",
+      "grupId": "23347",
+      "category": "C.C. JÚNIOR MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89489",
+      "teamName": "A.E. SANT ANDREU NATZARET",
+      "grupId": "23347",
+      "category": "C.C. JÚNIOR MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90089",
+      "teamName": "CLUB BASQUET SANTA COLOMA A",
+      "grupId": "23347",
+      "category": "C.C. JÚNIOR MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89396",
+      "teamName": "CENTRE CATÒLIC L'H A",
+      "grupId": "23348",
+      "category": "C.C. JÚNIOR MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90101",
+      "teamName": "FC MARTINENC BÀSQUET U18",
+      "grupId": "23348",
+      "category": "C.C. JÚNIOR MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "91131",
+      "teamName": "C.E.LAIETÀ - ASCENSORES ENINTER - A",
+      "grupId": "23348",
+      "category": "C.C. JÚNIOR MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89178",
+      "teamName": "SESE A",
+      "grupId": "23348",
+      "category": "C.C. JÚNIOR MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90813",
+      "teamName": "AEC COLLBLANC A",
+      "grupId": "23348",
+      "category": "C.C. JÚNIOR MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90378",
+      "teamName": "ASSOLIM - LLUÏSOS DE GRÀCIA  A",
+      "grupId": "23348",
+      "category": "C.C. JÚNIOR MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "88547",
+      "teamName": "AESE A",
+      "grupId": "23348",
+      "category": "C.C. JÚNIOR MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89117",
+      "teamName": "LA CASA AGENCY - C.B. SANT JOSEP OBRER BLANC",
+      "grupId": "23348",
+      "category": "C.C. JÚNIOR MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89493",
+      "teamName": "SANT IGNASI",
+      "grupId": "23349",
+      "category": "C.C. JÚNIOR MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89223",
+      "teamName": "CB MANYANET LES CORTS VERD",
+      "grupId": "23349",
+      "category": "C.C. JÚNIOR MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90424",
+      "teamName": "BC SANT JOAN DESPI A",
+      "grupId": "23349",
+      "category": "C.C. JÚNIOR MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90265",
+      "teamName": "CB CERDANYOLA NUROIL A",
+      "grupId": "23349",
+      "category": "C.C. JÚNIOR MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89030",
+      "teamName": "ESCOLAPIS SARRIÀ",
+      "grupId": "23349",
+      "category": "C.C. JÚNIOR MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89411",
+      "teamName": "C,B GRUP BARNA A",
+      "grupId": "23349",
+      "category": "C.C. JÚNIOR MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89216",
+      "teamName": "KENWOOD JOVENTUT LES CORTS U18",
+      "grupId": "23349",
+      "category": "C.C. JÚNIOR MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89508",
+      "teamName": "AE MINGUELLA A - PURE CUISINE",
+      "grupId": "23349",
+      "category": "C.C. JÚNIOR MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90527",
+      "teamName": "FLORANGE U.E.MATARÓ",
+      "grupId": "23296",
+      "category": "C.C. JÚNIOR MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "89175",
+      "teamName": "SESE B",
+      "grupId": "23296",
+      "category": "C.C. JÚNIOR MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "90657",
+      "teamName": "C.B. L'HOSPITALET B",
+      "grupId": "23296",
+      "category": "C.C. JÚNIOR MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "89582",
+      "teamName": "MANTISE CB SANT JOSEP BADALONA - JBM",
+      "grupId": "23296",
+      "category": "C.C. JÚNIOR MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "90438",
+      "teamName": "JAC SANTS BARCELONA U17 1",
+      "grupId": "23296",
+      "category": "C.C. JÚNIOR MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "91032",
+      "teamName": "CB TARRAGONA",
+      "grupId": "23296",
+      "category": "C.C. JÚNIOR MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "88945",
+      "teamName": "BÀSQUET GIRONA U17",
+      "grupId": "23296",
+      "category": "C.C. JÚNIOR MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "88790",
+      "teamName": "KIDS&US MANRESA U17",
+      "grupId": "23296",
+      "category": "C.C. JÚNIOR MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "89328",
+      "teamName": "BC MORABANC ANDORRA 2010 ANDORRA TELECOM",
+      "grupId": "23297",
+      "category": "C.C. JÚNIOR MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "88916",
+      "teamName": "CB CERDANYOLA NUROIL C",
+      "grupId": "23297",
+      "category": "C.C. JÚNIOR MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "89238",
+      "teamName": "CB VILADECANS VERD",
+      "grupId": "23297",
+      "category": "C.C. JÚNIOR MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "88862",
+      "teamName": "CNB VILANOVA AKO-VIMA GESTIÓ JM2",
+      "grupId": "23297",
+      "category": "C.C. JÚNIOR MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "90109",
+      "teamName": "FC MARTINENC BÀSQUET U17",
+      "grupId": "23297",
+      "category": "C.C. JÚNIOR MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "90327",
+      "teamName": "CB BOET MATARÓ 2010",
+      "grupId": "23297",
+      "category": "C.C. JÚNIOR MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "88641",
+      "teamName": "CB MOLLET C",
+      "grupId": "23297",
+      "category": "C.C. JÚNIOR MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "89093",
+      "teamName": "BASKET ALMEDA NEGRE",
+      "grupId": "23297",
+      "category": "C.C. JÚNIOR MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "90082",
+      "teamName": "CLUB BÀSQUET COLL GROC",
+      "grupId": "23298",
+      "category": "C.C. JÚNIOR MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "89870",
+      "teamName": "TGN BÀSQUET M10A",
+      "grupId": "23298",
+      "category": "C.C. JÚNIOR MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "89484",
+      "teamName": "A.E. SANT ANDREU NATZARET",
+      "grupId": "23298",
+      "category": "C.C. JÚNIOR MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "90166",
+      "teamName": "LA SALLE AUSA  1",
+      "grupId": "23298",
+      "category": "C.C. JÚNIOR MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "90349",
+      "teamName": "CN TERRASSA 1",
+      "grupId": "23298",
+      "category": "C.C. JÚNIOR MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "90916",
+      "teamName": "NAYOX FORÇA LLEIDA B",
+      "grupId": "23298",
+      "category": "C.C. JÚNIOR MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "90019",
+      "teamName": "UE SANT CUGAT - OCCIDENT 2010",
+      "grupId": "23298",
+      "category": "C.C. JÚNIOR MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "89709",
+      "teamName": "CB GRANOLLERS 1",
+      "grupId": "23298",
+      "category": "C.C. JÚNIOR MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "89383",
+      "teamName": "CB PEDAGOGIUM VERD",
+      "grupId": "23299",
+      "category": "C.C. JÚNIOR MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "91288",
+      "teamName": "CB SALT U17",
+      "grupId": "23299",
+      "category": "C.C. JÚNIOR MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "88707",
+      "teamName": "NÀSTIC SPORTS ACADEMY",
+      "grupId": "23299",
+      "category": "C.C. JÚNIOR MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "88500",
+      "teamName": "RAMÓN MAS ARQUITECTES - AECAM",
+      "grupId": "23299",
+      "category": "C.C. JÚNIOR MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "90583",
+      "teamName": "QBASKET SANT CUGAT 2",
+      "grupId": "23299",
+      "category": "C.C. JÚNIOR MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "90409",
+      "teamName": "C. B. SANTFELIUENC  2010",
+      "grupId": "23299",
+      "category": "C.C. JÚNIOR MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "91268",
+      "teamName": "CBCASTELLAR JÚNIOR GROC MASC",
+      "grupId": "23299",
+      "category": "C.C. JÚNIOR MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "89264",
+      "teamName": "C.B.VIC 2 - UNIVERSITAT DE VIC",
+      "grupId": "23299",
+      "category": "C.C. JÚNIOR MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "88780",
+      "teamName": "KIDS&US MANRESA U16",
+      "grupId": "23288",
+      "category": "C.C. CADET MASCULÍ PREFERENT"
+    },
+    {
+      "teamId": "90526",
+      "teamName": "FLORANGE U.E.MATARÓ",
+      "grupId": "23288",
+      "category": "C.C. CADET MASCULÍ PREFERENT"
+    },
+    {
+      "teamId": "91024",
+      "teamName": "CB TARRAGONA",
+      "grupId": "23288",
+      "category": "C.C. CADET MASCULÍ PREFERENT"
+    },
+    {
+      "teamId": "89647",
+      "teamName": "JOVENTUT BADALONA A",
+      "grupId": "23288",
+      "category": "C.C. CADET MASCULÍ PREFERENT"
+    },
+    {
+      "teamId": "88644",
+      "teamName": "BARÇA",
+      "grupId": "23288",
+      "category": "C.C. CADET MASCULÍ PREFERENT"
+    },
+    {
+      "teamId": "88943",
+      "teamName": "BÀSQUET GIRONA U16",
+      "grupId": "23288",
+      "category": "C.C. CADET MASCULÍ PREFERENT"
+    },
+    {
+      "teamId": "89578",
+      "teamName": "MANTISE CB SANT JOSEP BADALONA - CAM",
+      "grupId": "23288",
+      "category": "C.C. CADET MASCULÍ PREFERENT"
+    },
+    {
+      "teamId": "90655",
+      "teamName": "DROOP CENTRE C.B. L'HOSPITALET A",
+      "grupId": "23288",
+      "category": "C.C. CADET MASCULÍ PREFERENT"
+    },
+    {
+      "teamId": "90433",
+      "teamName": "JAC SANTS BARCELONA U16 1",
+      "grupId": "23289",
+      "category": "C.C. CADET MASCULÍ PREFERENT"
+    },
+    {
+      "teamId": "89173",
+      "teamName": "SESE A",
+      "grupId": "23289",
+      "category": "C.C. CADET MASCULÍ PREFERENT"
+    },
+    {
+      "teamId": "90921",
+      "teamName": "NAYOX FORÇA LLEIDA A",
+      "grupId": "23289",
+      "category": "C.C. CADET MASCULÍ PREFERENT"
+    },
+    {
+      "teamId": "89100",
+      "teamName": "BASKT ALMEDA 1",
+      "grupId": "23289",
+      "category": "C.C. CADET MASCULÍ PREFERENT"
+    },
+    {
+      "teamId": "88887",
+      "teamName": "SABADELL BQ VALLÈS U16M",
+      "grupId": "23289",
+      "category": "C.C. CADET MASCULÍ PREFERENT"
+    },
+    {
+      "teamId": "90415",
+      "teamName": "C. B. SANTFELIUENC 2011 BLAU",
+      "grupId": "23289",
+      "category": "C.C. CADET MASCULÍ PREFERENT"
+    },
+    {
+      "teamId": "89567",
+      "teamName": "UE.MONTGAT - VERMELL",
+      "grupId": "23289",
+      "category": "C.C. CADET MASCULÍ PREFERENT"
+    },
+    {
+      "teamId": "89712",
+      "teamName": "CB GRANOLLERS 1",
+      "grupId": "23289",
+      "category": "C.C. CADET MASCULÍ PREFERENT"
+    },
+    {
+      "teamId": "89263",
+      "teamName": "C.B.VIC 1 - UNIVERSITAT DE VIC",
+      "grupId": "23350",
+      "category": "C.C. CADET MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "88553",
+      "teamName": "CB OLOT",
+      "grupId": "23350",
+      "category": "C.C. CADET MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89663",
+      "teamName": "CB BANYOLES",
+      "grupId": "23350",
+      "category": "C.C. CADET MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89880",
+      "teamName": "CB CARDEDEU RODELEM - VERMELL",
+      "grupId": "23350",
+      "category": "C.C. CADET MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "88640",
+      "teamName": "CB MOLLET A",
+      "grupId": "23350",
+      "category": "C.C. CADET MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90253",
+      "teamName": "CB PARETS NEGRE",
+      "grupId": "23350",
+      "category": "C.C. CADET MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89714",
+      "teamName": "CB GRANOLLERS 2",
+      "grupId": "23350",
+      "category": "C.C. CADET MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90156",
+      "teamName": "CB GUÍXOLS U16 BLAU",
+      "grupId": "23350",
+      "category": "C.C. CADET MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "88511",
+      "teamName": "CB CALELLA",
+      "grupId": "23351",
+      "category": "C.C. CADET MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89958",
+      "teamName": "SOL GIRONÈS BISBAL BÀSQUET",
+      "grupId": "23351",
+      "category": "C.C. CADET MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89062",
+      "teamName": "ARESA SHIPYARD ARENYS BÀSQUET VERD",
+      "grupId": "23351",
+      "category": "C.C. CADET MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89814",
+      "teamName": "CB ARGENTONA 2011 NEGRE",
+      "grupId": "23351",
+      "category": "C.C. CADET MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "88942",
+      "teamName": "BÀSQUET GIRONA U16 VERMELL",
+      "grupId": "23351",
+      "category": "C.C. CADET MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "88498",
+      "teamName": "LAURA PUJADAS PERRUQUERIA - AECAM",
+      "grupId": "23351",
+      "category": "C.C. CADET MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "91287",
+      "teamName": "CB SALT U16 VERD",
+      "grupId": "23351",
+      "category": "C.C. CADET MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90315",
+      "teamName": "CB BOET MATARÓ 2011",
+      "grupId": "23351",
+      "category": "C.C. CADET MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89075",
+      "teamName": "CB MONTPEDRÓS",
+      "grupId": "23352",
+      "category": "C.C. CADET MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "91423",
+      "teamName": "CB. CORNELLÀ A 2011",
+      "grupId": "23352",
+      "category": "C.C. CADET MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89856",
+      "teamName": "TGN BÀSQUET M11A",
+      "grupId": "23352",
+      "category": "C.C. CADET MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "88480",
+      "teamName": "CB VALLS EUROPASTRY",
+      "grupId": "23352",
+      "category": "C.C. CADET MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90414",
+      "teamName": "C. B. SANTFELIUENC 2011 BLANC",
+      "grupId": "23352",
+      "category": "C.C. CADET MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90113",
+      "teamName": "PLOMS SALLE REUS CMU16",
+      "grupId": "23352",
+      "category": "C.C. CADET MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89250",
+      "teamName": "CB VILADECANS VERD",
+      "grupId": "23352",
+      "category": "C.C. CADET MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "88706",
+      "teamName": "NÀSTIC SPORTS ACADEMY",
+      "grupId": "23353",
+      "category": "C.C. CADET MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90423",
+      "teamName": "BC SANT JOAN DESPI A",
+      "grupId": "23353",
+      "category": "C.C. CADET MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "91033",
+      "teamName": "CB TARRAGONA BLAU2",
+      "grupId": "23353",
+      "category": "C.C. CADET MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "88866",
+      "teamName": "CNB VILANOVA AKO CM1",
+      "grupId": "23353",
+      "category": "C.C. CADET MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "88548",
+      "teamName": "AESE A",
+      "grupId": "23353",
+      "category": "C.C. CADET MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90665",
+      "teamName": "C.B. L'HOSPITALET 2011",
+      "grupId": "23353",
+      "category": "C.C. CADET MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "88609",
+      "teamName": "CB CASTELLDEFELS - BBA2011M",
+      "grupId": "23353",
+      "category": "C.C. CADET MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "88897",
+      "teamName": "U.E. CLARET A",
+      "grupId": "23354",
+      "category": "C.C. CADET MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "88856",
+      "teamName": "C.E.LAIETÀ - ASCENSORES ENINTER - A",
+      "grupId": "23354",
+      "category": "C.C. CADET MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90110",
+      "teamName": "FC MARTINENC BÀSQUET U16",
+      "grupId": "23354",
+      "category": "C.C. CADET MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "91635",
+      "teamName": "EL CÍRCOL A11",
+      "grupId": "23354",
+      "category": "C.C. CADET MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "88922",
+      "teamName": "BASQUET ATENEU MONTSERRAT INTERT",
+      "grupId": "23354",
+      "category": "C.C. CADET MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89410",
+      "teamName": "C.B GRUP BARNA A",
+      "grupId": "23354",
+      "category": "C.C. CADET MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89196",
+      "teamName": "KENWOOD JOVENTUT LES CORTS U16",
+      "grupId": "23354",
+      "category": "C.C. CADET MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90087",
+      "teamName": "CLUB BASQUET SANTA COLOMA A",
+      "grupId": "23354",
+      "category": "C.C. CADET MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "88883",
+      "teamName": "SABADELL BQ VALLÈS U16M INTER",
+      "grupId": "23355",
+      "category": "C.C. CADET MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89339",
+      "teamName": "BC MORABANC ANDORRA VERMELL FITESPORT",
+      "grupId": "23355",
+      "category": "C.C. CADET MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "88572",
+      "teamName": "CE SANT NICOLAU 1",
+      "grupId": "23355",
+      "category": "C.C. CADET MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90176",
+      "teamName": "LA SALLE MANRESA A",
+      "grupId": "23355",
+      "category": "C.C. CADET MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90048",
+      "teamName": "CLUB NATACIÓ SABADELL A",
+      "grupId": "23355",
+      "category": "C.C. CADET MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "88778",
+      "teamName": "KIDS&US MANRESA VERMELL",
+      "grupId": "23355",
+      "category": "C.C. CADET MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89428",
+      "teamName": "CB CERVERA MOBEL LINEA\tNEGRE",
+      "grupId": "23355",
+      "category": "C.C. CADET MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90267",
+      "teamName": "UE BARBERA A",
+      "grupId": "23356",
+      "category": "C.C. CADET MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90018",
+      "teamName": "UE SANT CUGAT - OCCIDENT 2011",
+      "grupId": "23356",
+      "category": "C.C. CADET MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "91096",
+      "teamName": "CB CAPPONT",
+      "grupId": "23356",
+      "category": "C.C. CADET MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90362",
+      "teamName": "CN TERRASSA A",
+      "grupId": "23356",
+      "category": "C.C. CADET MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90397",
+      "teamName": "CEB SANT JORDI BLAU",
+      "grupId": "23356",
+      "category": "C.C. CADET MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90920",
+      "teamName": "NAYOX FORÇA LLEIDA C",
+      "grupId": "23356",
+      "category": "C.C. CADET MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90577",
+      "teamName": "QBASKET SANT CUGAT 1",
+      "grupId": "23356",
+      "category": "C.C. CADET MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89286",
+      "teamName": "UE HORTA A",
+      "grupId": "23357",
+      "category": "C.C. CADET MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89225",
+      "teamName": "CB MANYANET LES CORTS VERD",
+      "grupId": "23357",
+      "category": "C.C. CADET MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89292",
+      "teamName": "U.E. GAUDI-FORUS SARDENYA A",
+      "grupId": "23357",
+      "category": "C.C. CADET MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89913",
+      "teamName": "CAMPING BIANYA ROSER VERMELL",
+      "grupId": "23357",
+      "category": "C.C. CADET MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89531",
+      "teamName": "AB PREMIÀ BLAU",
+      "grupId": "23357",
+      "category": "C.C. CADET MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "91093",
+      "teamName": "CLUB ESPORTIU DIAGONAL MAR A",
+      "grupId": "23357",
+      "category": "C.C. CADET MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89487",
+      "teamName": "A.E. SANT ANDREU NATZARET",
+      "grupId": "23357",
+      "category": "C.C. CADET MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89629",
+      "teamName": "JOVENTUT BADALONA 1",
+      "grupId": "23357",
+      "category": "C.C. CADET MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89699",
+      "teamName": "BARÇA B",
+      "grupId": "23308",
+      "category": "C.C. CADET MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "89643",
+      "teamName": "JOVENTUT BADALONA B",
+      "grupId": "23308",
+      "category": "C.C. CADET MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "90410",
+      "teamName": "C. B. SANTFELIUENC 2012 BLAU",
+      "grupId": "23308",
+      "category": "C.C. CADET MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "89088",
+      "teamName": "BASKET ALMEDA NEGRE",
+      "grupId": "23308",
+      "category": "C.C. CADET MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "90525",
+      "teamName": "FLORANGE U.E.MATARÓ",
+      "grupId": "23308",
+      "category": "C.C. CADET MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "90668",
+      "teamName": "C.B. L'HOSPITALET B",
+      "grupId": "23308",
+      "category": "C.C. CADET MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "88779",
+      "teamName": "KIDS&US MANRESA U15",
+      "grupId": "23308",
+      "category": "C.C. CADET MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "89843",
+      "teamName": "BÀSQUET GIRONA U15",
+      "grupId": "23308",
+      "category": "C.C. CADET MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "90440",
+      "teamName": "JAC SANTS BARCELONA U15 1",
+      "grupId": "23309",
+      "category": "C.C. CADET MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "91028",
+      "teamName": "CB TARRAGONA",
+      "grupId": "23309",
+      "category": "C.C. CADET MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "90020",
+      "teamName": "UE SANT CUGAT - OCCIDENT 2012",
+      "grupId": "23309",
+      "category": "C.C. CADET MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "89176",
+      "teamName": "SESE B",
+      "grupId": "23309",
+      "category": "C.C. CADET MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "90915",
+      "teamName": "NAYOX FORÇA LLEIDA B",
+      "grupId": "23309",
+      "category": "C.C. CADET MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "90449",
+      "teamName": "C.B GRUP BARNA B",
+      "grupId": "23309",
+      "category": "C.C. CADET MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "89818",
+      "teamName": "CB ARGENTONA 2012 NEGRE",
+      "grupId": "23309",
+      "category": "C.C. CADET MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "89586",
+      "teamName": "MANTISE CB SANT JOSEP BADALONA - CBM",
+      "grupId": "23309",
+      "category": "C.C. CADET MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "89701",
+      "teamName": "CB GRANOLLERS 3",
+      "grupId": "23310",
+      "category": "C.C. CADET MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "88846",
+      "teamName": "C.B. PRAT - AIGÜES DEL PRAT B",
+      "grupId": "23310",
+      "category": "C.C. CADET MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "89506",
+      "teamName": "AE MINGUELLA B - PURE CUISINE",
+      "grupId": "23310",
+      "category": "C.C. CADET MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "88561",
+      "teamName": "CE SANT NICOLAU 3",
+      "grupId": "23310",
+      "category": "C.C. CADET MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "90837",
+      "teamName": "U15 BQ MANYANET MOLINS",
+      "grupId": "23310",
+      "category": "C.C. CADET MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "89229",
+      "teamName": "BÀSQUET SAFA CLAROR 1",
+      "grupId": "23310",
+      "category": "C.C. CADET MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "90989",
+      "teamName": "CB MORELL",
+      "grupId": "23310",
+      "category": "C.C. CADET MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "90039",
+      "teamName": "CLUB NATACIÓ SABADELL B",
+      "grupId": "23310",
+      "category": "C.C. CADET MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "88608",
+      "teamName": "CB CASTELLDEFELS - BBA2012M",
+      "grupId": "23311",
+      "category": "C.C. CADET MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "90060",
+      "teamName": "FD CASSANENC U15",
+      "grupId": "23311",
+      "category": "C.C. CADET MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "88633",
+      "teamName": "MFC CONSULTING CB MOLLET C",
+      "grupId": "23311",
+      "category": "C.C. CADET MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "91050",
+      "teamName": "CB ARTÉS",
+      "grupId": "23311",
+      "category": "C.C. CADET MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "89538",
+      "teamName": "REUS DEPORTIU NEGRE",
+      "grupId": "23311",
+      "category": "C.C. CADET MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "90107",
+      "teamName": "FC MARTINENC BÀSQUET U15",
+      "grupId": "23311",
+      "category": "C.C. CADET MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "90377",
+      "teamName": "CADET PREFERENT 1ANY CBSPSP",
+      "grupId": "23311",
+      "category": "C.C. CADET MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "89285",
+      "teamName": "UE HORTA B",
+      "grupId": "23311",
+      "category": "C.C. CADET MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "88777",
+      "teamName": "KIDS&US MANRESA U14",
+      "grupId": "23292",
+      "category": "C.C. INFANTIL MASCULÍ PREFERENT"
+    },
+    {
+      "teamId": "90523",
+      "teamName": "FLORANGE U.E.MATARÓ",
+      "grupId": "23292",
+      "category": "C.C. INFANTIL MASCULÍ PREFERENT"
+    },
+    {
+      "teamId": "90031",
+      "teamName": "UE SANT CUGAT - OCCIDENT 2013",
+      "grupId": "23292",
+      "category": "C.C. INFANTIL MASCULÍ PREFERENT"
+    },
+    {
+      "teamId": "89621",
+      "teamName": "JOVENTUT BADALONA A",
+      "grupId": "23292",
+      "category": "C.C. INFANTIL MASCULÍ PREFERENT"
+    },
+    {
+      "teamId": "88957",
+      "teamName": "BÀSQUET GIRONA U14",
+      "grupId": "23292",
+      "category": "C.C. INFANTIL MASCULÍ PREFERENT"
+    },
+    {
+      "teamId": "89097",
+      "teamName": "BASKET ALMEDA 1",
+      "grupId": "23292",
+      "category": "C.C. INFANTIL MASCULÍ PREFERENT"
+    },
+    {
+      "teamId": "88651",
+      "teamName": "BARÇA",
+      "grupId": "23292",
+      "category": "C.C. INFANTIL MASCULÍ PREFERENT"
+    },
+    {
+      "teamId": "90667",
+      "teamName": "C.B. L'HOSPITALET A",
+      "grupId": "23292",
+      "category": "C.C. INFANTIL MASCULÍ PREFERENT"
+    },
+    {
+      "teamId": "90439",
+      "teamName": "JAC SANTS BARCELONA U14 1",
+      "grupId": "23293",
+      "category": "C.C. INFANTIL MASCULÍ PREFERENT"
+    },
+    {
+      "teamId": "90063",
+      "teamName": "FD CASSANENC U14",
+      "grupId": "23293",
+      "category": "C.C. INFANTIL MASCULÍ PREFERENT"
+    },
+    {
+      "teamId": "89453",
+      "teamName": "VITALDENT - UB SANT ADRIA",
+      "grupId": "23293",
+      "category": "C.C. INFANTIL MASCULÍ PREFERENT"
+    },
+    {
+      "teamId": "89184",
+      "teamName": "SESE",
+      "grupId": "23293",
+      "category": "C.C. INFANTIL MASCULÍ PREFERENT"
+    },
+    {
+      "teamId": "88882",
+      "teamName": "SABADELL BQ VALLÈS U14M",
+      "grupId": "23293",
+      "category": "C.C. INFANTIL MASCULÍ PREFERENT"
+    },
+    {
+      "teamId": "89316",
+      "teamName": "SEDIS NAGRUP",
+      "grupId": "23293",
+      "category": "C.C. INFANTIL MASCULÍ PREFERENT"
+    },
+    {
+      "teamId": "90231",
+      "teamName": "EL CÍRCOL A",
+      "grupId": "23293",
+      "category": "C.C. INFANTIL MASCULÍ PREFERENT"
+    },
+    {
+      "teamId": "88855",
+      "teamName": "C.E.LAIETÀ - ASCENSORES ENINTER -",
+      "grupId": "23293",
+      "category": "C.C. INFANTIL MASCULÍ PREFERENT"
+    },
+    {
+      "teamId": "88847",
+      "teamName": "C.B. PRAT - AIGÜES DEL PRAT A",
+      "grupId": "23358",
+      "category": "C.C. INFANTIL MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90836",
+      "teamName": "U14 BQ MANYANET MOLINS",
+      "grupId": "23358",
+      "category": "C.C. INFANTIL MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89850",
+      "teamName": "TGN BÀSQUET M13A",
+      "grupId": "23358",
+      "category": "C.C. INFANTIL MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "91030",
+      "teamName": "CB TARRAGONA",
+      "grupId": "23358",
+      "category": "C.C. INFANTIL MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "88650",
+      "teamName": "BARÇA B",
+      "grupId": "23358",
+      "category": "C.C. INFANTIL MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "88475",
+      "teamName": "CB VALLS TERMOWATT SOLAR ENERGY",
+      "grupId": "23358",
+      "category": "C.C. INFANTIL MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90987",
+      "teamName": "CB MORELL A",
+      "grupId": "23358",
+      "category": "C.C. INFANTIL MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "91201",
+      "teamName": "CONTENIDORS PENEDÈS - SE CASAL VILAFRANCA A",
+      "grupId": "23358",
+      "category": "C.C. INFANTIL MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89269",
+      "teamName": "C.B.VIC 1 - UNIVERSITAT DE VIC",
+      "grupId": "23359",
+      "category": "C.C. INFANTIL MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89959",
+      "teamName": "SOL GIRONÈS BISBAL BÀSQUET",
+      "grupId": "23359",
+      "category": "C.C. INFANTIL MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "88639",
+      "teamName": "CB MOLLET A",
+      "grupId": "23359",
+      "category": "C.C. INFANTIL MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89511",
+      "teamName": "AE MINGUELLA A - PURE CUISINE",
+      "grupId": "23359",
+      "category": "C.C. INFANTIL MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "88956",
+      "teamName": "BÀSQUET GIRONA U14 VERMELL",
+      "grupId": "23359",
+      "category": "C.C. INFANTIL MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "88499",
+      "teamName": "FUSTERIA DÀVILA - AECAM",
+      "grupId": "23359",
+      "category": "C.C. INFANTIL MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89713",
+      "teamName": "CB GRANOLLERS 1",
+      "grupId": "23359",
+      "category": "C.C. INFANTIL MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90158",
+      "teamName": "CB GUÍXOLS U14",
+      "grupId": "23359",
+      "category": "C.C. INFANTIL MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90918",
+      "teamName": "NAYOX FORÇA LLEIDA A",
+      "grupId": "23360",
+      "category": "C.C. INFANTIL MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89966",
+      "teamName": "CN TÀRREGA",
+      "grupId": "23360",
+      "category": "C.C. INFANTIL MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90046",
+      "teamName": "CLUB NATACIÓ SABADELL A",
+      "grupId": "23360",
+      "category": "C.C. INFANTIL MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90368",
+      "teamName": "TERRASSA 2013 A",
+      "grupId": "23360",
+      "category": "C.C. INFANTIL MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "88562",
+      "teamName": "CE SANT NICOLAU",
+      "grupId": "23360",
+      "category": "C.C. INFANTIL MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "91053",
+      "teamName": "CB ARTÉS",
+      "grupId": "23360",
+      "category": "C.C. INFANTIL MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "88660",
+      "teamName": "BASQUETPIASABADELL",
+      "grupId": "23360",
+      "category": "C.C. INFANTIL MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "88789",
+      "teamName": "KIDS&US MANRESA VERMELL",
+      "grupId": "23360",
+      "category": "C.C. INFANTIL MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90749",
+      "teamName": "BC TECLA SALA",
+      "grupId": "23361",
+      "category": "C.C. INFANTIL MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90425",
+      "teamName": "BC SANT JOAN DESPI A",
+      "grupId": "23361",
+      "category": "C.C. INFANTIL MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89305",
+      "teamName": "U.E. GAUDI-FORUS SARDENYA A",
+      "grupId": "23361",
+      "category": "C.C. INFANTIL MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "88905",
+      "teamName": "U.E. CLARET A",
+      "grupId": "23361",
+      "category": "C.C. INFANTIL MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90380",
+      "teamName": "LLUÏSOS DE GRÀCIA",
+      "grupId": "23361",
+      "category": "C.C. INFANTIL MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89409",
+      "teamName": "C.B GRUP BARNA A",
+      "grupId": "23361",
+      "category": "C.C. INFANTIL MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90032",
+      "teamName": "UE SANT CUGAT - OCCIDENT NEGRE",
+      "grupId": "23361",
+      "category": "C.C. INFANTIL MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "88729",
+      "teamName": "FITSTORE - E.B. ROSELLA VERMELL",
+      "grupId": "23361",
+      "category": "C.C. INFANTIL MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90791",
+      "teamName": "SANT QUIRZE BÀSQUET CLUB A",
+      "grupId": "23362",
+      "category": "C.C. INFANTIL MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89927",
+      "teamName": "CAMPING BIANYA ROSER VERMELL",
+      "grupId": "23362",
+      "category": "C.C. INFANTIL MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90111",
+      "teamName": "FC MARTINENC BÀSQUET U14",
+      "grupId": "23362",
+      "category": "C.C. INFANTIL MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90413",
+      "teamName": "CLÍNICA BERGÉS NIETO CBS 2013 INT",
+      "grupId": "23362",
+      "category": "C.C. INFANTIL MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89620",
+      "teamName": "JOVENTUT BADALONA B",
+      "grupId": "23362",
+      "category": "C.C. INFANTIL MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90671",
+      "teamName": "C.B. L'HOSPITALET B",
+      "grupId": "23362",
+      "category": "C.C. INFANTIL MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "88929",
+      "teamName": "BASQUET ATENEU MONTSERRAT INTERTERRITORIAL",
+      "grupId": "23362",
+      "category": "C.C. INFANTIL MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90088",
+      "teamName": "CLUB BASQUET SANTA COLOMA A",
+      "grupId": "23362",
+      "category": "C.C. INFANTIL MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89576",
+      "teamName": "MANTISE CB SANT JOSEP BADALONA - IAM",
+      "grupId": "23363",
+      "category": "C.C. INFANTIL MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90335",
+      "teamName": "CB BOET MATARÓ 2013",
+      "grupId": "23363",
+      "category": "C.C. INFANTIL MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89204",
+      "teamName": "KENWOOD JOVENTUT LES CORTS U14",
+      "grupId": "23363",
+      "category": "C.C. INFANTIL MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "88546",
+      "teamName": "AESE",
+      "grupId": "23363",
+      "category": "C.C. INFANTIL MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89089",
+      "teamName": "BASKET ALMEDA GROC",
+      "grupId": "23363",
+      "category": "C.C. INFANTIL MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89572",
+      "teamName": "UE.MONTGAT - VERMELL",
+      "grupId": "23363",
+      "category": "C.C. INFANTIL MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89830",
+      "teamName": "CLUB BÀSQUET ARGENTONA",
+      "grupId": "23363",
+      "category": "C.C. INFANTIL MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89254",
+      "teamName": "CB VILADECANS VERD",
+      "grupId": "23363",
+      "category": "C.C. INFANTIL MASCULÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90235",
+      "teamName": "EL CÍRCOL 14",
+      "grupId": "23316",
+      "category": "C.C. INFANTIL MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "90118",
+      "teamName": "PLOMS SALLE REUS IMU13",
+      "grupId": "23316",
+      "category": "C.C. INFANTIL MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "89249",
+      "teamName": "CB VILADECANS BLANC",
+      "grupId": "23316",
+      "category": "C.C. INFANTIL MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "88870",
+      "teamName": "CNB VILANOVA AKO INF 1ER ANY",
+      "grupId": "23316",
+      "category": "C.C. INFANTIL MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "88648",
+      "teamName": "BARÇA 1",
+      "grupId": "23316",
+      "category": "C.C. INFANTIL MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "89866",
+      "teamName": "TGN BÀSQUET M14A",
+      "grupId": "23316",
+      "category": "C.C. INFANTIL MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "91052",
+      "teamName": "CB ARTÉS",
+      "grupId": "23316",
+      "category": "C.C. INFANTIL MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "89354",
+      "teamName": "C.B. CAMBRILS",
+      "grupId": "23316",
+      "category": "C.C. INFANTIL MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "90437",
+      "teamName": "JAC SANTS BARCELONA U13 1",
+      "grupId": "23317",
+      "category": "C.C. INFANTIL MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "88913",
+      "teamName": "CB CERDANYOLA NUROIL",
+      "grupId": "23317",
+      "category": "C.C. INFANTIL MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "88558",
+      "teamName": "CB ADEPAF TXOT'S",
+      "grupId": "23317",
+      "category": "C.C. INFANTIL MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "89822",
+      "teamName": "CB ARGENTONA 2014 NEGRE",
+      "grupId": "23317",
+      "category": "C.C. INFANTIL MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "90762",
+      "teamName": "BÀSQUET SAFA CLAROR 1",
+      "grupId": "23317",
+      "category": "C.C. INFANTIL MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "89095",
+      "teamName": "BASKET ALMEDA NEGRE",
+      "grupId": "23317",
+      "category": "C.C. INFANTIL MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "88953",
+      "teamName": "BÀSQUET GIRONA U13",
+      "grupId": "23317",
+      "category": "C.C. INFANTIL MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "89589",
+      "teamName": "MANTISE CB SANT JOSEP BADALONA - IBM",
+      "grupId": "23317",
+      "category": "C.C. INFANTIL MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "90917",
+      "teamName": "NAYOX FORÇA LLEIDA B",
+      "grupId": "23318",
+      "category": "C.C. INFANTIL MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "88783",
+      "teamName": "KIDS&US MANRESA U13",
+      "grupId": "23318",
+      "category": "C.C. INFANTIL MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "90524",
+      "teamName": "FLORANGE U.E.MATARÓ",
+      "grupId": "23318",
+      "category": "C.C. INFANTIL MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "89485",
+      "teamName": "A.E. SANT ANDREU NATZARET-1A",
+      "grupId": "23318",
+      "category": "C.C. INFANTIL MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "88638",
+      "teamName": "CB MOLLET B",
+      "grupId": "23318",
+      "category": "C.C. INFANTIL MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "90108",
+      "teamName": "FC MARTINENC BÀSQUET U13",
+      "grupId": "23318",
+      "category": "C.C. INFANTIL MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "90454",
+      "teamName": "C.B GRUP BARNA B",
+      "grupId": "23318",
+      "category": "C.C. INFANTIL MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "90662",
+      "teamName": "C.B. L'HOSPITALET 2014",
+      "grupId": "23318",
+      "category": "C.C. INFANTIL MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "89452",
+      "teamName": "INELMA - UB SANT ADRIA GROC",
+      "grupId": "23319",
+      "category": "C.C. INFANTIL MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "88463",
+      "teamName": "CB QUART NEGRE GRUES CRUZ",
+      "grupId": "23319",
+      "category": "C.C. INFANTIL MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "89320",
+      "teamName": "CB SANT GREGORI VALL DE LLÉMENA U13 LILA",
+      "grupId": "23319",
+      "category": "C.C. INFANTIL MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "89181",
+      "teamName": "SESE B",
+      "grupId": "23319",
+      "category": "C.C. INFANTIL MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "88886",
+      "teamName": "SABADELL BQ VALLÈS U13M",
+      "grupId": "23319",
+      "category": "C.C. INFANTIL MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "89641",
+      "teamName": "JOVENTUT BADALONA VERD",
+      "grupId": "23319",
+      "category": "C.C. INFANTIL MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "90320",
+      "teamName": "CB BOET MATARÓ 2014",
+      "grupId": "23319",
+      "category": "C.C. INFANTIL MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "89703",
+      "teamName": "CB GRANOLLERS 4",
+      "grupId": "23319",
+      "category": "C.C. INFANTIL MASCULÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "89359",
+      "teamName": "LOQUILLO FEMENÍ SANT ADRIÀ A",
+      "grupId": "23286",
+      "category": "C. C. JÚNIOR FEMENÍ PREFERENT"
+    },
+    {
+      "teamId": "88880",
+      "teamName": "SABADELL BQ VALLÈS U18F",
+      "grupId": "23286",
+      "category": "C. C. JÚNIOR FEMENÍ PREFERENT"
+    },
+    {
+      "teamId": "89170",
+      "teamName": "SESE A",
+      "grupId": "23286",
+      "category": "C. C. JÚNIOR FEMENÍ PREFERENT"
+    },
+    {
+      "teamId": "88626",
+      "teamName": "FLORANGE U.E.MATARÓ",
+      "grupId": "23286",
+      "category": "C. C. JÚNIOR FEMENÍ PREFERENT"
+    },
+    {
+      "teamId": "88946",
+      "teamName": "BÀSQUET GIRONA U18",
+      "grupId": "23286",
+      "category": "C. C. JÚNIOR FEMENÍ PREFERENT"
+    },
+    {
+      "teamId": "89656",
+      "teamName": "JOVENTUT BADALONA A",
+      "grupId": "23286",
+      "category": "C. C. JÚNIOR FEMENÍ PREFERENT"
+    },
+    {
+      "teamId": "90621",
+      "teamName": "DISHELEC 65 VILABÀSQUET VILADECANS JF",
+      "grupId": "23286",
+      "category": "C. C. JÚNIOR FEMENÍ PREFERENT"
+    },
+    {
+      "teamId": "89017",
+      "teamName": "SEGLE XXI",
+      "grupId": "23286",
+      "category": "C. C. JÚNIOR FEMENÍ PREFERENT"
+    },
+    {
+      "teamId": "89675",
+      "teamName": "ALPANINO JET TERRASSA U18",
+      "grupId": "23287",
+      "category": "C. C. JÚNIOR FEMENÍ PREFERENT"
+    },
+    {
+      "teamId": "90027",
+      "teamName": "UE SANT CUGAT - OCCIDENT 2009",
+      "grupId": "23287",
+      "category": "C. C. JÚNIOR FEMENÍ PREFERENT"
+    },
+    {
+      "teamId": "89853",
+      "teamName": "TGN BÀSQUET F09A",
+      "grupId": "23287",
+      "category": "C. C. JÚNIOR FEMENÍ PREFERENT"
+    },
+    {
+      "teamId": "90460",
+      "teamName": "C.B GRUP BARNA A",
+      "grupId": "23287",
+      "category": "C. C. JÚNIOR FEMENÍ PREFERENT"
+    },
+    {
+      "teamId": "89189",
+      "teamName": "KENWOOD JOVENTUT LES CORTS U18F",
+      "grupId": "23287",
+      "category": "C. C. JÚNIOR FEMENÍ PREFERENT"
+    },
+    {
+      "teamId": "90325",
+      "teamName": "CB BOET MATARÓ 2009",
+      "grupId": "23287",
+      "category": "C. C. JÚNIOR FEMENÍ PREFERENT"
+    },
+    {
+      "teamId": "91409",
+      "teamName": "CB. CORNELLÀ A",
+      "grupId": "23287",
+      "category": "C. C. JÚNIOR FEMENÍ PREFERENT"
+    },
+    {
+      "teamId": "89784",
+      "teamName": "CB IGUALADA JFA",
+      "grupId": "23287",
+      "category": "C. C. JÚNIOR FEMENÍ PREFERENT"
+    },
+    {
+      "teamId": "89504",
+      "teamName": "AE MINGUELLA A - PURE CUISINE",
+      "grupId": "23365",
+      "category": "C.C. JÚNIOR FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89237",
+      "teamName": "BÀSQUET SAFA CLAROR",
+      "grupId": "23365",
+      "category": "C.C. JÚNIOR FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90820",
+      "teamName": "CLUB BÀSQUET SANT CELONI U18F",
+      "grupId": "23365",
+      "category": "C.C. JÚNIOR FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90382",
+      "teamName": "ASSOLIM - LLUÏSOS DE GRÀCIA  A",
+      "grupId": "23365",
+      "category": "C.C. JÚNIOR FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90226",
+      "teamName": "EL MASNOU BASQUETBOL",
+      "grupId": "23365",
+      "category": "C.C. JÚNIOR FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89555",
+      "teamName": "UE.MONTGAT - VERMELL",
+      "grupId": "23365",
+      "category": "C.C. JÚNIOR FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90442",
+      "teamName": "JAC SANTS BARCELONA U18 1",
+      "grupId": "23365",
+      "category": "C.C. JÚNIOR FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "91170",
+      "teamName": "CB TONA",
+      "grupId": "23366",
+      "category": "C.C. JÚNIOR FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "88892",
+      "teamName": "GEIEG VEDRUNA CATALUNYA TELECOM",
+      "grupId": "23366",
+      "category": "C.C. JÚNIOR FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "88681",
+      "teamName": "C.B.VILASSAR DE MAR 1984",
+      "grupId": "23366",
+      "category": "C.C. JÚNIOR FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90180",
+      "teamName": "U18 CE PALAMOS FEM",
+      "grupId": "23366",
+      "category": "C.C. JÚNIOR FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "88461",
+      "teamName": "C.B. PREMIÀ DE DALT - JF",
+      "grupId": "23366",
+      "category": "C.C. JÚNIOR FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89043",
+      "teamName": "FEMENÍ OSONA TARONJA- OVA PROJECTS",
+      "grupId": "23366",
+      "category": "C.C. JÚNIOR FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89824",
+      "teamName": "CLUB BÀSQUET ARGENTONA",
+      "grupId": "23366",
+      "category": "C.C. JÚNIOR FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "88607",
+      "teamName": "CB CASTELLDEFELS - BBA2009F",
+      "grupId": "23367",
+      "category": "C.C. JÚNIOR FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90011",
+      "teamName": "MANYANET REUS",
+      "grupId": "23367",
+      "category": "C.C. JÚNIOR FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90198",
+      "teamName": "DROOP CENTRE  C.B. L’HOSPITALET - CES",
+      "grupId": "23367",
+      "category": "C.C. JÚNIOR FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "91408",
+      "teamName": "CB. CORNELLÀ BLAU",
+      "grupId": "23367",
+      "category": "C.C. JÚNIOR FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "88494",
+      "teamName": "CB VALLS SOLIDITY",
+      "grupId": "23367",
+      "category": "C.C. JÚNIOR FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "91034",
+      "teamName": "CB TARRAGONA",
+      "grupId": "23367",
+      "category": "C.C. JÚNIOR FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "88598",
+      "teamName": "CE XAMBA A",
+      "grupId": "23367",
+      "category": "C.C. JÚNIOR FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89536",
+      "teamName": "REUS DEPORTIU NEGRE",
+      "grupId": "23367",
+      "category": "C.C. JÚNIOR FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89426",
+      "teamName": "CB CERVERA MOBEL LINEA",
+      "grupId": "23368",
+      "category": "C.C. JÚNIOR FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89684",
+      "teamName": "A.E SALLENT-BERGA 1",
+      "grupId": "23368",
+      "category": "C.C. JÚNIOR FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90798",
+      "teamName": "CENG VUNKERS",
+      "grupId": "23368",
+      "category": "C.C. JÚNIOR FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89315",
+      "teamName": "SEDIS GDOS",
+      "grupId": "23368",
+      "category": "C.C. JÚNIOR FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "88996",
+      "teamName": "BASQUET SANT PERE A",
+      "grupId": "23368",
+      "category": "C.C. JÚNIOR FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "88762",
+      "teamName": "UNIHABIT MANRESA CBF U18",
+      "grupId": "23368",
+      "category": "C.C. JÚNIOR FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "91084",
+      "teamName": "NAYOX FORÇA LLEIDA A",
+      "grupId": "23368",
+      "category": "C.C. JÚNIOR FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90892",
+      "teamName": "PROMOVIATGES CBF CERDANYOLA JUNIOR VERD",
+      "grupId": "23369",
+      "category": "C.C. JÚNIOR FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89224",
+      "teamName": "CB MANYANET LES CORTS GROC",
+      "grupId": "23369",
+      "category": "C.C. JÚNIOR FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90593",
+      "teamName": "QBASKET SANT CUGAT 1",
+      "grupId": "23369",
+      "category": "C.C. JÚNIOR FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "88574",
+      "teamName": "CE SANT NICOLAU 1",
+      "grupId": "23369",
+      "category": "C.C. JÚNIOR FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90501",
+      "teamName": "SANT GERVASI 1",
+      "grupId": "23369",
+      "category": "C.C. JÚNIOR FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89580",
+      "teamName": "MANTISE CB SANT JOSEP BADALONA - JAF",
+      "grupId": "23369",
+      "category": "C.C. JÚNIOR FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "88906",
+      "teamName": "U.E. CLARET A",
+      "grupId": "23369",
+      "category": "C.C. JÚNIOR FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "88669",
+      "teamName": "BASQUETPIASABADELL  BLAU",
+      "grupId": "23369",
+      "category": "C.C. JÚNIOR FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89090",
+      "teamName": "BASKET ALMEDA NEGRE",
+      "grupId": "23300",
+      "category": "C.C. JÚNIOR FEMENÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "90519",
+      "teamName": "FLORANGE U.E.MATARÓ",
+      "grupId": "23300",
+      "category": "C.C. JÚNIOR FEMENÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "90117",
+      "teamName": "PLOMS SALLE REUS JFU17",
+      "grupId": "23300",
+      "category": "C.C. JÚNIOR FEMENÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "89371",
+      "teamName": "CESA FEMENÍ SANT ADRIÀ B",
+      "grupId": "23300",
+      "category": "C.C. JÚNIOR FEMENÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "88944",
+      "teamName": "BÀSQUET GIRONA U17",
+      "grupId": "23300",
+      "category": "C.C. JÚNIOR FEMENÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "88754",
+      "teamName": "MEDIAGRUP MANRESA CBF U17",
+      "grupId": "23300",
+      "category": "C.C. JÚNIOR FEMENÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "89655",
+      "teamName": "JOVENTUT BADALONA B",
+      "grupId": "23300",
+      "category": "C.C. JÚNIOR FEMENÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "88573",
+      "teamName": "CE SANT NICOLAU",
+      "grupId": "23300",
+      "category": "C.C. JÚNIOR FEMENÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "89228",
+      "teamName": "BC TORROELLA U17",
+      "grupId": "23301",
+      "category": "C.C. JÚNIOR FEMENÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "89680",
+      "teamName": "MARINE CAPITAL JET TERRASSA U17",
+      "grupId": "23301",
+      "category": "C.C. JÚNIOR FEMENÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "88849",
+      "teamName": "C.B. PRAT - MONTIBELLO",
+      "grupId": "23301",
+      "category": "C.C. JÚNIOR FEMENÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "90800",
+      "teamName": "CENG TALLERS CARDENYES",
+      "grupId": "23301",
+      "category": "C.C. JÚNIOR FEMENÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "90450",
+      "teamName": "C.B GRUP BARNA B",
+      "grupId": "23301",
+      "category": "C.C. JÚNIOR FEMENÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "88920",
+      "teamName": "BASQUET ATENEU MONTSERRAT",
+      "grupId": "23301",
+      "category": "C.C. JÚNIOR FEMENÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "91416",
+      "teamName": "CB. CORNELLÀ B",
+      "grupId": "23301",
+      "category": "C.C. JÚNIOR FEMENÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "90331",
+      "teamName": "CB BOET MATARÓ 2010",
+      "grupId": "23301",
+      "category": "C.C. JÚNIOR FEMENÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "89585",
+      "teamName": "MANTISE CB SANT JOSEP BADALONA - JBF",
+      "grupId": "23302",
+      "category": "C.C. JÚNIOR FEMENÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "91083",
+      "teamName": "NAYOX FORÇA LLEIDA B",
+      "grupId": "23302",
+      "category": "C.C. JÚNIOR FEMENÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "90194",
+      "teamName": "CB BLANES A",
+      "grupId": "23302",
+      "category": "C.C. JÚNIOR FEMENÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "89158",
+      "teamName": "U. B. LLEFIÀ B",
+      "grupId": "23302",
+      "category": "C.C. JÚNIOR FEMENÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "88502",
+      "teamName": "CESET U17 VERD",
+      "grupId": "23302",
+      "category": "C.C. JÚNIOR FEMENÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "89867",
+      "teamName": "TGN BÀSQUET F10A",
+      "grupId": "23302",
+      "category": "C.C. JÚNIOR FEMENÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "89182",
+      "teamName": "SESE B",
+      "grupId": "23302",
+      "category": "C.C. JÚNIOR FEMENÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "89551",
+      "teamName": "REUS DEPORTIU VERMELL",
+      "grupId": "23303",
+      "category": "C.C. JÚNIOR FEMENÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "88734",
+      "teamName": "VIROLAI U17",
+      "grupId": "23303",
+      "category": "C.C. JÚNIOR FEMENÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "89193",
+      "teamName": "KENWOOD JOVENTUT LES CORTS U17",
+      "grupId": "23303",
+      "category": "C.C. JÚNIOR FEMENÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "88708",
+      "teamName": "CE SAGRAT COR DIPUTACIO",
+      "grupId": "23303",
+      "category": "C.C. JÚNIOR FEMENÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "88513",
+      "teamName": "CB CALELLA",
+      "grupId": "23303",
+      "category": "C.C. JÚNIOR FEMENÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "89520",
+      "teamName": "AE MINGUELLA B - PURE CUISINE",
+      "grupId": "23303",
+      "category": "C.C. JÚNIOR FEMENÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "90214",
+      "teamName": "CB GRANOLLERS 1",
+      "grupId": "23303",
+      "category": "C.C. JÚNIOR FEMENÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "89370",
+      "teamName": "MUNDOCLIMA FEMENÍ SANT ADRIÀ A",
+      "grupId": "23290",
+      "category": "C.C. CADET FEMENÍ PREFERENT"
+    },
+    {
+      "teamId": "88755",
+      "teamName": "PEPITU MANRESA CBF U16",
+      "grupId": "23290",
+      "category": "C.C. CADET FEMENÍ PREFERENT"
+    },
+    {
+      "teamId": "90528",
+      "teamName": "FLORANGE U.E.MATARÓ",
+      "grupId": "23290",
+      "category": "C.C. CADET FEMENÍ PREFERENT"
+    },
+    {
+      "teamId": "89645",
+      "teamName": "JOVENTUT BADALONA A",
+      "grupId": "23290",
+      "category": "C.C. CADET FEMENÍ PREFERENT"
+    },
+    {
+      "teamId": "90318",
+      "teamName": "CB BOET MATARÓ 2011",
+      "grupId": "23290",
+      "category": "C.C. CADET FEMENÍ PREFERENT"
+    },
+    {
+      "teamId": "88941",
+      "teamName": "BÀSQUET GIRONA U16",
+      "grupId": "23290",
+      "category": "C.C. CADET FEMENÍ PREFERENT"
+    },
+    {
+      "teamId": "89099",
+      "teamName": "BASKET ALMEDA 1",
+      "grupId": "23290",
+      "category": "C.C. CADET FEMENÍ PREFERENT"
+    },
+    {
+      "teamId": "88848",
+      "teamName": "C.B. PRAT - MONTIBELLO A",
+      "grupId": "23290",
+      "category": "C.C. CADET FEMENÍ PREFERENT"
+    },
+    {
+      "teamId": "90213",
+      "teamName": "CB GRANOLLERS 1",
+      "grupId": "23291",
+      "category": "C.C. CADET FEMENÍ PREFERENT"
+    },
+    {
+      "teamId": "91082",
+      "teamName": "NAYOX FORÇA LLEIDA A",
+      "grupId": "23291",
+      "category": "C.C. CADET FEMENÍ PREFERENT"
+    },
+    {
+      "teamId": "89846",
+      "teamName": "TGN BÀSQUET F11A",
+      "grupId": "23291",
+      "category": "C.C. CADET FEMENÍ PREFERENT"
+    },
+    {
+      "teamId": "90620",
+      "teamName": "LA SALCHICHA PELEONA VILABÀSQUET VILADECANS",
+      "grupId": "23291",
+      "category": "C.C. CADET FEMENÍ PREFERENT"
+    },
+    {
+      "teamId": "90457",
+      "teamName": "C.B GRUP BARNA A",
+      "grupId": "23291",
+      "category": "C.C. CADET FEMENÍ PREFERENT"
+    },
+    {
+      "teamId": "88879",
+      "teamName": "SABADELL BQ VALLÈS U16F",
+      "grupId": "23291",
+      "category": "C.C. CADET FEMENÍ PREFERENT"
+    },
+    {
+      "teamId": "89171",
+      "teamName": "SESE A",
+      "grupId": "23291",
+      "category": "C.C. CADET FEMENÍ PREFERENT"
+    },
+    {
+      "teamId": "90718",
+      "teamName": "PETROPINTO ASFE U16F VERD",
+      "grupId": "23291",
+      "category": "C.C. CADET FEMENÍ PREFERENT"
+    },
+    {
+      "teamId": "91040",
+      "teamName": "UER PINEDA DE MAR A",
+      "grupId": "23370",
+      "category": "C.C. CADET FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "88888",
+      "teamName": "GEIEG VEDRUNA",
+      "grupId": "23370",
+      "category": "C.C. CADET FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89602",
+      "teamName": "CCE MONTESSORI PALAU GIRONA",
+      "grupId": "23370",
+      "category": "C.C. CADET FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "88940",
+      "teamName": "BÀSQUET GIRONA U16 VERMELL",
+      "grupId": "23370",
+      "category": "C.C. CADET FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89825",
+      "teamName": "CB ARGENTONA - NEGRE",
+      "grupId": "23370",
+      "category": "C.C. CADET FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89970",
+      "teamName": "PRISCO-L'ESCALA",
+      "grupId": "23370",
+      "category": "C.C. CADET FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "88460",
+      "teamName": "C.B. PREMIÀ DE DALT - CAF",
+      "grupId": "23370",
+      "category": "C.C. CADET FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90685",
+      "teamName": "CB GRANOLLERS 2",
+      "grupId": "23370",
+      "category": "C.C. CADET FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89605",
+      "teamName": "CB TORELLÓ CFV - FARMÀCIA ÍNGRID JAIME I BOFILL",
+      "grupId": "23371",
+      "category": "C.C. CADET FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89661",
+      "teamName": "CB BANYOLES",
+      "grupId": "23371",
+      "category": "C.C. CADET FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "88552",
+      "teamName": "CB OLOT ALMIRALL GRÀFIQUES",
+      "grupId": "23371",
+      "category": "C.C. CADET FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90338",
+      "teamName": "CB BOET MATARÓ",
+      "grupId": "23371",
+      "category": "C.C. CADET FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90824",
+      "teamName": "CLUB BÀSQUET SANT CELONI U16F",
+      "grupId": "23371",
+      "category": "C.C. CADET FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90508",
+      "teamName": "SANT GERVASI 1",
+      "grupId": "23371",
+      "category": "C.C. CADET FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89639",
+      "teamName": "JOVENTUT BADALONA  1",
+      "grupId": "23371",
+      "category": "C.C. CADET FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89044",
+      "teamName": "FEMENÍ OSONA NEGRE- OVA PROJECTS",
+      "grupId": "23371",
+      "category": "C.C. CADET FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "91026",
+      "teamName": "CB TARRAGONA",
+      "grupId": "23372",
+      "category": "C.C. CADET FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "91414",
+      "teamName": "CB. CORNELLÀ A",
+      "grupId": "23372",
+      "category": "C.C. CADET FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89419",
+      "teamName": "FISIOCOOL - C.B. GAVÀ",
+      "grupId": "23372",
+      "category": "C.C. CADET FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "88601",
+      "teamName": "CE XAMBA A - LA VISTA",
+      "grupId": "23372",
+      "category": "C.C. CADET FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "88492",
+      "teamName": "CB VALLS SEVEN SEAS INVEST",
+      "grupId": "23372",
+      "category": "C.C. CADET FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89086",
+      "teamName": "BASKET ALMEDA GROC",
+      "grupId": "23372",
+      "category": "C.C. CADET FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89353",
+      "teamName": "C.B. CAMBRILS A",
+      "grupId": "23372",
+      "category": "C.C. CADET FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89256",
+      "teamName": "CB VILADECANS VERD",
+      "grupId": "23372",
+      "category": "C.C. CADET FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89678",
+      "teamName": "JET TERRASSA U16",
+      "grupId": "23373",
+      "category": "C.C. CADET FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "88761",
+      "teamName": "PORC DE PALOU MANRESA CBF 1",
+      "grupId": "23373",
+      "category": "C.C. CADET FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89427",
+      "teamName": "CB CERVERA MOBEL LINEA",
+      "grupId": "23373",
+      "category": "C.C. CADET FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90043",
+      "teamName": "CLUB NATACIÓ SABADELL A",
+      "grupId": "23373",
+      "category": "C.C. CADET FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89779",
+      "teamName": "CB IGUALADA CF U16",
+      "grupId": "23373",
+      "category": "C.C. CADET FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89331",
+      "teamName": "BC MORABANC ANDORRA",
+      "grupId": "23373",
+      "category": "C.C. CADET FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90353",
+      "teamName": "CN TERRASSA A",
+      "grupId": "23373",
+      "category": "C.C. CADET FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "88569",
+      "teamName": "CE SANT NICOLAU 1",
+      "grupId": "23374",
+      "category": "C.C. CADET FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90711",
+      "teamName": "SANT QUIRZE BÀSQUET CLUB A",
+      "grupId": "23374",
+      "category": "C.C. CADET FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89365",
+      "teamName": "FEMENÍ SANT ADRIÀ LILA",
+      "grupId": "23374",
+      "category": "C.C. CADET FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90023",
+      "teamName": "UE SANT CUGAT - OCCIDENT NEGRE",
+      "grupId": "23374",
+      "category": "C.C. CADET FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89234",
+      "teamName": "BASQUET SAFA CLAROR 2",
+      "grupId": "23374",
+      "category": "C.C. CADET FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "88794",
+      "teamName": "BÀSQUET PB9 - U16F",
+      "grupId": "23374",
+      "category": "C.C. CADET FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "88925",
+      "teamName": "BASQUET ATENEU MONTSERRAT INTERTERRITORIAL",
+      "grupId": "23374",
+      "category": "C.C. CADET FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89591",
+      "teamName": "MANTISE CB SANT JOSEP BADALONA - CF",
+      "grupId": "23374",
+      "category": "C.C. CADET FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90006",
+      "teamName": "CBS FEM  U16 INTERT",
+      "grupId": "23375",
+      "category": "C.C. CADET FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90429",
+      "teamName": "BC SANT JOAN DESPI A",
+      "grupId": "23375",
+      "category": "C.C. CADET FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89934",
+      "teamName": "CAMPING BIANYA ROSER VERMELL",
+      "grupId": "23375",
+      "category": "C.C. CADET FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89212",
+      "teamName": "KENWOOD JOVENTUT LES CORTS U16",
+      "grupId": "23375",
+      "category": "C.C. CADET FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90381",
+      "teamName": "LLUÏSOS DE GRÀCIA A",
+      "grupId": "23375",
+      "category": "C.C. CADET FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90653",
+      "teamName": "BASKET ESPLUGUES NEGRE",
+      "grupId": "23375",
+      "category": "C.C. CADET FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89408",
+      "teamName": "CENTRE CATÒLIC L'H A",
+      "grupId": "23375",
+      "category": "C.C. CADET FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "88898",
+      "teamName": "U.E. CLARET A",
+      "grupId": "23375",
+      "category": "C.C. CADET FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90009",
+      "teamName": "CBS FEM U15 1ER ANY",
+      "grupId": "23304",
+      "category": "C.C. CADET FEMENí PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "88939",
+      "teamName": "BÀSQUET GIRONA U15",
+      "grupId": "23304",
+      "category": "C.C. CADET FEMENí PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "89372",
+      "teamName": "CESA FEMENÍ SANT ADRIÀ B",
+      "grupId": "23304",
+      "category": "C.C. CADET FEMENí PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "90521",
+      "teamName": "FLORANGE U.E.MATARÓ",
+      "grupId": "23304",
+      "category": "C.C. CADET FEMENí PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "89652",
+      "teamName": "JOVENTUT BADALONA B",
+      "grupId": "23304",
+      "category": "C.C. CADET FEMENí PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "88881",
+      "teamName": "SABADELL BQ VALLÈS U15F",
+      "grupId": "23304",
+      "category": "C.C. CADET FEMENí PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "90105",
+      "teamName": "FC MARTINENC BÀSQUET U15",
+      "grupId": "23304",
+      "category": "C.C. CADET FEMENí PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "89782",
+      "teamName": "CB IGUALADA CF U15A",
+      "grupId": "23304",
+      "category": "C.C. CADET FEMENí PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "89185",
+      "teamName": "SESE B",
+      "grupId": "23305",
+      "category": "C.C. CADET FEMENí PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "90687",
+      "teamName": "CB GRANOLLERS 3",
+      "grupId": "23305",
+      "category": "C.C. CADET FEMENí PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "89865",
+      "teamName": "TGN BÀSQUET F12A",
+      "grupId": "23305",
+      "category": "C.C. CADET FEMENí PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "90715",
+      "teamName": "PETROPINTO ASFE U15F VERD",
+      "grupId": "23305",
+      "category": "C.C. CADET FEMENí PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "90468",
+      "teamName": "C.B GRUP BARNA B",
+      "grupId": "23305",
+      "category": "C.C. CADET FEMENí PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "90334",
+      "teamName": "CB BOET MATARÓ 2012",
+      "grupId": "23305",
+      "category": "C.C. CADET FEMENí PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "89084",
+      "teamName": "BASKET ALMEDA NEGRE",
+      "grupId": "23305",
+      "category": "C.C. CADET FEMENí PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "88753",
+      "teamName": "PROSPORT MANRESA CBF U15",
+      "grupId": "23305",
+      "category": "C.C. CADET FEMENí PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "90956",
+      "teamName": "FEMENI MARESME 3 VILES - CF",
+      "grupId": "23306",
+      "category": "C.C. CADET FEMENí PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "89604",
+      "teamName": "CB TORELLÓ CF GRIS",
+      "grupId": "23306",
+      "category": "C.C. CADET FEMENí PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "90115",
+      "teamName": "PLOMS SALLE REUS CFU15",
+      "grupId": "23306",
+      "category": "C.C. CADET FEMENí PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "89681",
+      "teamName": "CURVES JET TERRASSA U15",
+      "grupId": "23306",
+      "category": "C.C. CADET FEMENí PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "90893",
+      "teamName": "PROMOVIATGES CBF CERDANYOLA CADET BLANC",
+      "grupId": "23306",
+      "category": "C.C. CADET FEMENí PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "89021",
+      "teamName": "VEDRUNA-GEIEG  U15",
+      "grupId": "23306",
+      "category": "C.C. CADET FEMENí PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "88588",
+      "teamName": "CE XAMBA 1R ANY - KRAAL",
+      "grupId": "23306",
+      "category": "C.C. CADET FEMENí PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "91080",
+      "teamName": "NAYOX FORÇA LLEIDA B",
+      "grupId": "23306",
+      "category": "C.C. CADET FEMENí PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "89835",
+      "teamName": "CBU LLORET RECREATIVOS LLORET LILA",
+      "grupId": "23307",
+      "category": "C.C. CADET FEMENí PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "90406",
+      "teamName": "AD TORREFORTA NEGRE",
+      "grupId": "23307",
+      "category": "C.C. CADET FEMENí PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "90068",
+      "teamName": "FD CASSANENC U15",
+      "grupId": "23307",
+      "category": "C.C. CADET FEMENí PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "90028",
+      "teamName": "UE SANT CUGAT - OCCIDENT 2012",
+      "grupId": "23307",
+      "category": "C.C. CADET FEMENí PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "89543",
+      "teamName": "REUS DEPORTIU NEGRE",
+      "grupId": "23307",
+      "category": "C.C. CADET FEMENí PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "88507",
+      "teamName": "CN CALDES U15",
+      "grupId": "23307",
+      "category": "C.C. CADET FEMENí PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "89215",
+      "teamName": "KENWOOD JOVENTUT LES CORTS U15",
+      "grupId": "23307",
+      "category": "C.C. CADET FEMENí PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "88686",
+      "teamName": "VEDRUNA GRÀCIA NEGRE",
+      "grupId": "23307",
+      "category": "C.C. CADET FEMENí PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "89358",
+      "teamName": "CESA FEMENÍ SANT ADRIÀ A",
+      "grupId": "23294",
+      "category": "C.C INFANTIL FEMENÍ PREFERENT"
+    },
+    {
+      "teamId": "88955",
+      "teamName": "BÀSQUET GIRONA U14",
+      "grupId": "23294",
+      "category": "C.C INFANTIL FEMENÍ PREFERENT"
+    },
+    {
+      "teamId": "90518",
+      "teamName": "FLORANGE U.E.MATARÓ",
+      "grupId": "23294",
+      "category": "C.C INFANTIL FEMENÍ PREFERENT"
+    },
+    {
+      "teamId": "89792",
+      "teamName": "CB IGUALADA IF U14A",
+      "grupId": "23294",
+      "category": "C.C INFANTIL FEMENÍ PREFERENT"
+    },
+    {
+      "teamId": "89096",
+      "teamName": "BASKET ALMEDA 1",
+      "grupId": "23294",
+      "category": "C.C INFANTIL FEMENÍ PREFERENT"
+    },
+    {
+      "teamId": "90337",
+      "teamName": "CB BOET MATARÓ 2013",
+      "grupId": "23294",
+      "category": "C.C INFANTIL FEMENÍ PREFERENT"
+    },
+    {
+      "teamId": "89634",
+      "teamName": "JOVENTUT BADALONA A",
+      "grupId": "23294",
+      "category": "C.C INFANTIL FEMENÍ PREFERENT"
+    },
+    {
+      "teamId": "90005",
+      "teamName": "ÒPTICA FELIU CB SANTFELIUENC U14",
+      "grupId": "23294",
+      "category": "C.C INFANTIL FEMENÍ PREFERENT"
+    },
+    {
+      "teamId": "89168",
+      "teamName": "SESE A",
+      "grupId": "23295",
+      "category": "C.C INFANTIL FEMENÍ PREFERENT"
+    },
+    {
+      "teamId": "91081",
+      "teamName": "NAYOX FORÇA LLEIDA A",
+      "grupId": "23295",
+      "category": "C.C INFANTIL FEMENÍ PREFERENT"
+    },
+    {
+      "teamId": "91007",
+      "teamName": "LA SALLE MANRESA A",
+      "grupId": "23295",
+      "category": "C.C INFANTIL FEMENÍ PREFERENT"
+    },
+    {
+      "teamId": "89603",
+      "teamName": "CB TORELLÓ IF VERMELL",
+      "grupId": "23295",
+      "category": "C.C INFANTIL FEMENÍ PREFERENT"
+    },
+    {
+      "teamId": "89858",
+      "teamName": "TGN BÀSQUET F13A",
+      "grupId": "23295",
+      "category": "C.C INFANTIL FEMENÍ PREFERENT"
+    },
+    {
+      "teamId": "90116",
+      "teamName": "PLOMS SALLE REUS IFU14",
+      "grupId": "23295",
+      "category": "C.C INFANTIL FEMENÍ PREFERENT"
+    },
+    {
+      "teamId": "89397",
+      "teamName": "CENTRE CATÒLIC L'H",
+      "grupId": "23295",
+      "category": "C.C INFANTIL FEMENÍ PREFERENT"
+    },
+    {
+      "teamId": "89676",
+      "teamName": "AQUALIS JET TERRASSA U14",
+      "grupId": "23295",
+      "category": "C.C INFANTIL FEMENÍ PREFERENT"
+    },
+    {
+      "teamId": "88947",
+      "teamName": "BÀSQUET GIRONA U14 VERMELL",
+      "grupId": "23461",
+      "category": "C.C. INFANTIL FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89369",
+      "teamName": "FEMENÍ SANT ADRIÀ LILA",
+      "grupId": "23461",
+      "category": "C.C. INFANTIL FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "91048",
+      "teamName": "EL CÍRCOL",
+      "grupId": "23461",
+      "category": "C.C. INFANTIL FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89034",
+      "teamName": "FEMENÍ OSONA BLANC- OVA PROJECTS",
+      "grupId": "23461",
+      "category": "C.C. INFANTIL FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90507",
+      "teamName": "SANT GERVASI 1",
+      "grupId": "23461",
+      "category": "C.C. INFANTIL FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89319",
+      "teamName": "CB SANT GREGORI VALL DE LLÉMENA U14",
+      "grupId": "23461",
+      "category": "C.C. INFANTIL FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90674",
+      "teamName": "FLORANGE U.E.MATARÓ",
+      "grupId": "23461",
+      "category": "C.C. INFANTIL FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89063",
+      "teamName": "PIA OLOT",
+      "grupId": "23461",
+      "category": "C.C. INFANTIL FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "88680",
+      "teamName": "C.B.VILASSAR DE MAR 1984 NEGRE",
+      "grupId": "23461",
+      "category": "C.C. INFANTIL FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90688",
+      "teamName": "CB GRANOLLERS 1",
+      "grupId": "23461",
+      "category": "C.C. INFANTIL FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "91060",
+      "teamName": "RIO LOGISTIC CB LLIÇÀ D'AMUNT TARONJA",
+      "grupId": "23461",
+      "category": "C.C. INFANTIL FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "88490",
+      "teamName": "CB VALLS PORTAL 22",
+      "grupId": "23462",
+      "category": "C.C. INFANTIL FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "88928",
+      "teamName": "BASQUET ATENEU MONTSERRAT INTERTERITORIAL",
+      "grupId": "23462",
+      "category": "C.C. INFANTIL FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "91031",
+      "teamName": "CB TARRAGONA",
+      "grupId": "23462",
+      "category": "C.C. INFANTIL FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89098",
+      "teamName": "BASKET ALMEDA GROC",
+      "grupId": "23462",
+      "category": "C.C. INFANTIL FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89417",
+      "teamName": "FUNDACIO BLAI - C.B. GAVÀ",
+      "grupId": "23462",
+      "category": "C.C. INFANTIL FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90630",
+      "teamName": "VILABÀSQUET VILADECANS IF BLAU",
+      "grupId": "23462",
+      "category": "C.C. INFANTIL FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89211",
+      "teamName": "KENWOOD JOVENTUT LES CORTS U14",
+      "grupId": "23462",
+      "category": "C.C. INFANTIL FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "88593",
+      "teamName": "CE XAMBA A",
+      "grupId": "23462",
+      "category": "C.C. INFANTIL FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89632",
+      "teamName": "JOVENTUT BADALONA B",
+      "grupId": "23462",
+      "category": "C.C. INFANTIL FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "88709",
+      "teamName": "CE SAGRAT COR DIPUTACIO VERMELL",
+      "grupId": "23462",
+      "category": "C.C. INFANTIL FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90465",
+      "teamName": "C.B GRUP BARNA A",
+      "grupId": "23462",
+      "category": "C.C. INFANTIL FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "88904",
+      "teamName": "U.E. CLARET A",
+      "grupId": "23462",
+      "category": "C.C. INFANTIL FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "91103",
+      "teamName": "BASQUET SANT PERE",
+      "grupId": "23463",
+      "category": "C.C. INFANTIL FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89749",
+      "teamName": "BAGUERI CLINICA DENTAL - CB SANT JUST BLAU",
+      "grupId": "23463",
+      "category": "C.C. INFANTIL FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "88666",
+      "teamName": "BASQUETPIASABADELL BLAU",
+      "grupId": "23463",
+      "category": "C.C. INFANTIL FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "88769",
+      "teamName": "CONSTRUCTORA DEL CARDONER MANRESA CBF U14",
+      "grupId": "23463",
+      "category": "C.C. INFANTIL FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90002",
+      "teamName": "CBS FEM  U14 INTERT",
+      "grupId": "23463",
+      "category": "C.C. INFANTIL FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90755",
+      "teamName": "BC TECLA SALA",
+      "grupId": "23463",
+      "category": "C.C. INFANTIL FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90034",
+      "teamName": "UE SANT CUGAT - OCCIDENT 2013",
+      "grupId": "23463",
+      "category": "C.C. INFANTIL FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "90428",
+      "teamName": "BC SANT JOAN DESPI A",
+      "grupId": "23463",
+      "category": "C.C. INFANTIL FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89313",
+      "teamName": "SEDIS LA LOLA",
+      "grupId": "23463",
+      "category": "C.C. INFANTIL FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89424",
+      "teamName": "CB CERVERA MOBEL LINEA NEGRE",
+      "grupId": "23463",
+      "category": "C.C. INFANTIL FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89682",
+      "teamName": "JET TERRASSA U14 BLAU",
+      "grupId": "23463",
+      "category": "C.C. INFANTIL FEMENÍ INTERTERRITORIAL"
+    },
+    {
+      "teamId": "89650",
+      "teamName": "JOVENTUT BADALONA  2",
+      "grupId": "23312",
+      "category": "C.C. INFANTIL FEMENÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "89679",
+      "teamName": "PINTURAS FARO JET TERRASSA U13",
+      "grupId": "23312",
+      "category": "C.C. INFANTIL FEMENÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "90651",
+      "teamName": "BASKET ESPLUGUES U13",
+      "grupId": "23312",
+      "category": "C.C. INFANTIL FEMENÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "89051",
+      "teamName": "C.E. MARISTES A",
+      "grupId": "23312",
+      "category": "C.C. INFANTIL FEMENÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "91099",
+      "teamName": "CB BALAGUER GRANA",
+      "grupId": "23312",
+      "category": "C.C. INFANTIL FEMENÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "88878",
+      "teamName": "SABADELL BQ VALLÈS U13F",
+      "grupId": "23312",
+      "category": "C.C. INFANTIL FEMENÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "89287",
+      "teamName": "UE HORTA - DOMINIQUES",
+      "grupId": "23312",
+      "category": "C.C. INFANTIL FEMENÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "89363",
+      "teamName": "FEMENÍ SANT ADRIÀ B",
+      "grupId": "23312",
+      "category": "C.C. INFANTIL FEMENÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "90684",
+      "teamName": "CB GRANOLLERS 2",
+      "grupId": "23313",
+      "category": "C.C. INFANTIL FEMENÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "89592",
+      "teamName": "MANTISE CB SANT JOSEP BADALONA - IF",
+      "grupId": "23313",
+      "category": "C.C. INFANTIL FEMENÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "89863",
+      "teamName": "TGN BÀSQUET F14A",
+      "grupId": "23313",
+      "category": "C.C. INFANTIL FEMENÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "90453",
+      "teamName": "C.B GRUP BARNA B",
+      "grupId": "23313",
+      "category": "C.C. INFANTIL FEMENÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "91079",
+      "teamName": "NAYOX FORÇA LLEIDA B",
+      "grupId": "23313",
+      "category": "C.C. INFANTIL FEMENÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "90024",
+      "teamName": "UE SANT CUGAT - OCCIDENT 2014",
+      "grupId": "23313",
+      "category": "C.C. INFANTIL FEMENÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "90520",
+      "teamName": "FLORANGE U.E.MATARÓ",
+      "grupId": "23313",
+      "category": "C.C. INFANTIL FEMENÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "89998",
+      "teamName": "#SOMCAPITAL CB SANTFELIUENC U13",
+      "grupId": "23313",
+      "category": "C.C. INFANTIL FEMENÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "88670",
+      "teamName": "BASQUETPIASABADELL TARONJA",
+      "grupId": "23314",
+      "category": "C.C. INFANTIL FEMENÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "88752",
+      "teamName": "TALLERS BALLÚS MANRESA CBF U13",
+      "grupId": "23314",
+      "category": "C.C. INFANTIL FEMENÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "90891",
+      "teamName": "PROMOVIATGES CBF CERDANYOLA INFANTIL BLANC",
+      "grupId": "23314",
+      "category": "C.C. INFANTIL FEMENÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "89314",
+      "teamName": "SEDIS MAPISA",
+      "grupId": "23314",
+      "category": "C.C. INFANTIL FEMENÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "89174",
+      "teamName": "SESE B",
+      "grupId": "23314",
+      "category": "C.C. INFANTIL FEMENÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "90106",
+      "teamName": "FC MARTINENC BÀSQUET U13",
+      "grupId": "23314",
+      "category": "C.C. INFANTIL FEMENÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "90329",
+      "teamName": "CB BOET MATARÓ 2014",
+      "grupId": "23314",
+      "category": "C.C. INFANTIL FEMENÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "89041",
+      "teamName": "FEMENÍ OSONA 2014- OVA PROJECTS",
+      "grupId": "23315",
+      "category": "C.C. INFANTIL FEMENÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "90729",
+      "teamName": "PAIDOS-ASFE U13F VERD",
+      "grupId": "23315",
+      "category": "C.C. INFANTIL FEMENÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "89322",
+      "teamName": "CB SANT GREGORI VALL DE LLÉMENA U13 LILA",
+      "grupId": "23315",
+      "category": "C.C. INFANTIL FEMENÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "88682",
+      "teamName": "C.B.VILASSAR DE MAR 1984 VERD",
+      "grupId": "23315",
+      "category": "C.C. INFANTIL FEMENÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "89092",
+      "teamName": "BASKET ALMEDA NEGRE",
+      "grupId": "23315",
+      "category": "C.C. INFANTIL FEMENÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "89064",
+      "teamName": "PIA OLOT",
+      "grupId": "23315",
+      "category": "C.C. INFANTIL FEMENÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "91006",
+      "teamName": "LA SALLE MANRESA 1",
+      "grupId": "23315",
+      "category": "C.C. INFANTIL FEMENÍ PREFERENT 1R. ANY"
+    },
+    {
+      "teamId": "88952",
+      "teamName": "BÀSQUET GIRONA U13",
+      "grupId": "23315",
+      "category": "C.C. INFANTIL FEMENÍ PREFERENT 1R. ANY"
+    }
+  ]
+}

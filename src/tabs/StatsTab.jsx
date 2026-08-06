@@ -5,9 +5,12 @@ import { useLang } from "../LangContext";
 import { useTheme } from "../ThemeContext";
 
 const MSSTATS_BASE = "https://msstats.optimalwayconsulting.com/v1/fcbq";
-// Season: basketball year starts in September (month >= 8)
+// Season label rolls in July (month >= 6), not September. Games start in
+// September, but FCBQ publishes the new season over the summer and purges the
+// previous one, so a September boundary leaves July/August pointing at a season
+// with no data. Keep in sync with currentSeason() in api/_fcbq.js.
 const SEASON = String(
-  new Date().getMonth() >= 8 ? new Date().getFullYear() : new Date().getFullYear() - 1
+  new Date().getMonth() >= 6 ? new Date().getFullYear() : new Date().getFullYear() - 1
 );
 
 function pct(made, attempted) {

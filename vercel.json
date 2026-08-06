@@ -1,4 +1,7 @@
 {
+  "crons": [
+    { "path": "/api/sync-index", "schedule": "0 5 * * *" }
+  ],
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api/$1" },
     { "source": "/s/:token", "destination": "/api/share?token=:token" },
