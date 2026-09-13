@@ -11,6 +11,13 @@ const ARRIVAL_BUFFERS = {
 
 const GENDER_SYMBOL = { M: "♂", F: "♀" };
 
+// The config form lets trailing and doubled spaces through, and the acta is
+// matched by substring — so "Rohan  Thomas " would never match "ROHAN THOMAS
+// GUERRA". Normalise once, here, rather than at each comparison site.
+function cleanName(name) {
+  return (name || "").trim().replace(/\s+/g, " ");
+}
+
 function hexToRgb(hex) {
   const h = hex.replace("#", "");
   return [
@@ -29,7 +36,10 @@ export function buildKid(dbKid, index) {
     id: `k${index + 1}`,
     fcbqId: dbKid.fcbq_team_id || null,
     teamId: dbKid.fcbq_team_id || null,
-    name: dbKid.name,
+    name: cleanName(dbKid.name),
+    // Stable FCBQ player uuid — primary key for finding this kid in a match
+    // acta, because FCBQ anonymises some players' names to initials.
+    playerUuid: dbKid.fcbq_player_uuid || null,
     label: dbKid.label,
     clubName: dbKid.club_name || null,
     category: dbKid.category,

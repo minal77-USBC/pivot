@@ -61,13 +61,26 @@ Browser (React SPA)
 
 ### 3. Supabase — Family / Kids Config
 - **Tables:** `families` (user → family mapping, share_token), `kids` (one row per child)
-- **Key kids columns:** `name`, `label`, `category`, `gender`, `color`, `fcbq_team_id`, `grup_id_phase1`, `grup_id_phase2`
+- **Key kids columns:** `name`, `label`, `category`, `gender`, `color`, `fcbq_team_id`, `fcbq_player_uuid`, `grup_id_phase1`, `grup_id_phase2`
 - **`fcbq_team_id`:** Required for stats features. Flows into `kid.statsTeamId` via `familyUtils.buildKid()`. `statsAvailable = !!fcbq_team_id` — not category-gated.
-- **Kid shape built by:** `src/familyUtils.js:buildKid()` — converts DB row to app kid object
+- **`fcbq_player_uuid`:** Stable msstats player id, resolved via the roster picker in `KidForm`. **Primary key for locating a kid's row in a match acta** — see "Player identity" below. Added 2026-09-13 (`supabase-migration-player-uuid.sql`).
+- **Kid shape built by:** `src/familyUtils.js:buildKid()` — converts DB row to app kid object. Normalises `name` (trims, collapses double spaces) because the config form lets both through and the acta is matched by substring.
 - **Share flow:** `share_token` → `/s/TOKEN` redirect → `/?share_token=TOKEN` → `resolveShareToken()` reads URL param → `useFamily(shareToken)` → read-only view
 - **PWA share persistence:** `share-manifest.js` sets `start_url: /?share_token=TOKEN` so iOS always launches the PWA with the token in the URL — no storage dependency. `resolveShareToken()` reads `window.location.search` first, seeds `localStorage` as fallback for in-session SPA navigations, then falls back to `localStorage`. **Prior attempts** (sessionStorage, localStorage-only) failed because iOS standalone mode can clear sessionStorage on path navigation and may skip the redirect on fast resume. URL param in `start_url` is the only approach iOS must honour on every launch.
 - **Reinstall required** when share manifest `start_url` changes — iOS caches the old manifest. User must delete home screen icon and re-add.
-- **`match_box_scores` table:** Caches box score JSON by `stats_uuid`. Read-before-fetch in `api/player-log.js` — avoids re-hitting msstats for historical matches. See spike: `box-score-caching.md`.
+- **`match_box_scores` table:** Caches box score JSON by `stats_uuid`. Read-before-fetch via `loadBoxScores()` in `api/_boxscores.js` (shared by `player-log`, `team-roster` and `scout`) — avoids re-hitting msstats for historical matches. See spike: `box-score-caching.md`.
+- **Cache is write-once:** upsert uses `Prefer: resolution=ignore-duplicates`, so a row fetched while FCBQ had partial data is never refreshed. Known limitation — a `fetched_at`-based re-fetch for recent rows is not yet implemented.
+
+### 3a. Player identity — why name matching is not enough
+FCBQ anonymises opted-out players in the acta, publishing initials instead of a name. Rohan is `ROHAN THOMAS GUERRA` on team 80316 (2025/26) and `R.T.G.` on team 89410 (2026/27) — same person, same dorsal #7, same player `uuid`.
+
+This broke the Game Log silently in 2026/27: it is the only stats view that **filters** rows by name, so a failed match yields an empty log. Box Scores and Season Totals render the whole roster and only use the name to pick a highlight, so they kept working and merely stopped highlighting him.
+
+- **Resolution order** (`matchPlayer()` in `api/_boxscores.js`, mirrored by `isKid()` in `StatsTab.jsx`): player `uuid` first, normalised-name substring as fallback.
+- **`uuid` is stable** across games, teams and seasons — verified on `0171fd09-98d1-11e9-a2a5-0216824770c2` over two seasons and two teams.
+- **`actorId` is NOT stable** — it is a per-game record id. Do not key on it.
+- **Onboarding:** `/api/team-roster` lists the team's roster from its recent actas; `KidForm` shows it as dorsal pills and stores the chosen `uuid`. Rows matching `^(?:[A-Z]\.){2,}$` are flagged `anonymised` so the user knows to pick by shirt number.
+- **`player_log_fetched` analytics carries `matchedBy`** (`uuid` / `name` / `none`) — `none` is the signature of this failure recurring.
 
 ### 4. basquet.top — Non-Preferent Game Index
 - **Base URL:** `https://www.basquet.top/json/` and `https://basquettop-json.pages.dev/json/`
@@ -168,12 +181,20 @@ Browser (React SPA)
 - **Cache:** `s-maxage=3600`
 
 ### `api/player-log.js`
-- **Inputs:** `kidName`, `matches` (JSON array of `{statsUuid, date, opp, ha, win, score}`)
-- **Calls:** msstats `getJsonWithMatchStats` in parallel for all matches with a `statsUuid`
-- **Player match:** `p.name.toUpperCase().includes(kidName.toUpperCase())`
-- **Returns:** `{ log: [{ date, opp, ha, win, matchScore, min, pts, val, twoM, twoA, ftM, ftA, reb, ast, stl, pf, plusMinus, starting }] }` (`val` = PIR/valoration, added 2026-03-09)
+- **Inputs:** `kidName`, `matches` (JSON array of `{statsUuid, date, opp, ha, win, score}`), optional `teamId`, optional `playerUuid`
+- **Calls:** msstats `getJsonWithMatchStats` in parallel for all matches with a `statsUuid` (cache-first, via `loadBoxScores()`)
+- **Player match:** `playerUuid` first, then normalised-name substring — see "Player identity" above
+- **Returns:** `{ log: [{ date, opp, ha, win, matchScore, min, pts, val, twoM, twoA, ftM, ftA, reb, ast, stl, pf, plusMinus, starting }], teamLog, matchedBy }` (`val` = PIR/valoration, added 2026-03-09; `matchedBy` added 2026-09-13)
 - **Cache:** `s-maxage=300` (short — new matches enter msstats 24–48h after game); Supabase `match_box_scores` read-before-fetch for historical games
 - **Also used by:** `SeasonStatsFromLog` — same endpoint, aggregated into season averages for non-Preferent kids
+- **Refetch trigger:** callers key the effect on `playedKey` (the fixture set's statsUuids), not just `kidName` — otherwise a newly published acta never reloads within a session
+
+### `api/team-roster.js`
+- **Inputs:** `teamId`, `grupId` (comma-separated for multi-phase teams), optional `name`
+- **What it does:** finds the team's played fixtures via ESB, loads up to 6 recent actas cache-first, returns the distinct roster
+- **Returns:** `{ roster: [{ uuid, name, dorsal, gp, pts, ppg, anonymised, likely }], matchesScanned }`, sorted `likely` first then by dorsal
+- **Empty roster** is normal pre-season — no acta has been published yet, so there is no `uuid` to link. `KidForm` says so and lets the user save anyway.
+- **Cache:** `s-maxage=3600`
 
 ### `api/schedule.js`
 - Normalised match fields include `oppTeamId` (added 2026-03-07) for scout card

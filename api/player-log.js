@@ -1,44 +1,5 @@
 import { track } from "@vercel/analytics/server";
-const MSSTATS_BASE = "https://msstats.optimalwayconsulting.com/v1/fcbq";
-const SUPABASE_URL = process.env.SUPABASE_URL;
-const SUPABASE_KEY = process.env.SUPABASE_ANON_KEY;
-
-function sbHeaders() {
-  return {
-    apikey: SUPABASE_KEY,
-    Authorization: `Bearer ${SUPABASE_KEY}`,
-    "Content-Type": "application/json",
-  };
-}
-
-async function getCachedBoxScores(uuids) {
-  const list = uuids.map(u => `"${u}"`).join(",");
-  const r = await fetch(
-    `${SUPABASE_URL}/rest/v1/match_box_scores?select=stats_uuid,data&stats_uuid=in.(${list})`,
-    { headers: sbHeaders() }
-  );
-  if (!r.ok) return {};
-  const rows = await r.json();
-  return Object.fromEntries(rows.map(row => [row.stats_uuid, row.data]));
-}
-
-async function upsertBoxScores(rows) {
-  await fetch(`${SUPABASE_URL}/rest/v1/match_box_scores`, {
-    method: "POST",
-    headers: { ...sbHeaders(), Prefer: "resolution=ignore-duplicates" },
-    body: JSON.stringify(rows),
-  });
-}
-
-function extractPlayerRow(data, nameUpper) {
-  for (const team of data.teams || []) {
-    const player = (team.players || []).find(p =>
-      p.name?.toUpperCase().includes(nameUpper)
-    );
-    if (player) return player;
-  }
-  return null;
-}
+import { loadBoxScores, extractPlayerRow, findTeam, normalizeName } from "./_boxscores.js";
 
 function parseTimeSecs(timeStr) {
   if (!timeStr || timeStr === "—") return 0;
@@ -54,17 +15,14 @@ function formatTimeSecs(totalSecs) {
   return String(Math.round(totalSecs / 60));
 }
 
-function findTeam(data, teamIdStr) {
-  return (data.teams || []).find(t =>
-    String(t.teamId) === teamIdStr || String(t.teamIdExtern) === teamIdStr
-  ) || null;
-}
-
 function accumulateTeamPlayers(playerMap, team) {
   for (const p of team.players || []) {
-    const key = (p.name || "").trim().toUpperCase();
+    // Key by uuid where present — it survives the mid-season name changes that
+    // name keying does not. Falls back to the normalised name.
+    const key = p.uuid || normalizeName(p.name);
+    if (!key) continue;
     if (!playerMap[key]) {
-      playerMap[key] = { name: p.name, dorsal: p.dorsal, gp: 0, pts: 0, val: 0, ftM: 0, ftA: 0, pf: 0, threeM: 0, timeSecs: 0 };
+      playerMap[key] = { uuid: p.uuid ?? null, name: p.name, dorsal: p.dorsal, gp: 0, pts: 0, val: 0, ftM: 0, ftA: 0, pf: 0, threeM: 0, timeSecs: 0 };
     }
     const acc = playerMap[key];
     const d = p.data || {};
@@ -84,7 +42,7 @@ export default async function handler(req, res) {
   res.setHeader("Access-Control-Allow-Methods", "GET,OPTIONS");
   if (req.method === "OPTIONS") return res.status(200).end();
 
-  const { kidName, matches: matchesParam, teamId } = req.query;
+  const { kidName, matches: matchesParam, teamId, playerUuid } = req.query;
   if (!kidName || !matchesParam) {
     return res.status(400).json({ error: "kidName and matches required" });
   }
@@ -98,71 +56,29 @@ export default async function handler(req, res) {
 
   const withUuid = matches.filter(m => m.statsUuid);
   if (!withUuid.length) {
-    return res.status(200).json({ log: [] });
+    return res.status(200).json({ log: [], teamLog: [], matchedBy: null });
   }
   const start = Date.now();
 
-  const nameUpper = kidName.toUpperCase();
-  const allUuids = withUuid.map(m => m.statsUuid);
+  const identity = { playerUuid: playerUuid || null, name: kidName };
+  const { byUuid, cachedCount, fetchedCount } = await loadBoxScores(withUuid);
 
-  // 1. Read from Supabase cache
-  const cached = await getCachedBoxScores(allUuids).catch(() => ({}));
-  const cachedUuids = new Set(Object.keys(cached));
-
-  // 2. Fetch only missing box scores from msstats
-  const missing = withUuid.filter(m => !cachedUuids.has(m.statsUuid));
-  const freshData = {};
-
-  if (missing.length) {
-    const fetched = await Promise.all(
-      missing.map(async (m) => {
-        try {
-          const r = await fetch(
-            `${MSSTATS_BASE}/getJsonWithMatchStats/${m.statsUuid}`,
-            { headers: { "User-Agent": "Pivot/1.0" } }
-          );
-          if (!r.ok) return null;
-          const data = await r.json();
-          return { statsUuid: m.statsUuid, matchDate: m.date, data };
-        } catch {
-          return null;
-        }
-      })
-    );
-
-    const toUpsert = [];
-    for (const row of fetched) {
-      if (!row) continue;
-      freshData[row.statsUuid] = row.data;
-      toUpsert.push({
-        stats_uuid: row.statsUuid,
-        data: row.data,
-        match_date: row.matchDate,
-      });
-    }
-
-    // 3. Upsert new rows — await before response (Vercel kills process on res.end)
-    if (toUpsert.length) {
-      await upsertBoxScores(toUpsert).catch(() => {});
-    }
-  }
-
-  // 4. Combine cache + fresh, extract player rows + optionally aggregate team
   const playerMap = {};
-  const teamIdStr = teamId ? String(teamId) : null;
+  let matchedBy = null;
 
   const results = withUuid.map((m) => {
-    const data = cached[m.statsUuid] || freshData[m.statsUuid];
+    const data = byUuid[m.statsUuid];
     if (!data) return null;
 
     // Aggregate all team players if teamId supplied
-    if (teamIdStr) {
-      const team = findTeam(data, teamIdStr);
+    if (teamId) {
+      const team = findTeam(data, teamId);
       if (team) accumulateTeamPlayers(playerMap, team);
     }
 
-    const player = extractPlayerRow(data, nameUpper);
+    const player = extractPlayerRow(data, identity);
     if (!player) return null;
+    if (!matchedBy) matchedBy = identity.playerUuid && player.uuid === identity.playerUuid ? "uuid" : "name";
 
     const d = player.data || {};
     return {
@@ -192,9 +108,10 @@ export default async function handler(req, res) {
     .sort((a, b) => b.date.localeCompare(a.date));
 
   // Build team roster sorted by PPG desc
-  const teamLog = teamIdStr
+  const teamLog = teamId
     ? Object.values(playerMap)
         .map(p => ({
+          uuid: p.uuid,
           name: p.name,
           dorsal: p.dorsal,
           gp: p.gp,
@@ -210,8 +127,14 @@ export default async function handler(req, res) {
     : [];
 
   const latencyMs = Date.now() - start;
-  await track("player_log_fetched", { matchCount: withUuid.length, cacheHit: missing.length === 0, latencyMs }, { request: req });
+  await track("player_log_fetched", {
+    matchCount: withUuid.length,
+    cacheHit: fetchedCount === 0,
+    latencyMs,
+    // Surfaces the silent-empty case: acta rows exist but none resolved to this kid
+    matchedBy: matchedBy ?? "none",
+  }, { request: req });
   res.setHeader("Cache-Control", "s-maxage=300, stale-while-revalidate=60");
-  res.setHeader("X-Cache-Stats", `cached:${cachedUuids.size} fetched:${missing.length}`);
-  return res.status(200).json({ log, teamLog });
+  res.setHeader("X-Cache-Stats", `cached:${cachedCount} fetched:${fetchedCount}`);
+  return res.status(200).json({ log, teamLog, matchedBy });
 }

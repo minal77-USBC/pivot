@@ -18,6 +18,7 @@ function toEditShape(kid) {
     label: kid.label || "",
     clubName: kid.clubName || "",
     fcbqTeamId: kid.fcbqTeamId || kid.fcbqId || "",
+    fcbqPlayerUuid: kid.fcbqPlayerUuid || kid.playerUuid || "",
     category: kid.category || "Infantil",
     gender: kid.gender || "M",
     grupIdPhase1: kid.grupIdPhase1 || kid.grupIds?.[0] || "",

@@ -1,11 +1,10 @@
 import { ESB, MSSTATS_BASE } from "./constants.js";
+import { getCachedBoxScores, upsertBoxScores } from "./_boxscores.js";
 
 // Rolls in July — see currentSeason() in _fcbq.js for why not September
 const SEASON = String(
   new Date().getMonth() >= 6 ? new Date().getFullYear() : new Date().getFullYear() - 1
 );
-const SUPABASE_URL = process.env.SUPABASE_URL;
-const SUPABASE_KEY = process.env.SUPABASE_ANON_KEY;
 
 function daysUntil(dateStr) {
   return Math.round((new Date(dateStr + "T12:00:00") - new Date()) / 86400000);
@@ -14,33 +13,6 @@ function daysUntil(dateStr) {
 function ftPct(made, attempted) {
   if (!attempted) return "—";
   return `${Math.round((made / attempted) * 100)}%`;
-}
-
-function sbHeaders() {
-  return {
-    apikey: SUPABASE_KEY,
-    Authorization: `Bearer ${SUPABASE_KEY}`,
-    "Content-Type": "application/json",
-  };
-}
-
-async function getCachedBoxScores(uuids) {
-  const list = uuids.map(u => `"${u}"`).join(",");
-  const r = await fetch(
-    `${SUPABASE_URL}/rest/v1/match_box_scores?select=stats_uuid,data&stats_uuid=in.(${list})`,
-    { headers: sbHeaders() }
-  );
-  if (!r.ok) return {};
-  const rows = await r.json();
-  return Object.fromEntries(rows.map(row => [row.stats_uuid, row.data]));
-}
-
-async function upsertBoxScores(rows) {
-  await fetch(`${SUPABASE_URL}/rest/v1/match_box_scores`, {
-    method: "POST",
-    headers: { ...sbHeaders(), Prefer: "resolution=ignore-duplicates" },
-    body: JSON.stringify(rows),
-  });
 }
 
 function parseTimeSecs(timeStr) {

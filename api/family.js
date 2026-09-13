@@ -87,24 +87,40 @@ export default async function handler(req, res) {
       await sb(`/kids?family_id=eq.${familyId}`, { method: "DELETE" });
 
       if (kids.length) {
-        await sb("/kids", {
-          method: "POST",
-          body: JSON.stringify(
-            kids.map((k, i) => ({
-              family_id: familyId,
-              sort_order: i,
-              name: k.name,
-              label: k.label,
-              club_name: k.clubName || null,
-              fcbq_team_id: k.fcbqTeamId || null,
-              category: k.category,
-              gender: k.gender || "M",
-              grup_id_phase1: k.grupIdPhase1 || null,
-              grup_id_phase2: k.grupIdPhase2 || null,
-              color: k.color || "#FF6B2B",
-            }))
-          ),
-        });
+        const kidRows = () =>
+          kids.map((k, i) => ({
+            family_id: familyId,
+            sort_order: i,
+            name: (k.name || "").trim().replace(/\s+/g, " "),
+            label: k.label,
+            club_name: k.clubName || null,
+            fcbq_team_id: k.fcbqTeamId || null,
+            fcbq_player_uuid: k.fcbqPlayerUuid || null,
+            category: k.category,
+            gender: k.gender || "M",
+            grup_id_phase1: k.grupIdPhase1 || null,
+            grup_id_phase2: k.grupIdPhase2 || null,
+            color: k.color || "#FF6B2B",
+          }));
+
+        // fcbq_player_uuid arrives with supabase-migration-player-uuid.sql. If the
+        // code is deployed before the migration runs, PostgREST rejects the whole
+        // insert on the unknown column — which would take out saving entirely.
+        // Drop the field and retry rather than fail the save.
+        try {
+          await sb("/kids", { method: "POST", body: JSON.stringify(kidRows()) });
+        } catch (err) {
+          if (!/fcbq_player_uuid/.test(err.message)) throw err;
+          console.warn("kids insert: fcbq_player_uuid column missing — run supabase-migration-player-uuid.sql");
+          await sb("/kids", {
+            method: "POST",
+            body: JSON.stringify(kidRows().map((row) => {
+              const stripped = { ...row };
+              delete stripped.fcbq_player_uuid;
+              return stripped;
+            })),
+          });
+        }
       }
 
       return res.json({ ok: true, shareToken: family.share_token });
