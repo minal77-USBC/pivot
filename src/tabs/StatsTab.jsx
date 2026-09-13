@@ -13,6 +13,19 @@ const SEASON = String(
   new Date().getMonth() >= 6 ? new Date().getFullYear() : new Date().getFullYear() - 1
 );
 
+// Mirrors matchPlayer() in api/_boxscores.js: the stable player uuid wins, the
+// normalised display name is only a fallback. FCBQ anonymises opted-out players
+// to initials ("R.T.G."), so name matching alone silently highlights nobody.
+function normName(name) {
+  return (name || "").trim().replace(/\s+/g, " ").toUpperCase();
+}
+
+function isKid(player, kidName, playerUuid) {
+  if (playerUuid && player?.uuid) return player.uuid === playerUuid;
+  const wanted = normName(kidName);
+  return !!wanted && normName(player?.name).includes(wanted);
+}
+
 function pct(made, attempted) {
   if (!attempted) return "—";
   return `${Math.round((made / attempted) * 100)}%`;
@@ -80,7 +93,7 @@ function BoxScoreRow({ p, isHighlighted, border }) {
   );
 }
 
-function SeasonStats({ teamId, kidName, onResult }) {
+function SeasonStats({ teamId, kidName, playerUuid, onResult }) {
   const { t } = useLang();
   const { S, theme } = useTheme();
   const [data, setData] = useState(null);
@@ -149,7 +162,7 @@ function SeasonStats({ teamId, kidName, onResult }) {
             <StatRow
               key={p.uuid || i}
               p={p}
-              isHighlighted={p.name.toUpperCase().includes(kidName.toUpperCase())}
+              isHighlighted={isKid(p, kidName, playerUuid)}
               border={i < players.length - 1}
             />
           ))}
@@ -162,27 +175,31 @@ function SeasonStats({ teamId, kidName, onResult }) {
   );
 }
 
-function PlayerGameLog({ kidMatches, kidName }) {
+function PlayerGameLog({ kidMatches, kidName, playerUuid }) {
   const { t } = useLang();
   const { S, theme } = useTheme();
   const [log, setLog] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const played = kidMatches
-      .filter(m => m.played)
-      .map(({ statsUuid, date, opp, ha, win, score }) => ({ statsUuid, date, opp, ha, win, score }));
+  // playedKey keeps this keyed to the actual fixture set, so a newly published
+  // acta refetches instead of serving whatever was loaded on first mount.
+  const played = kidMatches
+    .filter(m => m.played)
+    .map(({ statsUuid, date, opp, ha, win, score }) => ({ statsUuid, date, opp, ha, win, score }));
+  const playedKey = played.map(m => m.statsUuid || m.date).join(",");
 
-    const params = new URLSearchParams({
-      kidName,
-      matches: JSON.stringify(played),
-    });
+  useEffect(() => {
+    setLoading(true); setError(null);
+    const params = new URLSearchParams({ kidName, matches: JSON.stringify(played) });
+    if (playerUuid) params.set("playerUuid", playerUuid);
     fetch(`/api/player-log?${params}`)
       .then(r => { if (!r.ok) throw new Error(`${r.status}`); return r.json(); })
       .then(d => { setLog(d.log); setLoading(false); })
       .catch(e => { setError(e.message); setLoading(false); });
-  }, [kidName]);
+    // `played` is rebuilt every render; playedKey is its stable identity.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [kidName, playerUuid, playedKey]);
 
   if (loading) return (
     <div style={{ textAlign: "center", padding: 32, color: "#64748b" }}>
@@ -289,7 +306,7 @@ function PlayerGameLog({ kidMatches, kidName }) {
   );
 }
 
-function MatchBoxScores({ kidMatches, kidName }) {
+function MatchBoxScores({ kidMatches, kidName, playerUuid }) {
   const { t } = useLang();
   const { S, theme } = useTheme();
   const [selectedMatch, setSelectedMatch] = useState(null);
@@ -388,7 +405,7 @@ function MatchBoxScores({ kidMatches, kidName }) {
                     <BoxScoreRow
                       key={i}
                       p={p}
-                      isHighlighted={p.name?.toUpperCase().includes(kidName.toUpperCase())}
+                      isHighlighted={isKid(p, kidName, playerUuid)}
                       border={i < team.players.length - 1}
                     />
                   ))}
@@ -402,7 +419,7 @@ function MatchBoxScores({ kidMatches, kidName }) {
   );
 }
 
-function SeasonStatsFromLog({ kidMatches, kidName, statsTeamId }) {
+function SeasonStatsFromLog({ kidMatches, kidName, statsTeamId, playerUuid }) {
   const { t } = useLang();
   const { S, theme } = useTheme();
   const [log, setLog] = useState(null);
@@ -410,17 +427,22 @@ function SeasonStatsFromLog({ kidMatches, kidName, statsTeamId }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const played = kidMatches
+    .filter(m => m.played)
+    .map(({ statsUuid, date, opp, ha, win, score }) => ({ statsUuid, date, opp, ha, win, score }));
+  const playedKey = played.map(m => m.statsUuid || m.date).join(",");
+
   useEffect(() => {
-    const played = kidMatches
-      .filter(m => m.played)
-      .map(({ statsUuid, date, opp, ha, win, score }) => ({ statsUuid, date, opp, ha, win, score }));
+    setLoading(true); setError(null);
     const params = new URLSearchParams({ kidName, matches: JSON.stringify(played) });
     if (statsTeamId) params.set("teamId", statsTeamId);
+    if (playerUuid) params.set("playerUuid", playerUuid);
     fetch(`/api/player-log?${params}`)
       .then(r => { if (!r.ok) throw new Error(`${r.status}`); return r.json(); })
       .then(d => { setLog(d.log); setTeamLog(d.teamLog || []); setLoading(false); })
       .catch(e => { setError(e.message); setLoading(false); });
-  }, [kidName]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [kidName, playerUuid, statsTeamId, playedKey]);
 
   if (loading) return (
     <div style={{ textAlign: "center", padding: 32, color: "#64748b" }}>
@@ -478,7 +500,7 @@ function SeasonStatsFromLog({ kidMatches, kidName, statsTeamId }) {
 
           {teamLog.length > 0 ? (
             teamLog.map((p, i) => {
-              const isHighlighted = p.name?.toUpperCase().includes(kidName.toUpperCase());
+              const isHighlighted = isKid(p, kidName, playerUuid);
               return (
                 <div key={i} style={{
                   display: "grid", gridTemplateColumns: COLS,
@@ -594,10 +616,10 @@ export default function StatsTab({ kids = [], k1Matches, k2Matches = [], k3Match
             ))}
           </div>
 
-          {view === "season" && statsConfirmed !== false && <SeasonStats teamId={selectedKid.statsTeamId} kidName={selectedKid.name} onResult={setStatsConfirmed} />}
-          {view === "season" && statsConfirmed === false && <SeasonStatsFromLog kidMatches={selectedMatches} kidName={selectedKid.name} statsTeamId={selectedKid.statsTeamId} />}
-          {view === "box"    && <MatchBoxScores kidMatches={selectedMatches} kidName={selectedKid.name} />}
-          {view === "log"    && <PlayerGameLog kidMatches={selectedMatches} kidName={selectedKid.name} />}
+          {view === "season" && statsConfirmed !== false && <SeasonStats teamId={selectedKid.statsTeamId} kidName={selectedKid.name} playerUuid={selectedKid.playerUuid} onResult={setStatsConfirmed} />}
+          {view === "season" && statsConfirmed === false && <SeasonStatsFromLog kidMatches={selectedMatches} kidName={selectedKid.name} statsTeamId={selectedKid.statsTeamId} playerUuid={selectedKid.playerUuid} />}
+          {view === "box"    && <MatchBoxScores kidMatches={selectedMatches} kidName={selectedKid.name} playerUuid={selectedKid.playerUuid} />}
+          {view === "log"    && <PlayerGameLog kidMatches={selectedMatches} kidName={selectedKid.name} playerUuid={selectedKid.playerUuid} />}
         </>
       )}
     </div>

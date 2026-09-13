@@ -5,7 +5,7 @@ import { useTheme } from "./ThemeContext";
 
 const CATEGORIES = ["Premini", "Mini", "Infantil", "Cadet", "Junior", "Sènior"];
 export const COLORS = ["#FF6B2B", "#A855F7", "#22d3a0", "#3B82F6", "#F59E0B", "#EF4444"];
-export const EMPTY_KID = { name: "", label: "", clubName: "", fcbqTeamId: "", category: "Infantil", gender: "M", grupIdPhase1: "", grupIdPhase2: "", color: "#FF6B2B" };
+export const EMPTY_KID = { name: "", label: "", clubName: "", fcbqTeamId: "", fcbqPlayerUuid: "", category: "Infantil", gender: "M", grupIdPhase1: "", grupIdPhase2: "", color: "#FF6B2B" };
 
 function positiveInt(val) {
   return val.replace(/[^0-9]/g, "");
@@ -32,6 +32,8 @@ export function KidForm({ kid, index, onChange, onRemove, canRemove }) {
   const [selectedTeam, setSelectedTeam] = useState(null);
   const [autoFilled, setAutoFilled] = useState(!!kid.fcbqTeamId);
   const [categoryLocked, setCategoryLocked] = useState(!!kid.fcbqTeamId);
+  const [roster, setRoster] = useState([]);
+  const [rosterState, setRosterState] = useState("idle"); // idle | loading | ready | empty | error
   const clubRef = useRef(null);
 
   // Debounced club search
@@ -52,6 +54,31 @@ export function KidForm({ kid, index, onChange, onRemove, canRemove }) {
     document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
   }, []);
+
+  // Load the team's roster so the kid can be identified by their acta row.
+  // Runs off team + grup ids, so it works in Settings (already-saved kids) as
+  // well as straight after the team picker in onboarding.
+  const grupKey = [kid.grupIdPhase1, kid.grupIdPhase2].filter(Boolean).join(",");
+  useEffect(() => {
+    if (!kid.fcbqTeamId || !grupKey) { setRoster([]); setRosterState("idle"); return; }
+    let cancelled = false;
+    setRosterState("loading");
+    const params = new URLSearchParams({ teamId: kid.fcbqTeamId, grupId: grupKey });
+    if (kid.name.trim()) params.set("name", kid.name.trim());
+    fetch(`/api/team-roster?${params}`)
+      .then(r => { if (!r.ok) throw new Error(`${r.status}`); return r.json(); })
+      .then(d => {
+        if (cancelled) return;
+        const list = d.roster || [];
+        setRoster(list);
+        setRosterState(list.length ? "ready" : "empty");
+      })
+      .catch(() => { if (!cancelled) { setRoster([]); setRosterState("error"); } });
+    return () => { cancelled = true; };
+    // kid.name is deliberately excluded — it only reorders the list, and
+    // refetching on every keystroke would hammer msstats.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [kid.fcbqTeamId, grupKey]);
 
   const selectClub = (club) => {
     track("club_selected", { clubName: club.name });
@@ -76,7 +103,7 @@ export function KidForm({ kid, index, onChange, onRemove, canRemove }) {
     setAutoFilled(false);
     setSelectedTeam(null);
     setCategoryLocked(false);
-    onChange({ ...kid, clubName: "", fcbqTeamId: "", grupIdPhase1: "", grupIdPhase2: "" });
+    onChange({ ...kid, clubName: "", fcbqTeamId: "", fcbqPlayerUuid: "", grupIdPhase1: "", grupIdPhase2: "" });
   };
 
   const selectTeam = (team) => {
@@ -88,6 +115,7 @@ export function KidForm({ kid, index, onChange, onRemove, canRemove }) {
         onChange({
           ...kid,
           fcbqTeamId: data.fcbqTeamId || "",
+          fcbqPlayerUuid: "",
           grupIdPhase1: data.grupIdPhase1 || "",
           grupIdPhase2: data.grupIdPhase2 || "",
         });
@@ -103,7 +131,7 @@ export function KidForm({ kid, index, onChange, onRemove, canRemove }) {
     setSelectedTeam(null);
     setAutoFilled(false);
     setCategoryLocked(false);
-    onChange({ ...kid, fcbqTeamId: "", grupIdPhase1: "", grupIdPhase2: "" });
+    onChange({ ...kid, fcbqTeamId: "", fcbqPlayerUuid: "", grupIdPhase1: "", grupIdPhase2: "" });
   };
 
   return (
@@ -283,6 +311,61 @@ export function KidForm({ kid, index, onChange, onRemove, canRemove }) {
           </button>
         )}
       </div>
+
+      {/* Roster picker — captures the stable acta player uuid.
+          FCBQ anonymises opted-out players to initials, so name matching alone
+          cannot find the kid's row in a box score. */}
+      {rosterState !== "idle" && (
+        <div style={{ marginTop: 14, paddingTop: 12, borderTop: `1px solid ${theme.cardBorder}` }}>
+          <div style={S.label}>{t.rosterPicker}</div>
+
+          {rosterState === "loading" && (
+            <div style={{ fontSize: 11, color: theme.textDim, padding: "6px 0" }}>{t.rosterLoading}</div>
+          )}
+
+          {rosterState === "empty" && (
+            <div style={{ fontSize: 11, color: theme.textMuted, lineHeight: 1.5, padding: "6px 0" }}>{t.rosterEmpty}</div>
+          )}
+
+          {rosterState === "error" && (
+            <div style={{ fontSize: 11, color: "#ffb347", padding: "6px 0" }}>{t.rosterError}</div>
+          )}
+
+          {rosterState === "ready" && (
+            <>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+                {roster.map(p => {
+                  const selected = !!p.uuid && kid.fcbqPlayerUuid === p.uuid;
+                  return (
+                    <button key={p.uuid || p.name} type="button" disabled={!p.uuid}
+                      onClick={() => {
+                        track("roster_player_selected", { anonymised: p.anonymised, viaLikely: p.likely });
+                        set("fcbqPlayerUuid", selected ? "" : p.uuid);
+                      }}
+                      style={{
+                        background: selected ? kid.color : theme.inputBg,
+                        border: `1px solid ${selected ? kid.color : theme.inputBorder}`,
+                        borderRadius: 999, padding: "5px 10px",
+                        color: selected ? "#fff" : theme.textPrimary,
+                        fontSize: 11, fontFamily: "inherit",
+                        cursor: p.uuid ? "pointer" : "not-allowed",
+                        opacity: p.uuid ? 1 : 0.4,
+                        display: "flex", alignItems: "center", gap: 5,
+                      }}>
+                      <span style={{ fontFamily: "'DM Mono', monospace", opacity: 0.7 }}>{p.dorsal || "—"}</span>
+                      <span>{(p.name || "").split(" ").slice(0, 2).join(" ")}</span>
+                      <span style={{ opacity: 0.6 }}>{p.ppg}</span>
+                    </button>
+                  );
+                })}
+              </div>
+              <div style={{ fontSize: 10, color: theme.textMuted, marginTop: 6, lineHeight: 1.5 }}>
+                {kid.fcbqPlayerUuid ? t.rosterLinked : t.rosterHint}
+              </div>
+            </>
+          )}
+        </div>
+      )}
     </div>
   );
 }

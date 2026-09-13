@@ -18,6 +18,10 @@ create table kids (
   label text not null,
   club_name text,
   fcbq_team_id text,
+  -- Stable msstats/FCBQ player uuid. Primary key for finding this kid's row in a
+  -- match acta: FCBQ anonymises opted-out players to initials ("R.T.G."), so
+  -- display-name matching silently finds nobody. Resolved via the roster picker.
+  fcbq_player_uuid text,
   category text not null,
   gender text not null default 'M',
   grup_id_phase1 text,
