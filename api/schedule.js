@@ -1,6 +1,7 @@
 import { ESB } from "./constants.js";
 import { Sentry } from "./_sentry.js";
 import { readFixtures, writeFixtures, matchToRow } from "./_fixtures.js";
+import { decodeEsb } from "./_fcbq.js";
 import { track } from "@vercel/analytics/server";
 const BARNA = ["GRUP BARNA", "BARNA VERMELL", "GRUP ESP"];
 
@@ -105,27 +106,7 @@ async function fetchGrup(grupId) {
     headers: { "User-Agent": "Pivot/1.0" },
   });
   const raw = await res.arrayBuffer();
-  const b64 = Buffer.from(raw).toString("ascii");
-
-  // ESB reports auth failures as HTTP 200 with an UNENCODED JSON body, so
-  // res.ok is useless here and base64-decoding it produces binary garbage that
-  // JSON.parse rejects with "Unexpected token '\uFFFD'" — an error that says
-  // nothing about the real cause. Detect the plain-JSON error envelope first.
-  // (Observed 2026-09: ACCESS DENIED / ERRORCODEx0008 on every endpoint.)
-  const head = b64.trimStart();
-  if (head.startsWith("{") || head.startsWith("[")) {
-    let envelope = {};
-    try { envelope = JSON.parse(head); } catch { /* not the error envelope either */ }
-    const detail = envelope.message || envelope.errorCode || `HTTP ${res.status}`;
-    throw new Error(`ESB refused grup ${grupId}: ${detail}`);
-  }
-
-  const json = Buffer.from(b64, "base64").toString("utf-8");
-  const data = JSON.parse(json);
-  if (data.result && data.result !== "OK") {
-    throw new Error(`ESB error for grup ${grupId}: ${data.errorCode || data.result}`);
-  }
-  return data;
+  return decodeEsb(Buffer.from(raw).toString("ascii"), `grup ${grupId}`);
 }
 
 export default async function handler(req, res) {

@@ -149,6 +149,7 @@ export const LOCALES = {
     tapMatch: "Tap a match to see the full box score.",
     backToMatches: "← Back to matches",
     loadingBoxScore: "⏳ Loading box score…",
+    boxScoreUnavailable: "Box score not yet available — check back 24–48h after the match.",
 
     // MatchCard
     yours: "✓ yours",
@@ -351,6 +352,7 @@ export const LOCALES = {
     tapMatch: "Toca un partido para ver el acta.",
     backToMatches: "← Volver a partidos",
     loadingBoxScore: "⏳ Cargando acta…",
+    boxScoreUnavailable: "El acta aún no está disponible — vuelve 24–48h después del partido.",
 
     yours: "✓ tuyo",
     editTravelTime: "Editar tiempo de viaje",
@@ -551,6 +553,7 @@ export const LOCALES = {
     tapMatch: "Toca un partit per veure l'acta.",
     backToMatches: "← Tornar als partits",
     loadingBoxScore: "⏳ Carregant acta…",
+    boxScoreUnavailable: "L'acta encara no està disponible — torna-hi 24–48h després del partit.",
 
     yours: "✓ teu",
     editTravelTime: "Edita el temps de viatge",

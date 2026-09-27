@@ -59,7 +59,14 @@ export async function loadBoxScores(matches) {
             { headers: { "User-Agent": "Pivot/1.0" } }
           );
           if (!r.ok) return null;
-          return { statsUuid: m.statsUuid, matchDate: m.date, data: await r.json() };
+          const data = await r.json();
+          // msstats answers with HTTP 200 and `{}` for a match it cannot serve —
+          // including, as of 2026-09, every uuid while the acta endpoint is
+          // degraded. Because upsertBoxScores uses ignore-duplicates, caching
+          // one of those would freeze an empty acta in place permanently and
+          // the real box score could never replace it. Treat it as a miss.
+          if (!(data?.teams || []).length) return null;
+          return { statsUuid: m.statsUuid, matchDate: m.date, data };
         } catch {
           return null;
         }
