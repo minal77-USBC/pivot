@@ -322,7 +322,7 @@ function MatchBoxScores({ kidMatches, kidName, playerUuid }) {
     if (!match.statsUuid) {
       setSelectedMatch(match);
       setBoxScore(null);
-      setError("Box score not yet available — check back 24–48h after the match.");
+      setError(t.boxScoreUnavailable);
       return;
     }
     setSelectedMatch(match);
@@ -330,11 +330,14 @@ function MatchBoxScores({ kidMatches, kidName, playerUuid }) {
     setError(null);
     setLoading(true);
     try {
-      const url = `${MSSTATS_BASE}/getJsonWithMatchStats/${match.statsUuid}`;
-      const r = await fetch(`/api/fcbq?url=${encodeURIComponent(url)}`);
+      // Cache-first via /api/box-score — reads the same Supabase store the Game
+      // Log uses, so a degraded msstats no longer blanks this view.
+      const params = new URLSearchParams({ statsUuid: match.statsUuid });
+      if (match.date) params.set("date", match.date);
+      const r = await fetch(`/api/box-score?${params}`);
+      if (r.status === 404) { setError(t.boxScoreUnavailable); return; }
       if (!r.ok) throw new Error(`${r.status}`);
-      const d = await r.json();
-      setBoxScore(d);
+      setBoxScore(await r.json());
     } catch (e) {
       setError(e.message);
     } finally {

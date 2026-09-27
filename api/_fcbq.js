@@ -58,14 +58,33 @@ export function tierOf(categoryName) {
   return "Senior";
 }
 
+// ESB reports auth/quota failures as HTTP 200 with an UNENCODED JSON body, so
+// res.ok tells you nothing and base64-decoding the body yields binary garbage
+// that JSON.parse rejects with "Unexpected token '\uFFFD'" — an error naming
+// nothing relevant. Every ESB caller must route its response through here.
+// (Observed 2026-09: ACCESS DENIED / ERRORCODEx0008 on every endpoint.)
+export function decodeEsb(b64, context = "request") {
+  const head = (b64 || "").trimStart();
+  if (head.startsWith("{") || head.startsWith("[")) {
+    let envelope = {};
+    try { envelope = JSON.parse(head); } catch { /* not the error envelope either */ }
+    const detail = envelope.message || envelope.errorCode || "unrecognised plain-text response";
+    throw new Error(`ESB refused ${context}: ${detail}`);
+  }
+  const decoded = JSON.parse(Buffer.from(head, "base64").toString("utf8"));
+  if (decoded.result && decoded.result !== "OK") {
+    throw new Error(`ESB error for ${context}: ${decoded.errorCode || decoded.result}`);
+  }
+  return decoded;
+}
+
 export async function esb(path) {
   const res = await fetch(`${ESB}/${path}`, { headers: { "User-Agent": "Pivot/1.0" } });
   if (!res.ok) throw new Error(`ESB ${res.status} ${path}`);
   const text = await res.text();
-  // ESB returns base64-encoded JSON
-  const decoded = JSON.parse(Buffer.from(text, "base64").toString("utf8"));
-  if (decoded.result !== "OK") throw new Error(`ESB ${decoded.errorCode} ${path}`);
-  return decoded.messageData;
+  // ESB returns base64-encoded JSON — decodeEsb also catches the plain-JSON
+  // error envelope that a denied key produces.
+  return decodeEsb(text, path).messageData;
 }
 
 // rounds is keyed by round number; each round is { date, matches: { matchId: {...} } }

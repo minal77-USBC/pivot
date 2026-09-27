@@ -18,6 +18,8 @@ export const LOCALES = {
     loading: "Loading…",
     failedToLoad: "Failed to load:",
     retry: "Retry",
+    fixturesStale: "Couldn't reach FCBQ — showing fixtures saved on",
+    fixturesPartial: "Couldn't reach FCBQ for some teams — some fixtures saved on",
 
     // Tab labels
     tabDash: "Dashboard",
@@ -147,6 +149,7 @@ export const LOCALES = {
     tapMatch: "Tap a match to see the full box score.",
     backToMatches: "← Back to matches",
     loadingBoxScore: "⏳ Loading box score…",
+    boxScoreUnavailable: "Box score not yet available — check back 24–48h after the match.",
 
     // MatchCard
     yours: "✓ yours",
@@ -226,6 +229,8 @@ export const LOCALES = {
     loading: "Cargando…",
     failedToLoad: "Error al cargar:",
     retry: "Reintentar",
+    fixturesStale: "Sin conexión con la FCBQ — partidos guardados el",
+    fixturesPartial: "Sin conexión con la FCBQ para algunos equipos — algunos partidos guardados el",
 
     tabDash: "Inicio",
     tabCalendar: "Calendario",
@@ -347,6 +352,7 @@ export const LOCALES = {
     tapMatch: "Toca un partido para ver el acta.",
     backToMatches: "← Volver a partidos",
     loadingBoxScore: "⏳ Cargando acta…",
+    boxScoreUnavailable: "El acta aún no está disponible — vuelve 24–48h después del partido.",
 
     yours: "✓ tuyo",
     editTravelTime: "Editar tiempo de viaje",
@@ -424,6 +430,8 @@ export const LOCALES = {
     loading: "Carregant…",
     failedToLoad: "Error en carregar:",
     retry: "Reintenta",
+    fixturesStale: "Sense connexió amb la FCBQ — partits desats el",
+    fixturesPartial: "Sense connexió amb la FCBQ per a alguns equips — alguns partits desats el",
 
     tabDash: "Inici",
     tabCalendar: "Calendari",
@@ -545,6 +553,7 @@ export const LOCALES = {
     tapMatch: "Toca un partit per veure l'acta.",
     backToMatches: "← Tornar als partits",
     loadingBoxScore: "⏳ Carregant acta…",
+    boxScoreUnavailable: "L'acta encara no està disponible — torna-hi 24–48h després del partit.",
 
     yours: "✓ teu",
     editTravelTime: "Edita el temps de viatge",

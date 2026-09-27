@@ -1,5 +1,7 @@
 import { ESB } from "./constants.js";
 import { Sentry } from "./_sentry.js";
+import { readFixtures, writeFixtures, matchToRow } from "./_fixtures.js";
+import { decodeEsb } from "./_fcbq.js";
 import { track } from "@vercel/analytics/server";
 const BARNA = ["GRUP BARNA", "BARNA VERMELL", "GRUP ESP"];
 
@@ -104,9 +106,7 @@ async function fetchGrup(grupId) {
     headers: { "User-Agent": "Pivot/1.0" },
   });
   const raw = await res.arrayBuffer();
-  const b64 = Buffer.from(raw).toString("ascii");
-  const json = Buffer.from(b64, "base64").toString("utf-8");
-  return JSON.parse(json);
+  return decodeEsb(Buffer.from(raw).toString("ascii"), `grup ${grupId}`);
 }
 
 export default async function handler(req, res) {
@@ -124,29 +124,99 @@ export default async function handler(req, res) {
     }
 
     const result = {};
+    const meta = {};           // per-kid: { stale, fetchedAt }
+    let anyFresh = false;
+    let anyStale = false;
+    let lastUpstreamError = null;
 
     for (const kid of kids) {
       const kidMatches = [];
+      let kidStale = false;
+      let kidFetchedAt = null;
+
       for (const grupId of (kid.grupIds || [])) {
         if (!grupId) continue;
-        const data = await fetchGrup(grupId);
-        const rounds = data.messageData.rounds;
-        for (const round of Object.values(rounds)) {
-          for (const m of Object.values(round.matches || {})) {
-            const norm = normalizeMatch(m, kid.teamId);
-            if (norm) kidMatches.push({ ...norm, grupId });
+
+        // Each grup is attempted independently. Previously one bad grup threw
+        // and killed the whole response for every kid; now a failure falls back
+        // to that grup's cached rows and the rest still serves fresh data.
+        try {
+          const data = await fetchGrup(grupId);
+          const rounds = data.messageData.rounds;
+          const rows = [];
+          for (const round of Object.values(rounds)) {
+            // `matches` is keyed by match id — the only stable identifier for a
+            // fixture that has not been played yet (statsUuid is null until
+            // 24-48h after the game).
+            for (const [matchId, m] of Object.entries(round.matches || {})) {
+              const norm = normalizeMatch(m, kid.teamId);
+              if (!norm) continue;
+              kidMatches.push({ ...norm, grupId });
+              rows.push(matchToRow(norm, grupId, kid.teamId, matchId));
+            }
+          }
+          anyFresh = true;
+          // Write-through. Never let a cache write failure break a good
+          // response — the fixtures are already in hand.
+          if (rows.length) {
+            // A cache write must never break a good response — the fixtures are
+            // already in hand. But it must not fail silently either, or the
+            // fallback quietly stops existing and nobody finds out until the
+            // next outage.
+            try {
+              const w = await writeFixtures(rows);
+              if (!w.ok) {
+                Sentry.captureException(
+                  new Error(`Fixture cache write failed (HTTP ${w.status}) for grup ${grupId} — fallback will be empty`)
+                );
+              }
+            } catch (we) {
+              Sentry.captureException(we);
+            }
+          }
+        } catch (ge) {
+          lastUpstreamError = ge.message;
+          Sentry.captureException(ge);
+          const { matches, fetchedAt } = await readFixtures(kid.teamId, grupId).catch(
+            () => ({ matches: [], fetchedAt: null })
+          );
+          if (matches.length) {
+            kidMatches.push(...matches);
+            kidStale = true;
+            anyStale = true;
+            if (!kidFetchedAt || (fetchedAt && fetchedAt > kidFetchedAt)) kidFetchedAt = fetchedAt;
           }
         }
       }
+
       kidMatches.sort((a, b) => a.date.localeCompare(b.date));
       result[kid.id] = kidMatches;
+      meta[kid.id] = { stale: kidStale, fetchedAt: kidFetchedAt };
+    }
+
+    // Only a total miss is an error: upstream failed AND the cache had nothing
+    // for anyone. A kid with no cached rows gets an empty list and the client
+    // renders a per-kid empty state rather than failing the whole app.
+    if (!anyFresh && !anyStale) {
+      const err = new Error(lastUpstreamError || "No schedule available");
+      Sentry.captureException(err);
+      return res.status(502).json({ error: err.message });
     }
 
     const latencyMs = Date.now() - start;
     const grupCount = kids.reduce((n, k) => n + (k.grupIds || []).filter(Boolean).length, 0);
-    await track("schedule_fetched", { kidCount: kids.length, grupCount, latencyMs }, { request: req });
-    res.setHeader("Cache-Control", "s-maxage=300, stale-while-revalidate=60");
-    return res.status(200).json(result);
+    await track("schedule_fetched", {
+      kidCount: kids.length, grupCount, latencyMs,
+      // "partial" = some grups fresh, some served from cache
+      source: anyStale ? (anyFresh ? "partial" : "cache") : "live",
+    }, { request: req });
+
+    // Don't let the CDN pin a stale response for 5 minutes — when ESB recovers
+    // the next request should get through and repopulate.
+    res.setHeader("Cache-Control", anyStale
+      ? "s-maxage=30, stale-while-revalidate=30"
+      : "s-maxage=300, stale-while-revalidate=60");
+    return res.status(200).json({ ...result, _meta: { stale: anyStale, partial: anyStale && anyFresh, upstreamError: lastUpstreamError, kids: meta } });
   } catch (e) {
     Sentry.captureException(e);
     return res.status(502).json({ error: e.message });

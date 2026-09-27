@@ -1,5 +1,6 @@
 import { ESB, MSSTATS_BASE } from "./constants.js";
 import { getCachedBoxScores, upsertBoxScores } from "./_boxscores.js";
+import { decodeEsb } from "./_fcbq.js";
 
 // Rolls in July — see currentSeason() in _fcbq.js for why not September
 const SEASON = String(
@@ -56,8 +57,7 @@ async function fetchFormFromGrup(grupId, oppTeamId) {
     { headers: { "User-Agent": "Pivot/1.0" } }
   );
   const raw = await res.arrayBuffer();
-  const json = Buffer.from(Buffer.from(raw).toString("ascii"), "base64").toString("utf-8");
-  const rounds = JSON.parse(json).messageData.rounds;
+  const rounds = decodeEsb(Buffer.from(raw).toString("ascii"), `grup ${grupId}`).messageData.rounds;
   const matches = [];
 
   for (const round of Object.values(rounds)) {
