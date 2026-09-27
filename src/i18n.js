@@ -18,6 +18,8 @@ export const LOCALES = {
     loading: "Loading…",
     failedToLoad: "Failed to load:",
     retry: "Retry",
+    fixturesStale: "Couldn't reach FCBQ — showing fixtures saved on",
+    fixturesPartial: "Couldn't reach FCBQ for some teams — some fixtures saved on",
 
     // Tab labels
     tabDash: "Dashboard",
@@ -226,6 +228,8 @@ export const LOCALES = {
     loading: "Cargando…",
     failedToLoad: "Error al cargar:",
     retry: "Reintentar",
+    fixturesStale: "Sin conexión con la FCBQ — partidos guardados el",
+    fixturesPartial: "Sin conexión con la FCBQ para algunos equipos — algunos partidos guardados el",
 
     tabDash: "Inicio",
     tabCalendar: "Calendario",
@@ -424,6 +428,8 @@ export const LOCALES = {
     loading: "Carregant…",
     failedToLoad: "Error en carregar:",
     retry: "Reintenta",
+    fixturesStale: "Sense connexió amb la FCBQ — partits desats el",
+    fixturesPartial: "Sense connexió amb la FCBQ per a alguns equips — alguns partits desats el",
 
     tabDash: "Inici",
     tabCalendar: "Calendari",

@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Analytics } from "@vercel/analytics/react";
 import { track } from "@vercel/analytics";
+import { fmtDate } from "./utils";
 import { useSchedule } from "./useSchedule";
 import { useFamily } from "./useFamily";
 import { LangProvider, useLang } from "./LangContext";
@@ -40,7 +41,7 @@ function AppInner() {
   const [showSettings, setShowSettings] = useState(false);
 
   const { kids, loading: familyLoading, error: familyError, shareUrl } = useFamily(user, setupKey, shareToken);
-  const { kidMatches, loading: schedLoading, error: schedError, refresh } = useSchedule(kids);
+  const { kidMatches, staleInfo, loading: schedLoading, error: schedError, refresh } = useSchedule(kids);
 
   const loading = familyLoading || (kids?.length > 0 && schedLoading);
   const error = schedError || familyError;
@@ -180,6 +181,21 @@ function AppInner() {
           <div style={{ ...S.card({ borderColor: "rgba(255,71,87,0.3)" }), color: "#ff4757", fontSize: 13 }}>
             <div style={{ marginBottom: 8 }}>{t.failedToLoad} {error}</div>
             <button onClick={() => { refresh(); track("schedule_retry"); }} style={{ background: "#FF6B2B", border: "none", borderRadius: 6, color: "white", fontSize: 12, padding: "6px 14px", cursor: "pointer" }}>
+              {t.retry}
+            </button>
+          </div>
+        )}
+
+        {/* Fixtures served from the durable cache because FCBQ was unreachable.
+            Not an error — the tabs below are working, just on older data. */}
+        {!loading && !error && staleInfo && (
+          <div style={{ ...S.card({ borderColor: "rgba(255,179,71,0.35)", background: "rgba(255,179,71,0.07)" }), color: "#ffb347", fontSize: 12, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10 }}>
+            <span>
+              {staleInfo.partial ? t.fixturesPartial : t.fixturesStale}
+              {staleInfo.fetchedAt ? ` ${fmtDate(staleInfo.fetchedAt.slice(0, 10))}` : ""}
+            </span>
+            <button onClick={() => { refresh(); track("schedule_retry", { from: "stale_banner" }); }}
+              style={{ background: "none", border: "1px solid rgba(255,179,71,0.4)", borderRadius: 6, color: "#ffb347", fontSize: 11, padding: "4px 10px", cursor: "pointer", whiteSpace: "nowrap" }}>
               {t.retry}
             </button>
           </div>
